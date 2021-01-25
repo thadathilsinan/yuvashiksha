@@ -5,13 +5,16 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var loginRouter = require("./routes/login");
 
-mongoose.connect("mongodb://localhost:27017/yuvashiksha", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://yuvashiksha:yuvashiksha@yuvashilsha.y1gzh.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
+  {
+    //mongodb://localhost:27017/yuvashiksha
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -25,14 +28,13 @@ var app = express();
 // view engine setup
 app.set("view engine", "jade");
 
+app.use("/login", loginRouter);
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-app.use("/admin", indexRouter); //http://localhost:3000/admin
-app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
