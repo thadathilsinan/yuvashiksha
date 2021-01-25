@@ -5,7 +5,8 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 
-var loginRouter = require("./routes/login");
+let loginRouter = require("./routes/login");
+let registerRouter = require("./routes/register");
 
 mongoose.connect(
   "mongodb+srv://yuvashiksha:yuvashiksha@yuvashilsha.y1gzh.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
@@ -29,6 +30,7 @@ var app = express();
 app.set("view engine", "jade");
 
 app.use("/login", loginRouter);
+app.use("/register", registerRouter);
 
 app.use(logger("dev"));
 app.use(express.json());

@@ -38,4 +38,4 @@ const StudentSignupSchema = new Schema({
 });
 
 let StudentSignup = mongoose.model("StudentSignup", StudentSignupSchema);
-export default StudentSignup;
+module.exports = StudentSignup;

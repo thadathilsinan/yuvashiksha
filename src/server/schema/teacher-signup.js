@@ -30,4 +30,4 @@ const TeacherSignupSchema = new Schema({
 });
 
 let TeacherSignup = mongoose.model("TeacherSignup", TeacherSignupSchema);
-export default TeacherSignup;
+module.exports = TeacherSignup;
