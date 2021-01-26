@@ -1,6 +1,14 @@
 import { Component } from "react";
+import { connect } from "react-redux";
+
 import "./student.css";
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateData: (payload) => dispatch({ type: "updateSignupData", payload }),
+    clearData: () => dispatch({ type: "clearSignupData" }),
+  };
+};
 class Student extends Component {
   constructor(props) {
     super(props);
@@ -65,7 +73,9 @@ class Student extends Component {
     let valid = this.validateForm();
 
     if (valid) {
-      console.log("Validation Success");
+      this.props.updateData({ accountType: "student", ...this.inputValues });
+    } else {
+      this.props.clearData();
     }
   };
 
@@ -136,4 +146,4 @@ class Student extends Component {
   }
 }
 
-export default Student;
+export default connect(null, mapDispatchToProps)(Student);

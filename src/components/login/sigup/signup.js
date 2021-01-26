@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { connect } from "react-redux";
 import "./signup.css";
 
 import Student from "./student/student";
@@ -7,11 +8,18 @@ import Teacher from "./teacher/teacher";
 import { serverDomain } from "../../../config";
 import axios from "axios";
 
+const mapStateToProps = (state) => {
+  return {
+    signupData: state.login.signupData,
+    validSignupData: state.login.validSignupData,
+  };
+};
 class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
       accountType: "student",
+      validData: false,
     };
   }
 
@@ -19,7 +27,23 @@ class Signup extends Component {
     this.setState({ accountType: event.target.value });
   };
 
-  verifyEmail = () => {};
+  verifyEmail = () => {
+    if (this.props.validSignupData) {
+      axios({
+        method: "POST",
+        url: "http://localhost:4000/register",
+        data: this.props.signupData,
+      })
+        .then((response) => {
+          console.log(`POST request send to ${serverDomain}/register`);
+          console.log("Response from server: ", response);
+        })
+        .catch((err) => {
+          alert("Error occured during signup. \n Check console for log data");
+          console.log(err);
+        });
+    }
+  };
 
   render() {
     return (
@@ -50,6 +74,7 @@ class Signup extends Component {
             className="btn btn-success"
             id="login-btn"
             onClick={this.verifyEmail}
+            disabled={!this.props.validSignupData}
           >
             VERIFY EMAIL
           </button>
@@ -68,4 +93,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default connect(mapStateToProps)(Signup);

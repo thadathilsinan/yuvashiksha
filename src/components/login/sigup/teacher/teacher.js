@@ -6,6 +6,7 @@ import "./teacher.css";
 const mapDispatchToProps = (dispatch) => {
   return {
     updateData: (payload) => dispatch({ type: "updateSignupData", payload }),
+    clearData: () => dispatch({ type: "clearSignupData" }),
   };
 };
 class Teacher extends Component {
@@ -51,7 +52,9 @@ class Teacher extends Component {
     let valid = this.validateForm();
 
     if (valid) {
-      console.log("Validation success");
+      this.props.updateData({ accountType: "teacher", ...this.inputValues });
+    } else {
+      this.props.clearData();
     }
   };
 

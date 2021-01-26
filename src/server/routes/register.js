@@ -48,6 +48,11 @@ router.post("/", (req, res, next) => {
           sendMail(req.body.email, mailSubject, mailBody);
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
+          res.header("Access-Control-Allow-Origin", "*");
+          res.header(
+            "Access-Control-Allow-Headers",
+            "Origin, X-Requested-With, Content-Type, Accept"
+          );
           res.json(student);
         },
         (err) => next(err)
@@ -71,6 +76,11 @@ router.post("/", (req, res, next) => {
           sendMail(req.body.email, mailSubject, mailBody);
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
+          res.header("Access-Control-Allow-Origin", "*");
+          res.header(
+            "Access-Control-Allow-Headers",
+            "Origin, X-Requested-With, Content-Type, Accept"
+          );
           res.json(teacher);
         },
         (err) => next(err)
