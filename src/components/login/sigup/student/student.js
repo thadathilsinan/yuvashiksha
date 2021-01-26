@@ -2,20 +2,99 @@ import { Component } from "react";
 import "./student.css";
 
 class Student extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+      parentEmailError: null,
+      emailError: null,
+    };
+  }
+
+  inputValues = {};
+
+  validateEmail = (email) => {
+    if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  validateForm = () => {
+    if (
+      this.inputValues.name &&
+      this.inputValues.admissionNumber &&
+      this.inputValues.class &&
+      this.inputValues.batch &&
+      this.inputValues.email &&
+      this.inputValues.parentEmail
+    ) {
+      this.setState({ error: null });
+      if (this.validateEmail(this.inputValues.email)) {
+        this.setState({ emailError: null });
+      } else {
+        this.setState({ emailError: <p>Enter a valid email address</p> });
+      }
+
+      if (this.validateEmail(this.inputValues.parentEmail)) {
+        this.setState({ parentEmailError: null });
+      } else {
+        this.setState({ parentEmailError: <p>Enter a valid email address</p> });
+      }
+
+      if (
+        this.validateEmail(this.inputValues.email) &&
+        this.validateEmail(this.inputValues.parentEmail)
+      ) {
+        //Successful validation
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      this.setState({
+        error: <p style={{ color: "black" }}>PLEASE FILL ALL DATA</p>,
+      });
+      return false;
+    }
+  };
+
+  onValueChange = (event) => {
+    this.inputValues[event.target.name] = event.target.value;
+    let valid = this.validateForm();
+
+    if (valid) {
+      console.log("Validation Success");
+    }
+  };
+
   render() {
     return (
       <div>
-        <input type="text" class="form-control" id="name" placeholder="Name" />
+        {this.state.error}
         <input
-          type="number"
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          placeholder="Name"
+          onChange={this.onValueChange}
+        />
+        <input
+          type="text"
           className="form-control mt-3"
           id="admission-number"
+          name="admissionNumber"
           placeholder="Admission Number"
+          onChange={this.onValueChange}
         />
         <select
           className="form-select mt-3"
           aria-label="Default select example"
           id="class"
+          name="class"
+          onChange={this.onValueChange}
         >
           <option value="BCA" selected>
             BCA
@@ -26,6 +105,8 @@ class Student extends Component {
           className="form-select mt-3"
           aria-label="Default select example"
           id="batch"
+          onChange={this.onValueChange}
+          name="batch"
         >
           <option value="2020-21" selected>
             2018-21
@@ -36,14 +117,20 @@ class Student extends Component {
           type="email"
           className="form-control mt-3"
           id="email"
+          name="email"
           placeholder="Email"
+          onChange={this.onValueChange}
         />
+        {this.state.emailError}
         <input
           type="email"
           className="form-control mt-3"
           id="parent-email"
+          name="parentEmail"
           placeholder="Parent Email"
+          onChange={this.onValueChange}
         />
+        {this.state.parentEmailError}
       </div>
     );
   }

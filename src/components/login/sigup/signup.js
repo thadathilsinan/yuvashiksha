@@ -4,6 +4,9 @@ import "./signup.css";
 import Student from "./student/student";
 import Teacher from "./teacher/teacher";
 
+import { serverDomain } from "../../../config";
+import axios from "axios";
+
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +18,8 @@ class Signup extends Component {
   selectAccountType = (event) => {
     this.setState({ accountType: event.target.value });
   };
+
+  verifyEmail = () => {};
 
   render() {
     return (
@@ -40,7 +45,12 @@ class Signup extends Component {
           {this.state.accountType == "teacher" ? <Teacher /> : null}
         </div>
         <div className="d-flex align-items-center justify-content-center">
-          <button type="button" className="btn btn-success" id="login-btn">
+          <button
+            type="button"
+            className="btn btn-success"
+            id="login-btn"
+            onClick={this.verifyEmail}
+          >
             VERIFY EMAIL
           </button>
         </div>
