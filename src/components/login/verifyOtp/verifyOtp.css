@@ -1,0 +1,15 @@
+#otp {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 6px;
+  border-radius: 5px;
+}
+#info-text {
+  margin-top: 15px;
+  color: white;
+}
+
+#resend-otp,
+#proceed {
+  margin-top: 15px;
+}

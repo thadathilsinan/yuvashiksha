@@ -3,24 +3,33 @@ import "./login.css";
 
 import Signin from "./signin/signin";
 import Signup from "./sigup/signup";
+import VerifyOtp from "./verifyOtp/verifyOtp";
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      signin: true,
+      signin: false,
+      signup: false,
+      showVerifyOtp: true,
     };
   }
 
   changeTabToSignup = () => {
     this.setState({
       signin: false,
+      signup: true,
     });
   };
 
   changeTabToSignin = () => {
     this.setState({
       signin: true,
+      signup: false,
     });
+  };
+
+  showVerifyOtp = () => {
+    this.setState({ showVerifyOtp: true });
   };
 
   render() {
@@ -56,7 +65,11 @@ class Login extends Component {
                   SIGN UP
                 </a>
               </nav>
-              {this.state.signin ? <Signin /> : <Signup />}
+              {this.state.signin ? <Signin /> : null}
+              {this.state.signup ? (
+                <Signup otpSent={this.showVerifyOtp} />
+              ) : null}
+              {this.state.showVerifyOtp ? <VerifyOtp /> : null}
             </div>
           </div>
         </div>

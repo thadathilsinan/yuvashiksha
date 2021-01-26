@@ -19,7 +19,6 @@ class Signup extends Component {
     super(props);
     this.state = {
       accountType: "student",
-      validData: false,
     };
   }
 
@@ -37,6 +36,8 @@ class Signup extends Component {
         .then((response) => {
           console.log(`POST request send to ${serverDomain}/register`);
           console.log("Response from server: ", response);
+
+          this.props.otpSent();
         })
         .catch((err) => {
           alert("Error occured during signup. \n Check console for log data");
