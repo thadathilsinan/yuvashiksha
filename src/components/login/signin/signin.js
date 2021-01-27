@@ -2,6 +2,16 @@ import { Component } from "react";
 import "./signin.css";
 
 class Signin extends Component {
+  showPassword = () => {
+    let password = document.getElementById("password");
+
+    if (password.type == "password") {
+      password.type = "text";
+    } else {
+      password.type = "password";
+    }
+  };
+
   render() {
     return (
       <form>
@@ -29,6 +39,7 @@ class Signin extends Component {
             className="form-check-input"
             id="showPassword"
             name="showPassword"
+            onClick={this.showPassword}
           />
           <label className="form-check-label" for="showPassword">
             Show Password
