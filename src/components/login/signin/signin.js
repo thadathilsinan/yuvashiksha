@@ -1,7 +1,9 @@
 import { Component } from "react";
+import { withRouter } from "react-router-dom";
 import "./signin.css";
 
 import http from "../../../shared/http";
+import parseCookie from "../../../shared/parseCookie";
 
 class Signin extends Component {
   constructor(props) {
@@ -41,8 +43,12 @@ class Signin extends Component {
         (res) => {
           if (res.status == 200) {
             let cookies = res.data.split(" %split% ");
-            document.cookie = cookies[0];
-            document.cookie = cookies[1];
+            for (let item in cookies) {
+              document.cookie = cookies[item];
+            }
+
+            cookies = parseCookie();
+            this.props.history.push("/" + cookies.accountType);
           } else {
             this.setState({
               erroMessage: <p>Username or password incorrect</p>,
@@ -127,4 +133,4 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+export default withRouter(Signin);

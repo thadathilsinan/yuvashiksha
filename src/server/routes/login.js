@@ -23,7 +23,7 @@ router.post("/", function (req, res, next) {
         res.end(
           `username=${user.username}` +
             " %split% " +
-            `password=${user.password}`
+            `password=${user.password} %split% accountType=${user.accountType}`
         );
       }
     })
