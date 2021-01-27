@@ -8,9 +8,9 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      signin: false,
+      signin: true,
       signup: false,
-      showVerifyOtp: true,
+      showVerifyOtp: false,
     };
   }
 
@@ -29,7 +29,7 @@ class Login extends Component {
   };
 
   showVerifyOtp = () => {
-    this.setState({ showVerifyOtp: true });
+    this.setState({ showVerifyOtp: true, signin: false, signup: false });
   };
 
   render() {

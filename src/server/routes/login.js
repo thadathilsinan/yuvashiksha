@@ -6,7 +6,7 @@ var router = express.Router();
 router.use(bodyParser.json());
 
 router.post("/", function (req, res, next) {
-  res.end();
+  res.statusCode = 200;
   next();
 });
 

@@ -5,8 +5,7 @@ import "./signup.css";
 import Student from "./student/student";
 import Teacher from "./teacher/teacher";
 
-import { serverDomain } from "../../../config";
-import axios from "axios";
+import http from "../../../shared/http";
 
 const mapStateToProps = (state) => {
   return {
@@ -28,21 +27,12 @@ class Signup extends Component {
 
   verifyEmail = () => {
     if (this.props.validSignupData) {
-      axios({
-        method: "POST",
-        url: "http://localhost:4000/register",
-        data: this.props.signupData,
-      })
-        .then((response) => {
-          console.log(`POST request send to ${serverDomain}/register`);
-          console.log("Response from server: ", response);
-
-          this.props.otpSent();
-        })
-        .catch((err) => {
-          alert("Error occured during signup. \n Check console for log data");
-          console.log(err);
-        });
+      http("POST", "/register", this.props.signupData, (res) => {
+        for (let item in res.data) {
+          document.cookie = `${item}=${res.data[item]}`;
+        }
+        this.props.otpSent();
+      });
     }
   };
 

@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+let cors = require("cors");
 
 let loginRouter = require("./routes/login");
 let registerRouter = require("./routes/register");
@@ -28,25 +29,17 @@ var app = express();
 
 // view engine setup
 app.set("view engine", "jade");
+app.use(cookieParser());
 
-//Allow CORS support
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
-app.use("/login", loginRouter);
-app.use("/register", registerRouter);
+app.use(cors());
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/login", loginRouter);
+app.use("/register", registerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

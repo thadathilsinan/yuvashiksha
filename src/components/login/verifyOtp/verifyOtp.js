@@ -1,21 +1,13 @@
 import { Component } from "react";
-import { connect } from "react-redux";
 import "./verifyOtp.css";
 
-import { serverDomain } from "../../../config";
-import axios from "axios";
-
-const mapStateToProps = (state) => {
-  return {
-    signupData: state.login.signupData,
-    validSignupData: state.login.validSignupData,
-  };
-};
+import http from "../../../shared/http";
+import parseCookie from "../../../shared/parseCookie";
 
 class VerifyOtp extends Component {
   constructor(props) {
     super(props);
-    this.state = { time: {}, seconds: 1 * 5, resendEnable: false };
+    this.state = { time: {}, seconds: 60 * 5, resendEnable: false };
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
@@ -65,22 +57,16 @@ class VerifyOtp extends Component {
   }
 
   resendOtp = () => {
-    console.log(this.props);
-    if (this.props.validSignupData) {
-      axios({
-        method: "POST",
-        url: "http://localhost:4000/register",
-        data: this.props.signupData,
-      })
-        .then((response) => {
-          console.log(`POST request send to ${serverDomain}/register`);
-          console.log("Response from server: ", response);
-        })
-        .catch((err) => {
-          alert("Error occured during signup. \n Check console for log data");
-          console.log(err);
-        });
-    }
+    http("POST", "/register/resendotp", { cookies: parseCookie() }, (res) => {
+      if (res.status == 200) {
+        console.log("OTP resend");
+      } else {
+        alert(
+          `Error ${res.status} during otp resend\nError message logged in console.`
+        );
+        console.log(res);
+      }
+    });
   };
 
   render() {
@@ -126,4 +112,4 @@ class VerifyOtp extends Component {
   }
 }
 
-export default connect(mapStateToProps)(VerifyOtp);
+export default VerifyOtp;
