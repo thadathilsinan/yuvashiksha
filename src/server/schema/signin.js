@@ -21,4 +21,4 @@ const SigninSchema = new Schema({
 });
 
 let Signin = mongoose.model("Signin", SigninSchema);
-export default Signin;
+module.exports = Signin;

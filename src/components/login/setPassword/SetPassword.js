@@ -76,13 +76,18 @@ class SetPassword extends Component {
           />
           {this.state.errorMessage}
           <br />
-          <input
-            type="checkbox"
-            name="showPassword"
-            id="showPassword"
-            onClick={this.showPassword}
-          />
-          <span style={{ color: "white" }}>Show Password</span>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="showPassword"
+              name="showPassword"
+              onClick={this.showPassword}
+            />
+            <label className="form-check-label" for="showPassword">
+              Show Password
+            </label>
+          </div>
         </div>
         <div className="d-flex align-items-center justify-content-center">
           <button

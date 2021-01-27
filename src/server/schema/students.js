@@ -33,4 +33,4 @@ const StudentsSchema = new Schema({
 });
 
 let Students = mongoose.model("Students", StudentsSchema);
-export default Students;
+module.exports = Students;

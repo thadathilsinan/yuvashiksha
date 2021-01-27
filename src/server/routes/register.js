@@ -5,6 +5,9 @@ let sendMail = require("../functions/sendMail");
 
 let StudentSignup = require("../schema/student-signup");
 let TeacherSignup = require("../schema/teacher-signup");
+let Students = require("../schema/students");
+let Teachers = require("../schema/teachers");
+let Signin = require("../schema/signin");
 
 var router = express.Router();
 
@@ -246,11 +249,45 @@ router
               "No user found.\nCookies may be cleared from your browser.\nYou are required to restart the signup process."
             );
           } else {
-            res.statusCode = 200;
-            res.end("Password set successfully");
+            Students.create({
+              username: user.email,
+              name: user.name,
+              admissionNumber: user.admissionNumber,
+              class: user.class,
+              batch: user.batch,
+              email: user.email,
+              parentEmail: user.parentEmail,
+            })
+              .then((newUser) => {
+                Signin.create({
+                  username: newUser.username,
+                  password: req.body.password,
+                  accountType: "student",
+                  active: false,
+                })
+                  .then((newStudent) => {
+                    console.log(
+                      "Added new Student account into Students and Signin DB"
+                    );
+
+                    res.statusCode = 200;
+                    res.end("Signup Successful");
+                  })
+                  .catch((err) => {
+                    console.log("Error IN SIGIN");
+                    next(err);
+                  });
+              })
+              .catch((err) => {
+                console.log("ERROR IN STUDENTS");
+                next(err);
+              });
           }
         })
-        .catch((err) => next(err));
+        .catch((err) => {
+          console.log("ERROR IN STUDENT SIGNUP");
+          next(err);
+        });
     } else if (req.body.cookies.accountType == "teacher") {
       TeacherSignup.findOneAndUpdate(
         {
@@ -266,8 +303,33 @@ router
               "No user found.\nCookies may be cleared from your browser.\nYou are required to restart the signup process."
             );
           } else {
-            res.statusCode = 200;
-            res.end("Password set successfully");
+            Teachers.create({
+              username: user.email,
+              mentor: null,
+              hod: null,
+              name: user.name,
+              idNumber: user.idNumber,
+              email: user.email,
+              department: user.department,
+            })
+              .then((newTeacher) => {
+                Signin.create({
+                  username: newTeacher.username,
+                  password: req.body.password,
+                  accountType: "teacher",
+                  active: false,
+                })
+                  .then((newTeacher) => {
+                    console.log(
+                      "Added new Teacher account into Teachers   and Signin DB"
+                    );
+
+                    res.statusCode = 200;
+                    res.end("Signup Successful");
+                  })
+                  .catch((err) => next(err));
+              })
+              .catch((err) => next(err));
           }
         })
         .catch((err) => next(err));

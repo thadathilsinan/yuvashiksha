@@ -27,6 +27,17 @@ class Signin extends Component {
           <input
             type="checkbox"
             className="form-check-input"
+            id="showPassword"
+            name="showPassword"
+          />
+          <label className="form-check-label" for="showPassword">
+            Show Password
+          </label>
+        </div>
+        <div className="form-check">
+          <input
+            type="checkbox"
+            className="form-check-input"
             id="remember-me"
           />
           <label className="form-check-label" for="remember-me">
