@@ -1,13 +1,18 @@
 import axios from "axios";
 import { serverDomain } from "../config";
+import parseCookie from "./parseCookie";
 
 let http = (
-  method,
-  url,
+  method = "GET",
+  url = "/",
   body = null,
   callback = null,
   errorCallback = null
 ) => {
+  if (method == "POST") {
+    body = { ...body, cookies: parseCookie() };
+  }
+
   axios({
     method: method,
     url: serverDomain + url,

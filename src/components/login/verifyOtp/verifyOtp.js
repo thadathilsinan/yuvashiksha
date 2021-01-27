@@ -2,12 +2,16 @@ import { Component } from "react";
 import "./verifyOtp.css";
 
 import http from "../../../shared/http";
-import parseCookie from "../../../shared/parseCookie";
-
 class VerifyOtp extends Component {
   constructor(props) {
     super(props);
-    this.state = { time: {}, seconds: 60 * 5, resendEnable: false };
+    this.state = {
+      time: {},
+      seconds: 60 * 5,
+      resendEnable: false,
+      otp: "",
+      otpError: null,
+    };
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
@@ -57,7 +61,7 @@ class VerifyOtp extends Component {
   }
 
   resendOtp = () => {
-    http("POST", "/register/resendotp", { cookies: parseCookie() }, (res) => {
+    http("POST", "/register/resendotp", {}, (res) => {
       if (res.status == 200) {
         console.log("OTP resend");
       } else {
@@ -67,6 +71,38 @@ class VerifyOtp extends Component {
         console.log(res);
       }
     });
+  };
+
+  proceed = () => {
+    if (this.state.otp.length > 0) {
+      this.setState({ otpError: null });
+
+      http(
+        "POST",
+        "/register/otp",
+        {
+          otp: this.state.otp,
+        },
+        (res) => {
+          console.log("OTP Sent to server");
+          if (res.status == 203) {
+            console.log(res.data);
+            alert("OTP Not verified: " + res.data);
+          } else {
+            console.log("OTP verification Success");
+          }
+        }
+      );
+    } else {
+      this.setState({ otpError: <p>Please enter OTP</p> });
+    }
+  };
+
+  otpChange = (event) => {
+    if (this.state.otp.length > 0) {
+      this.setState({ otpError: null });
+    }
+    this.setState({ otp: event.target.value });
   };
 
   render() {
@@ -86,7 +122,10 @@ class VerifyOtp extends Component {
             id="otp"
             placeholder="OTP"
             className="form-control mt-3"
+            value={this.state.otp}
+            onChange={this.otpChange}
           />
+          {this.state.otpError}
           <p>
             Resend OTP: {this.state.time.m}:{this.state.time.s}
           </p>
@@ -103,7 +142,12 @@ class VerifyOtp extends Component {
           </button>
         </div>
         <div className="d-flex align-items-center justify-content-center">
-          <button type="button" className="btn btn-success" id="proceed">
+          <button
+            type="button"
+            className="btn btn-success"
+            id="proceed"
+            onClick={this.proceed}
+          >
             PROCEED
           </button>
         </div>

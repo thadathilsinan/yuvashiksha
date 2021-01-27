@@ -4,13 +4,15 @@ import "./login.css";
 import Signin from "./signin/signin";
 import Signup from "./sigup/signup";
 import VerifyOtp from "./verifyOtp/verifyOtp";
+import SetPassword from "./setPassword/SetPassword";
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      signin: true,
+      signin: false,
       signup: false,
       showVerifyOtp: false,
+      showSetPassword: true,
     };
   }
 
@@ -70,6 +72,7 @@ class Login extends Component {
                 <Signup otpSent={this.showVerifyOtp} />
               ) : null}
               {this.state.showVerifyOtp ? <VerifyOtp /> : null}
+              {this.state.showSetPassword ? <SetPassword /> : null}
             </div>
           </div>
         </div>

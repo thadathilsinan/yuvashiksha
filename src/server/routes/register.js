@@ -172,6 +172,61 @@ router
       res.statusCode = 404;
       res.end("Cookie not found");
     }
+  })
+  .post("/otp", (req, res, next) => {
+    if (req.body.cookies.accountType == "student") {
+      StudentSignup.findOne({
+        admissionNumber: req.body.cookies.admissionNumber,
+        email: req.body.cookies.email,
+      })
+        .then((user) => {
+          if (!user) {
+            res.statusCode = 203;
+            res.end(
+              "No user found.\nCookies may be cleared from your browser.\nYou are required to restart the signup process."
+            );
+          }
+
+          if (user.otp == req.body.otp) {
+            console.log("OTP successfully verified");
+            res.statusCode = 200;
+            res.end("OTP successfully verified");
+          } else {
+            console.log("OTP is incorrect");
+            res.statusCode = 203;
+            res.end("OTP incorrect");
+          }
+        })
+        .catch((err) => next(err));
+    } else if (req.body.cookies.accountType == "teacher") {
+      TeacherSignup.findOne({
+        idNumber: req.body.cookies.idNumber,
+        email: req.body.cookies.email,
+      })
+        .then((user) => {
+          if (!user) {
+            res.statusCode = 203;
+            res.end(
+              "No user found.\nCookies may be cleared from your browser.\nYou are required to restart the signup process."
+            );
+          }
+
+          if (user.otp == req.body.otp) {
+            console.log("OTP successfully verified");
+            res.statusCode = 200;
+            res.end("OTP successfully verified");
+          } else {
+            console.log("OTP is incorrect");
+            res.statusCode = 203;
+            res.end("OTP incorrect");
+          }
+        })
+        .catch((err) => next(err));
+    } else {
+      console.log(req);
+      res.statusCode = 404;
+      res.end("Cookie not found");
+    }
   });
 
 module.exports = router;
