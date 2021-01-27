@@ -90,6 +90,7 @@ class VerifyOtp extends Component {
             alert("OTP Not verified: " + res.data);
           } else {
             console.log("OTP verification Success");
+            this.props.otpVerified();
           }
         }
       );

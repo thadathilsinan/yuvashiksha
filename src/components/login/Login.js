@@ -9,10 +9,10 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      signin: false,
+      signin: true,
       signup: false,
       showVerifyOtp: false,
-      showSetPassword: true,
+      showSetPassword: false,
     };
   }
 
@@ -32,6 +32,15 @@ class Login extends Component {
 
   showVerifyOtp = () => {
     this.setState({ showVerifyOtp: true, signin: false, signup: false });
+  };
+
+  otpVerified = () => {
+    this.setState({
+      showVerifyOtp: false,
+      signin: false,
+      signup: false,
+      showSetPassword: true,
+    });
   };
 
   render() {
@@ -71,7 +80,9 @@ class Login extends Component {
               {this.state.signup ? (
                 <Signup otpSent={this.showVerifyOtp} />
               ) : null}
-              {this.state.showVerifyOtp ? <VerifyOtp /> : null}
+              {this.state.showVerifyOtp ? (
+                <VerifyOtp otpVerified={this.otpVerified} />
+              ) : null}
               {this.state.showSetPassword ? <SetPassword /> : null}
             </div>
           </div>
