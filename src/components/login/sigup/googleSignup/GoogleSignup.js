@@ -1,20 +1,10 @@
 import { Component } from "react";
-import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import "./signup.css";
+import "./GoogleSignup.css";
 
-import Student from "./student/student";
-import Teacher from "./teacher/teacher";
+import Student from "../student/student";
+import Teacher from "../teacher/teacher";
 
-import http from "../../../shared/http";
-import parseCookie from "../../../shared/parseCookie";
-
-const mapStateToProps = (state) => {
-  return {
-    signupData: state.login.signupData,
-    validSignupData: state.login.validSignupData,
-  };
-};
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -25,22 +15,6 @@ class Signup extends Component {
 
   selectAccountType = (event) => {
     this.setState({ accountType: event.target.value });
-  };
-
-  verifyEmail = () => {
-    if (this.props.validSignupData) {
-      http("POST", "/register", this.props.signupData, (res) => {
-        for (let item in res.data) {
-          document.cookie = `${item}=${res.data[item]}`;
-        }
-        this.props.otpSent();
-      });
-    }
-  };
-
-  googleSignup = () => {
-    console.log(this.props);
-    document.location.href = "http://localhost:4000/register/google";
   };
 
   render() {
@@ -77,19 +51,9 @@ class Signup extends Component {
             VERIFY EMAIL
           </button>
         </div>
-        <div className="d-flex align-items-center justify-content-center">
-          <button
-            type="button"
-            className="btn btn-danger"
-            id="google-login-btn"
-            onClick={this.googleSignup}
-          >
-            SIGN UP WITH GOOGLE
-          </button>
-        </div>
       </form>
     );
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Signup));
+export default withRouter(Signup);

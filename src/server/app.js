@@ -4,10 +4,14 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+const cookieSession = require("cookie-session");
 let cors = require("cors");
 
 let loginRouter = require("./routes/login");
 let registerRouter = require("./routes/register");
+
+var passport = require("passport");
+var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 mongoose.connect(
   "mongodb+srv://yuvashiksha:yuvashiksha@yuvashilsha.y1gzh.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
@@ -27,11 +31,45 @@ db.once("open", function () {
 
 var app = express();
 
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID:
+        "512354110909-ge6o3e0uphbkhmpg7qndaid7b1j1tkid.apps.googleusercontent.com",
+      clientSecret: "cnJ_KHiLUX1oCsCJ_At-31X4",
+      callbackURL: "http://localhost:4000/register/redirect",
+    },
+    function (accessToken, refreshToken, profile, done) {
+      done(null, profile);
+    }
+  )
+);
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
 // view engine setup
 app.set("view engine", "jade");
 app.use(cookieParser());
 
 app.use(cors());
+
+//Configure Session Storage
+app.use(
+  cookieSession({
+    name: "session-name",
+    keys: ["key1", "key2"],
+  })
+);
+
+//Configure Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(logger("dev"));
 app.use(express.json());

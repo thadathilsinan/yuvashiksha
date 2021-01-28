@@ -1,4 +1,5 @@
 var express = require("express");
+let passport = require("passport");
 const bodyParser = require("body-parser");
 
 let sendMail = require("../functions/sendMail");
@@ -339,5 +340,23 @@ router
       res.end("Cookie not found");
     }
   });
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/redirect",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  function (req, res) {
+    res.header("Set-Cokkie", "googleUser=true");
+    res.header(
+      "Set-Cookie",
+      "googleUserData=" + JSON.stringify(req.user._json)
+    );
+    res.redirect("http://localhost:3000/signup");
+  }
+);
 
 module.exports = router;

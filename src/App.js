@@ -2,10 +2,12 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 
-import Login from "./components/login/Login";
+import LoginRoute from "./components/login/LoginRoute";
 import Student from "./components/student/Student";
 import Teacher from "./components/teacher/Teacher";
 import Admin from "./components/admin/Admin";
+
+import Signup from "./components/login/sigup/signup";
 
 import { store } from "./store/store";
 
@@ -14,7 +16,7 @@ function App() {
     <BrowserRouter>
       <Provider store={store}>
         <div id="root">
-          <Route path="/" exact component={Login} />
+          <Route path="/" component={LoginRoute} />
           <Route path="/student" component={Student} />
           <Route path="/teacher" component={Teacher} />
           <Route path="/admin" component={Admin} />
