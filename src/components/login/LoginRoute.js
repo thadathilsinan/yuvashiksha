@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 
 import Login from "./Login";
-import GoogleSignup from "./sigup/googleSignup/GoogleSignup";
 
 class LoginRoute extends Component {
   render() {

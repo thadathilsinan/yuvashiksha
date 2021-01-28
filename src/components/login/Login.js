@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { connect } from "react-redux";
 import "./login.css";
 
 import Signin from "./signin/signin";
@@ -7,12 +8,21 @@ import VerifyOtp from "./verifyOtp/verifyOtp";
 import SetPassword from "./setPassword/SetPassword";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import GoogleSignup from "./sigup/googleSignup/GoogleSignup";
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateData: (payload) => dispatch({ type: "updateSignupData", payload }),
+    clearData: () => dispatch({ type: "clearSignupData" }),
+  };
+};
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       signin: true,
       signup: false,
+
+      googleSignup: false,
       showVerifyOtp: false,
       showSetPassword: false,
     };
@@ -22,6 +32,10 @@ class Login extends Component {
     this.setState({
       signin: false,
       signup: true,
+
+      googleSignup: false,
+      showVerifyOtp: false,
+      showSetPassword: false,
     });
 
     this.props.history.push("/signup");
@@ -31,6 +45,10 @@ class Login extends Component {
     this.setState({
       signin: true,
       signup: false,
+
+      googleSignup: false,
+      showVerifyOtp: false,
+      showSetPassword: false,
     });
     this.props.history.push("/signin");
   };
@@ -121,4 +139,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+export default withRouter(connect(null, mapDispatchToProps)(Login));

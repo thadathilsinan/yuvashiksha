@@ -73,10 +73,16 @@ class Teacher extends Component {
   };
 
   componentDidMount() {
+    this.props.clearData();
     this.setView();
   }
 
   render() {
+    if (this.props.google) {
+      this.inputValues.name = this.props.data.name;
+      this.inputValues.email = this.props.data.email;
+    }
+
     return (
       <div>
         {this.state.error}

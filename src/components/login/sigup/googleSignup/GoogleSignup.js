@@ -1,9 +1,17 @@
 import { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import "./GoogleSignup.css";
 
 import Student from "../student/student";
 import Teacher from "../teacher/teacher";
+
+const mapStateToProps = (state) => {
+  return {
+    signupData: state.login.signupData,
+    validSignupData: state.login.validSignupData,
+  };
+};
 
 class Signup extends Component {
   constructor(props) {
@@ -66,4 +74,4 @@ class Signup extends Component {
   }
 }
 
-export default withRouter(Signup);
+export default withRouter(connect(mapStateToProps)(Signup));
