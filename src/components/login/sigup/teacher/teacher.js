@@ -58,6 +58,24 @@ class Teacher extends Component {
     }
   };
 
+  setView = () => {
+    if (this.props.google) {
+      document
+        .getElementById("email")
+        .setAttribute("value", this.props.data.email);
+      document
+        .getElementById("name")
+        .setAttribute("value", this.props.data.name);
+
+      document.getElementById("email").setAttribute("disabled", "true");
+      document.getElementById("name").setAttribute("disabled", "true");
+    }
+  };
+
+  componentDidMount() {
+    this.setView();
+  }
+
   render() {
     return (
       <div>

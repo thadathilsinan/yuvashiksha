@@ -37,8 +37,18 @@ class Signup extends Component {
         </div>
         <div className="form-group">
           <label>Enter your details</label>
-          {this.state.accountType == "student" ? <Student /> : null}
-          {this.state.accountType == "teacher" ? <Teacher /> : null}
+          {this.state.accountType == "student" ? (
+            <Student
+              google
+              data={{ name: "Example", email: "exaple@123.com" }}
+            />
+          ) : null}
+          {this.state.accountType == "teacher" ? (
+            <Teacher
+              google
+              data={{ name: "Example", email: "exaple@123.com" }}
+            />
+          ) : null}
         </div>
         <div className="d-flex align-items-center justify-content-center">
           <button
@@ -48,7 +58,7 @@ class Signup extends Component {
             onClick={this.verifyEmail}
             disabled={!this.props.validSignupData}
           >
-            VERIFY EMAIL
+            FINISH
           </button>
         </div>
       </form>

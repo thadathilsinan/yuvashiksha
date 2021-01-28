@@ -25,7 +25,7 @@ class LoginRoute extends Component {
             <Login signup />
           </Route>
           <Route path="/signup/google" exact>
-            <GoogleSignup />
+            <Login googleSignup />
           </Route>
         </Switch>
       </BrowserRouter>

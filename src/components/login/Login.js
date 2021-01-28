@@ -6,6 +6,7 @@ import Signup from "./sigup/signup";
 import VerifyOtp from "./verifyOtp/verifyOtp";
 import SetPassword from "./setPassword/SetPassword";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
+import GoogleSignup from "./sigup/googleSignup/GoogleSignup";
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -43,6 +44,7 @@ class Login extends Component {
       showVerifyOtp: false,
       signin: false,
       signup: false,
+      googleSignup: false,
       showSetPassword: true,
     });
   };
@@ -52,6 +54,14 @@ class Login extends Component {
       this.changeTabToSignin();
     } else if (this.props.signup) {
       this.changeTabToSignup();
+    } else if (this.props.googleSignup) {
+      this.setState({
+        signin: false,
+        signup: false,
+        showSetPassword: false,
+        showVerifyOtp: false,
+        googleSignup: true,
+      });
     }
   };
 
@@ -101,6 +111,7 @@ class Login extends Component {
                   <VerifyOtp otpVerified={this.otpVerified} />
                 ) : null}
                 {this.state.showSetPassword ? <SetPassword /> : null}
+                {this.state.googleSignup ? <GoogleSignup /> : null}
               </div>
             </div>
           </div>
