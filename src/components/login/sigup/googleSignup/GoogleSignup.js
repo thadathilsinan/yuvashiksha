@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import "./GoogleSignup.css";
 
@@ -13,11 +13,14 @@ const mapStateToProps = (state) => {
   };
 };
 
+let GOOGLE_DATA = {};
+
 class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
       accountType: "student",
+      googleData: {},
     };
   }
 
@@ -25,7 +28,21 @@ class Signup extends Component {
     this.setState({ accountType: event.target.value });
   };
 
+  useQuery = () => {
+    let query = new URLSearchParams(this.props.location.search);
+    return query;
+  };
+
+  getGoogleData = () => {
+    let query = this.useQuery();
+
+    if (query.get("name")) GOOGLE_DATA.name = query.get("name");
+    if (query.get("email")) GOOGLE_DATA.email = query.get("email");
+    if (query.get("id")) GOOGLE_DATA.id = query.get("id");
+  };
+
   render() {
+    this.getGoogleData();
     return (
       <form>
         <div className="form-group">
@@ -48,13 +65,21 @@ class Signup extends Component {
           {this.state.accountType == "student" ? (
             <Student
               google
-              data={{ name: "Example", email: "exaple@123.com" }}
+              data={{
+                name: GOOGLE_DATA.name,
+                email: GOOGLE_DATA.email,
+                id: GOOGLE_DATA.id,
+              }}
             />
           ) : null}
           {this.state.accountType == "teacher" ? (
             <Teacher
               google
-              data={{ name: "Example", email: "exaple@123.com" }}
+              data={{
+                name: GOOGLE_DATA.name,
+                email: GOOGLE_DATA.email,
+                id: GOOGLE_DATA.id,
+              }}
             />
           ) : null}
         </div>

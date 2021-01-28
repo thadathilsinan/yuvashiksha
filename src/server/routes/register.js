@@ -350,12 +350,15 @@ router.get(
   "/redirect",
   passport.authenticate("google", { failureRedirect: "/" }),
   function (req, res) {
-    res.header("Set-Cokkie", "googleUser=true");
-    res.header(
-      "Set-Cookie",
-      "googleUserData=" + JSON.stringify(req.user._json)
+    console.log(req);
+    // res.header(
+    //   "Set-Cookie",
+    //   `googleProfileEmail=${req.user._json.email};googleProfileName=${req.user._json.name};googleProfileId=${req.user._json.sub}`
+    // );
+
+    res.redirect(
+      `http://localhost:3000/signup/google?name=${req.user._json.name}&id=${req.user._json.sub}&email=${req.user._json.email}`
     );
-    res.redirect("http://localhost:3000/signup");
   }
 );
 
