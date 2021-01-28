@@ -1,6 +1,5 @@
 import { Component } from "react";
 import "./Admin.css";
-//import React from "react";
 
 import Navbar from "./Component/Navbar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -13,11 +12,11 @@ import VerifyAccount from "./pages/VerifyAccounts";
 class Admin extends Component {
   render() {
     return (
-      <>
+      <div className="root">
         <Router>
           <Navbar />
           <Switch>
-            <Route path="/" exact component={Home} />
+            <Route path="/admin" exact component={Home} />
             <Route
               path="/Institutionstructure"
               component={Institutionstructure}
@@ -28,7 +27,7 @@ class Admin extends Component {
             <Route path="/VerifyAccounts" component={VerifyAccount} />
           </Switch>
         </Router>
-      </>
+      </div>
     );
   }
 }

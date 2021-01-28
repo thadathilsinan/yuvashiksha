@@ -2,7 +2,7 @@ import React from "react";
 export const SidebarData = [
   {
     title: "Home",
-    path: "/",
+    path: "/admin",
 
     cName: "nav-text",
   },
