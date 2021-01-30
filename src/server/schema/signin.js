@@ -8,7 +8,6 @@ const SigninSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   accountType: {
     type: String,
@@ -17,6 +16,13 @@ const SigninSchema = new Schema({
   active: {
     type: Boolean,
     required: true,
+  },
+  googleSignup: {
+    type: Boolean,
+    default: false,
+  },
+  googleId: {
+    type: String,
   },
 });
 

@@ -22,7 +22,8 @@ class SetPassword extends Component {
         "/register/finish",
         { password: this.state.password },
         (res) => {
-          window.location.href = "http://localhost:3000";
+          alert("Signup Completed");
+          window.location.href = "http://localhost:3000/signin";
         }
       );
     } else {

@@ -35,6 +35,9 @@ const StudentSignupSchema = new Schema({
   googleSignup: {
     type: Boolean,
   },
+  googleId: {
+    type: String,
+  },
 });
 
 let StudentSignup = mongoose.model("StudentSignup", StudentSignupSchema);

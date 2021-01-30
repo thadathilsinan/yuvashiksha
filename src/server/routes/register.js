@@ -350,16 +350,158 @@ router.get(
   "/redirect",
   passport.authenticate("google", { failureRedirect: "/" }),
   function (req, res) {
-    console.log(req);
-    // res.header(
-    //   "Set-Cookie",
-    //   `googleProfileEmail=${req.user._json.email};googleProfileName=${req.user._json.name};googleProfileId=${req.user._json.sub}`
-    // );
-
-    res.redirect(
-      `http://localhost:3000/signup/google?name=${req.user._json.name}&id=${req.user._json.sub}&email=${req.user._json.email}`
-    );
+    Signin.findOne({ googleId: req.user._json.sub })
+      .then((user) => {
+        if (user) {
+          if (user.accountType == "student")
+            res.redirect("http://localhost:3000/student");
+          else if (user.accountType == "teacher")
+            res.redirect("http://localhost:3000/teacher");
+        } else {
+          res.redirect(
+            `http://localhost:3000/signup/google?name=${req.user._json.name}&id=${req.user._json.sub}&email=${req.user._json.email}`
+          );
+        }
+      })
+      .catch((err) => next(err));
   }
 );
+
+router.post("/googlesignup", (req, res, next) => {
+  if (req.body.accountType == "student") {
+    StudentSignup.findOne({ admissionNumber: req.body.admissionNumber })
+      .then((user) => {
+        if (user) {
+          let error = new Error("User already Exist.");
+          next(error);
+          res.end();
+        } else {
+          StudentSignup.create({
+            name: req.body.name,
+            admissionNumber: req.body.admissionNumber,
+            class: req.body.class,
+            batch: req.body.batch,
+            email: req.body.email,
+            parentEmail: req.body.parentEmail,
+            otp: null,
+            password: null,
+            googleSignup: true,
+            googleId: req.body.googleId,
+          })
+            .then((user) => {
+              console.log(
+                "New user data added to StudentSignup collection : " + user
+              );
+
+              Students.create({
+                username: user.email,
+                name: user.name,
+                admissionNumber: user.admissionNumber,
+                class: user.class,
+                batch: user.batch,
+                email: user.email,
+                parentEmail: user.parentEmail,
+              })
+                .then((newUser) => {
+                  Signin.create({
+                    username: req.body.email,
+                    password: null,
+                    accountType: "student",
+                    active: false,
+                    googleSignup: true,
+                    googleId: req.body.googleId,
+                  })
+                    .then((newStudent) => {
+                      console.log(
+                        "Added new Student account into Students and Signin DB"
+                      );
+
+                      res.statusCode = 200;
+                      res.end("Google Signup Success");
+                    })
+                    .catch((err) => {
+                      console.log("Error in Signin", err);
+                      next(err);
+                    });
+                })
+                .catch((err) => {
+                  console.log("Error in Students");
+                  next(err);
+                });
+            })
+            .catch((err) => {
+              console.log("Error in Student Signup");
+              next(err);
+            });
+        }
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else if (req.body.accountType == "teacher") {
+    TeacherSignup.findOne({ idNumber: req.body.idNumber })
+      .then((user) => {
+        if (user) {
+          let error = new Error("User already Exist.");
+          next(error);
+        } else {
+          TeacherSignup.create({
+            name: req.body.name,
+            idNumber: req.body.idNumber,
+            email: req.body.email,
+            department: req.body.department,
+            otp: null,
+            password: null,
+            googleSignup: true,
+            googleId: req.body.googleId,
+          })
+            .then((user) => {
+              console.log(
+                "New user data added to TeacherSignup collection : " + user
+              );
+              Teachers.create({
+                username: user.email,
+                name: user.name,
+                idNumber: user.idNumber,
+                email: user.email,
+                department: user.department,
+              })
+                .then((newUser) => {
+                  Signin.create({
+                    username: newUser.username,
+                    password: null,
+                    accountType: "teacher",
+                    active: false,
+                    googleSignup: true,
+                    googleId: req.body.googleId,
+                  })
+                    .then((newStudent) => {
+                      console.log(
+                        "Added new Teacher account into Teachers and Signin DB"
+                      );
+
+                      res.statusCode = 200;
+                      res.end("Google Signup Success");
+                    })
+                    .catch((err) => {
+                      next(err);
+                    });
+                })
+                .catch((err) => {
+                  next(err);
+                });
+            })
+            .catch((err) => next(err));
+        }
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else {
+    console.log(req);
+    res.statusCode = 404;
+    res.end("Invalid Account type");
+  }
+});
 
 module.exports = router;

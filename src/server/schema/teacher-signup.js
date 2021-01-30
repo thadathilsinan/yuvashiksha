@@ -27,6 +27,9 @@ const TeacherSignupSchema = new Schema({
   googleSignup: {
     type: Boolean,
   },
+  googleId: {
+    type: String,
+  },
 });
 
 let TeacherSignup = mongoose.model("TeacherSignup", TeacherSignupSchema);

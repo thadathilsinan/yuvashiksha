@@ -32,4 +32,6 @@ router.post("/", function (req, res, next) {
     });
 });
 
+router.post("/google", (req, res, next) => {});
+
 module.exports = router;

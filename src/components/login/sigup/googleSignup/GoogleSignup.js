@@ -6,6 +6,8 @@ import "./GoogleSignup.css";
 import Student from "../student/student";
 import Teacher from "../teacher/teacher";
 
+import http from "../../../../shared/http";
+
 const mapStateToProps = (state) => {
   return {
     signupData: state.login.signupData,
@@ -24,8 +26,26 @@ class Signup extends Component {
     };
   }
 
+  query = null;
+
   selectAccountType = (event) => {
     this.setState({ accountType: event.target.value });
+  };
+
+  finishSignup = () => {
+    http(
+      "POST",
+      "/register/googlesignup",
+      { ...this.props.signupData, ...GOOGLE_DATA },
+      (res) => {
+        if (res.status == 200) {
+          alert("Signup Completed");
+          document.location.href = "http://localhost:3000/signin";
+        } else {
+          alert("Error During Signup. May be accoount already exist");
+        }
+      }
+    );
   };
 
   useQuery = () => {
@@ -34,11 +54,11 @@ class Signup extends Component {
   };
 
   getGoogleData = () => {
-    let query = this.useQuery();
+    this.query = this.useQuery();
 
-    if (query.get("name")) GOOGLE_DATA.name = query.get("name");
-    if (query.get("email")) GOOGLE_DATA.email = query.get("email");
-    if (query.get("id")) GOOGLE_DATA.id = query.get("id");
+    if (this.query.get("name")) GOOGLE_DATA.name = this.query.get("name");
+    if (this.query.get("email")) GOOGLE_DATA.email = this.query.get("email");
+    if (this.query.get("id")) GOOGLE_DATA.googleId = this.query.get("id");
   };
 
   render() {
@@ -88,7 +108,7 @@ class Signup extends Component {
             type="button"
             className="btn btn-success"
             id="login-btn"
-            onClick={this.verifyEmail}
+            onClick={this.finishSignup}
             disabled={!this.props.validSignupData}
           >
             FINISH

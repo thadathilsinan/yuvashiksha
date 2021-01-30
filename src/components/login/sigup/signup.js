@@ -39,7 +39,6 @@ class Signup extends Component {
   };
 
   googleSignup = () => {
-    console.log(this.props);
     document.location.href = "http://localhost:4000/register/google";
   };
 

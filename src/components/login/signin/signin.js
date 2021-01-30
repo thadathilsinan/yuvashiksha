@@ -61,6 +61,10 @@ class Signin extends Component {
     }
   };
 
+  googleSignin = () => {
+    document.location.href = "http://localhost:4000/register/google";
+  };
+
   render() {
     return (
       <form>
@@ -116,6 +120,7 @@ class Signin extends Component {
             type="button"
             className="btn btn-danger"
             id="google-login-btn"
+            onClick={this.googleSignin}
           >
             SIGN IN WITH GOOGLE
           </button>
