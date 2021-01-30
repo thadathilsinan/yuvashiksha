@@ -1,0 +1,16 @@
+#navBar {
+  width: 100%;
+  height: 80px;
+  background-color: rgb(31, 80, 153);
+}
+
+#navBarContainer {
+  height: 100%;
+}
+
+#left,
+#right,
+#center {
+  margin: 0 20px;
+  padding: 0;
+}
