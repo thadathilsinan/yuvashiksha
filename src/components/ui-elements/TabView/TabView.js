@@ -8,19 +8,19 @@ class TabView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: null,
+      leftTab: true,
     };
   }
 
   changeToLeftTab = () => {
-    this.setState({ selectedTab: 1 });
+    this.setState({ leftTab: true });
 
     document.getElementById("leftTab").setAttribute("class", "selectedTab");
     document.getElementById("rightTab").removeAttribute("class");
   };
 
   changeToRightTab = () => {
-    this.setState({ selectedTab: 2 });
+    this.setState({ leftTab: false });
 
     document.getElementById("rightTab").setAttribute("class", "selectedTab");
     document.getElementById("leftTab").removeAttribute("class");
@@ -49,6 +49,11 @@ class TabView extends Component {
           <div id="rightTab" onClick={this.changeToRightTab}>
             <span>{leftTab}</span>
           </div>
+        </div>
+        <div id="tabViewBody">
+          {this.state.leftTab
+            ? this.props.children.leftTabBody
+            : this.props.children.rightTabBody}
         </div>
       </div>
     );

@@ -6,3 +6,11 @@
 #NavBarInfoText {
   height: 20px;
 }
+
+#leftTabBody {
+  height: calc(100vh - 80px - 50px);
+}
+
+#rightTabBody {
+  height: calc(100vh - 80px - 50px);
+}

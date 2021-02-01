@@ -51,6 +51,8 @@ class Teacher extends Component {
           {{
             leftTab: <span>SCHEDULED EXAMS</span>,
             rightTab: <span>PREVIOUS EXAMS</span>,
+            leftTabBody: <div id="leftTabBody">LEFT</div>,
+            rightTabBody: <div id="rightTabBody">RIGHT</div>,
           }}
         </TabView>
       </div>
