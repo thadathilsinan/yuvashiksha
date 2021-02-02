@@ -35,9 +35,15 @@ class Messagecontent extends Component {
           </table>
           <div className="mt-4">{this.props.message.message}</div>
           <form>
-            <textarea id="msg" name="msg" rows="10" cols="90"></textarea>
+            <textarea
+              className="mt-4"
+              id="msg"
+              name="msg"
+              rows="10"
+              cols="90"
+            ></textarea>
             <div className="text-right">
-              <Button type="submit" className=" mr-3 btn btn-success">
+              <Button type="submit" className="mt-4 mr-3 btn btn-success">
                 Reply
               </Button>
             </div>
