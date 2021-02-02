@@ -1,5 +1,6 @@
 .root {
   background-color: #82b1ff;
+  /* width: calc(100% - 200px); */
 }
 
 #admin-sidebar {
