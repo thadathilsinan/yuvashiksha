@@ -20,7 +20,7 @@ class Message extends React.Component {
   storeMessage = () => {
     this.props.storeMessage(this.props.message);
 
-    this.props.history.push("/messagecontent");
+    this.props.history.push("/admin/message/messagecontent");
   };
   render() {
     return (
