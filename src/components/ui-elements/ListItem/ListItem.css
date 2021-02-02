@@ -1,0 +1,12 @@
+#list-item-container {
+  height: 100px;
+  background-color: white;
+  border-radius: 15px;
+  margin: 10px;
+  box-sizing: border-box;
+}
+
+#left-list-item-content,
+#right-list-item-content {
+  margin: 20px;
+}

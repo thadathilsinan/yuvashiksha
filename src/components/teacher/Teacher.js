@@ -3,8 +3,31 @@ import "./Teacher.css";
 
 import NavBar from "../ui-elements/navBar/NavBar";
 import TabView from "../ui-elements/TabView/TabView";
+import ListItem from "../ui-elements/ListItem/ListItem";
+
+let examData = [
+  {
+    name: "Name of Exam",
+    subject: "Subject",
+    from: "9:00",
+    to: "12:00",
+    marsk: 80,
+    date: "12-01-2021",
+  },
+];
 
 class Teacher extends Component {
+  examList = examData.map((item) => {
+    return (
+      <ListItem height="100px">
+        {{
+          left: <div>LEFT</div>,
+          right: <div>RIGHT</div>,
+        }}
+      </ListItem>
+    );
+  });
+
   render() {
     return (
       <div>
@@ -51,6 +74,8 @@ class Teacher extends Component {
           {{
             leftTab: <span>SCHEDULED EXAMS</span>,
             rightTab: <span>PREVIOUS EXAMS</span>,
+            leftTabBody: <div id="leftTabBody">{this.examList}</div>,
+            rightTabBody: <div id="rightTabBody">RIGHT</div>,
           }}
         </TabView>
       </div>
