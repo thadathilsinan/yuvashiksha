@@ -9,6 +9,7 @@ let cors = require("cors");
 
 let loginRouter = require("./routes/login");
 let registerRouter = require("./routes/register");
+let adminRouter = require("./routes/admin");
 
 var passport = require("passport");
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
@@ -78,6 +79,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
+app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
