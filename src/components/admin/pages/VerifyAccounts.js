@@ -11,7 +11,7 @@ export default class VerifyAccounts extends Component {
     };
   }
   getUserData = () => {
-    http("GET", "/admin", null, (res) => {
+    http("GET", "/admin/verifyaccount", null, (res) => {
       this.setState({ userData: res.data.data });
     });
   };
@@ -20,10 +20,26 @@ export default class VerifyAccounts extends Component {
     this.getUserData();
   }
 
+  acceptUser = (item) => {
+    http(
+      "POST",
+      "/admin/verifyaccount/accept",
+      { username: item.username },
+      (res) => {
+        if (res.status == 200) {
+          alert("Account Verified Successfully");
+          document.getElementById(item._id).style.display = "none";
+        } else {
+          alert("Error during account verification");
+        }
+      }
+    );
+  };
+
   getTeacherList = () => {
     let teachers = this.state.userData.map((item) => {
       return (
-        <div className="container  col-md-10 mt-1 ">
+        <div className="container  col-md-10 mt-1 " id={item._id}>
           <ListItem height="180px">
             {{
               left: (
@@ -31,11 +47,11 @@ export default class VerifyAccounts extends Component {
                   <span>
                     <Row>
                       <Col>
-                        <p class="text-left">{}</p>
+                        <p class="text-left">{item.name}</p>
                       </Col>
                     </Row>
-                    <p class="text-left">Email</p>
-                    <p class="text-left">Department</p>
+                    <p class="text-left">{item.email}</p>
+                    <p class="text-left">{item.department}</p>
                   </span>{" "}
                   <Col className="text-left">
                     <Button type="submit" className=" mr-3 btn btn-danger">
@@ -46,11 +62,15 @@ export default class VerifyAccounts extends Component {
               ),
               right: (
                 <div>
-                  <p class="text-right">ID Number</p>
+                  <p class="text-right">{item.idNumber}</p>
                   <br />
                   <br />
                   <br />
-                  <Button type="submit" className=" mr-3 btn btn-success">
+                  <Button
+                    type="submit"
+                    className=" mr-3 btn btn-success"
+                    onClick={() => this.acceptUser(item)}
+                  >
                     Accept
                   </Button>
                 </div>
