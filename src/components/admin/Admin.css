@@ -1,3 +1,24 @@
 .root {
-  background-color: #fff;
+  background-color: #82b1ff;
+  /* width: calc(100% - 200px); */
+}
+
+#admin-sidebar {
+  width: 200px;
+  height: calc(100vh - 80px);
+  background-color: #060b26;
+}
+
+.nav-text {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 8px 0px 8px 16px;
+  list-style: none;
+  height: 60px;
+}
+
+#adminContent {
+  height: calc(100vh - 80px);
+  overflow: auto;
 }

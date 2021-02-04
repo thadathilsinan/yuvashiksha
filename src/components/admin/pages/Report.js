@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 function Report() {
   return (
-    <div className="container  col-md-6 mt-5 bg-secondary">
+    <div className="container  col-md-8 mt-5 bg-secondary">
       <Form className="">
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Department" />

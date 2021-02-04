@@ -13,8 +13,8 @@ const SigninSchema = new Schema({
     type: String,
     required: true,
   },
-  active: {
-    type: Boolean,
+  accountStatus: {
+    type: String,
     required: true,
   },
   googleSignup: {

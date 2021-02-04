@@ -1,4 +1,3 @@
-import React from "react";
 export const SidebarData = [
   {
     title: "Home",
@@ -8,32 +7,32 @@ export const SidebarData = [
   },
   {
     title: "Institution structure",
-    path: "/institutionstructure",
+    path: "/admin/institutionstructure",
 
     cName: "nav-text",
   },
   {
     title: "Message",
-    path: "/message",
+    path: "/admin/message",
 
     cName: "nav-text",
   },
   {
     title: "Report",
-    path: "/report",
+    path: "/admin/report",
 
     cName: "nav-text",
   },
 
   {
     title: "VerifyAccounts",
-    path: "/Verifyaccounts",
+    path: "/admin/verifyaccounts",
 
     cName: "nav-text",
   },
   {
     title: "UserMangamenet",
-    path: "/usermangamenet",
+    path: "/admin/usermangamenet",
 
     cName: "nav-text",
   },
