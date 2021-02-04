@@ -95,6 +95,7 @@ class Teacher extends Component {
 
   componentDidMount() {
     this.setExamData();
+    this.forceUpdate();
   }
 
   render() {
