@@ -264,7 +264,7 @@ router
                   username: newUser.username,
                   password: req.body.password,
                   accountType: "student",
-                  active: false,
+                  accountStatus: "not-activated",
                 })
                   .then((newStudent) => {
                     console.log(
@@ -318,7 +318,7 @@ router
                   username: newTeacher.username,
                   password: req.body.password,
                   accountType: "teacher",
-                  active: false,
+                  accountStatus: "not-activated",
                 })
                   .then((newTeacher) => {
                     console.log(
@@ -407,7 +407,7 @@ router.post("/googlesignup", (req, res, next) => {
                     username: req.body.email,
                     password: null,
                     accountType: "student",
-                    active: false,
+                    accountStatus: "not-activated",
                     googleSignup: true,
                     googleId: req.body.googleId,
                   })
@@ -471,7 +471,7 @@ router.post("/googlesignup", (req, res, next) => {
                     username: newUser.username,
                     password: null,
                     accountType: "teacher",
-                    active: false,
+                    accountStatus: "not-activated",
                     googleSignup: true,
                     googleId: req.body.googleId,
                   })

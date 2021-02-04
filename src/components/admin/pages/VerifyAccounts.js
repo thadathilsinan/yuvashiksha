@@ -21,19 +21,43 @@ export default class VerifyAccounts extends Component {
   }
 
   acceptUser = (item) => {
-    http(
-      "POST",
-      "/admin/verifyaccount/accept",
-      { username: item.username },
-      (res) => {
-        if (res.status == 200) {
-          alert("Account Verified Successfully");
-          document.getElementById(item._id).style.display = "none";
-        } else {
-          alert("Error during account verification");
+    let confirmation = window.confirm("Are you sure you want to accept?");
+
+    if (confirmation) {
+      http(
+        "POST",
+        "/admin/verifyaccount/accept",
+        { username: item.username },
+        (res) => {
+          if (res.status == 200) {
+            alert("Account Verified Successfully");
+            document.getElementById(item._id).style.display = "none";
+          } else {
+            alert("Error during account verification");
+          }
         }
-      }
-    );
+      );
+    }
+  };
+
+  rejectUser = (item) => {
+    let confirmation = window.confirm("Are you sure you want to reject?");
+
+    if (confirmation) {
+      http(
+        "POST",
+        "/admin/verifyaccount/reject",
+        { username: item.username },
+        (res) => {
+          if (res.status == 200) {
+            alert("Account Rejected Successfully");
+            document.getElementById(item._id).style.display = "none";
+          } else {
+            alert("Error during account rejection");
+          }
+        }
+      );
+    }
   };
 
   getTeacherList = () => {
@@ -54,7 +78,11 @@ export default class VerifyAccounts extends Component {
                     <p class="text-left">{item.department}</p>
                   </span>{" "}
                   <Col className="text-left">
-                    <Button type="submit" className=" mr-3 btn btn-danger">
+                    <Button
+                      type="submit"
+                      className=" mr-3 btn btn-danger"
+                      onClick={() => this.rejectUser(item)}
+                    >
                       Reject
                     </Button>
                   </Col>

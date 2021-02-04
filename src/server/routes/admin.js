@@ -8,7 +8,7 @@ var router = express.Router();
 
 router.use(bodyParser.json());
 router.get("/verifyaccount", async function (req, res, next) {
-  Signin.find({ active: false, accountType: "teacher" })
+  Signin.find({ accountStatus: "not-activated", accountType: "teacher" })
     .then(async (response) => {
       let teacherData = [];
       for (item of response) {
@@ -23,10 +23,25 @@ router.get("/verifyaccount", async function (req, res, next) {
 });
 
 router.post("/verifyaccount/accept", (req, res, next) => {
-  Signin.findOneAndUpdate({ username: req.body.username }, { active: true })
+  Signin.findOneAndUpdate(
+    { username: req.body.username },
+    { accountStatus: "ok" }
+  )
     .then((user) => {
       res.statusCode = 200;
       res.end("Suucessfully Verified");
+    })
+    .catch((err) => next(err));
+});
+
+router.post("/verifyaccount/reject", (req, res, next) => {
+  Signin.findOneAndUpdate(
+    { username: req.body.username },
+    { accountStatus: "rejected" }
+  )
+    .then((user) => {
+      res.statusCode = 200;
+      res.end("Suucessfully Rejected");
     })
     .catch((err) => next(err));
 });
