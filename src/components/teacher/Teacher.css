@@ -22,3 +22,11 @@
 #exam-list-item {
   height: 100px;
 }
+
+p {
+  line-height: 0.6;
+}
+#leftListItem,
+#rightListItem {
+  margin-top: 10px;
+}

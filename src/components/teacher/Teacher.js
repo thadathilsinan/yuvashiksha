@@ -9,24 +9,93 @@ let examData = [
   {
     name: "Name of Exam",
     subject: "Subject",
-    from: "9:00",
-    to: "12:00",
-    marsk: 80,
-    date: "12-01-2021",
+    from: "9:00:00",
+    to: "12:00:00",
+    marks: 80,
+    date: "12-01-2021", //mm-dd-yyyy
+  },
+  {
+    name: "Name of Exam",
+    subject: "Subject",
+    from: "9:00:00",
+    to: "12:00:00",
+    marks: 80,
+    date: "08-01-2021", //mm-dd-yyyy
+  },
+  {
+    name: "Name of Exam",
+    subject: "Subject",
+    from: "9:00:00",
+    to: "12:00:00",
+    marks: 80,
+    date: "01-01-2021", //mm-dd-yyyy
   },
 ];
 
 class Teacher extends Component {
-  examList = examData.map((item) => {
-    return (
-      <ListItem height="100px">
-        {{
-          left: <div>LEFT</div>,
-          right: <div>RIGHT</div>,
-        }}
-      </ListItem>
-    );
-  });
+  examList = [];
+  previousExamList = [];
+
+  setExamData = () => {
+    console.log("CAlled");
+    let currentTime = new Date();
+
+    examData.map((item) => {
+      let examDate = new Date(`${item.date},${item.to}`);
+
+      if (currentTime.getTime() > examDate.getTime()) {
+        this.previousExamList.push(
+          <ListItem height="100px">
+            {{
+              left: (
+                <div id="leftListItem">
+                  <p>{item.name}</p>
+                  <p>{item.subject}</p>
+                  <p>{item.date}</p>
+                </div>
+              ),
+              right: (
+                <div id="rightListItem">
+                  <p>
+                    {item.from} - {item.to}
+                  </p>
+                  <p>{item.marks} Marks</p>
+                </div>
+              ),
+            }}
+          </ListItem>
+        );
+        console.log("pushed to prev");
+      } else {
+        this.examList.push(
+          <ListItem height="100px">
+            {{
+              left: (
+                <div id="leftListItem">
+                  <p>{item.name}</p>
+                  <p>{item.subject}</p>
+                  <p>{item.date}</p>
+                </div>
+              ),
+              right: (
+                <div id="rightListItem">
+                  <p>
+                    {item.from} - {item.to}
+                  </p>
+                  <p>{item.marks} Marks</p>
+                </div>
+              ),
+            }}
+          </ListItem>
+        );
+        console.log("Pushed to scheduled");
+      }
+    });
+  };
+
+  componentDidMount() {
+    this.setExamData();
+  }
 
   render() {
     return (
@@ -75,7 +144,7 @@ class Teacher extends Component {
             leftTab: <span>SCHEDULED EXAMS</span>,
             rightTab: <span>PREVIOUS EXAMS</span>,
             leftTabBody: <div id="leftTabBody">{this.examList}</div>,
-            rightTabBody: <div id="rightTabBody">RIGHT</div>,
+            rightTabBody: <div id="rightTabBody">{this.previousExamList}</div>,
           }}
         </TabView>
       </div>
