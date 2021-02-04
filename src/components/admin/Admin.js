@@ -14,7 +14,7 @@ import { SidebarData } from "./Component/Sidebardata";
 class Admin extends Component {
   isHome = () => {
     console.log(this.props);
-    if (this.props.location.pathname == "/admin") {
+    if (this.props.location.pathname === "/admin") {
       return true;
     } else {
       return false;
