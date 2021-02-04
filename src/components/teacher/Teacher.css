@@ -22,3 +22,30 @@
 #exam-list-item {
   height: 100px;
 }
+
+p {
+  line-height: 0.6;
+}
+#leftListItem,
+#rightListItem {
+  margin-top: 10px;
+}
+
+#new-exam {
+  background-color: white;
+  height: 80px;
+  width: 80px;
+  border-radius: 80px;
+
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+
+  text-align: center;
+  box-shadow: 2px 2px 3px rgb(58, 58, 58);
+}
+
+#floatButtonText {
+  margin-top: 2px;
+  font-size: 50px;
+}

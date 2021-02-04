@@ -44,10 +44,10 @@ class TabView extends Component {
       <div id="tabViewContainer">
         <div id="tabViewRow">
           <div id="leftTab" onClick={this.changeToLeftTab}>
-            <span>{rightTab}</span>
+            <span>{leftTab}</span>
           </div>
           <div id="rightTab" onClick={this.changeToRightTab}>
-            <span>{leftTab}</span>
+            <span>{rightTab}</span>
           </div>
         </div>
         <div id="tabViewBody">
