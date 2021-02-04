@@ -147,6 +147,9 @@ class Teacher extends Component {
             rightTabBody: <div id="rightTabBody">{this.previousExamList}</div>,
           }}
         </TabView>
+        <div id="new-exam">
+          <div id="floatButtonText">+</div>
+        </div>
       </div>
     );
   }
