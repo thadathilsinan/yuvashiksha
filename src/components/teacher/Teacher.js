@@ -4,6 +4,9 @@ import "./Teacher.css";
 import NavBar from "../ui-elements/navBar/NavBar";
 import TabView from "../ui-elements/TabView/TabView";
 import ListItem from "../ui-elements/ListItem/ListItem";
+import NewExam from "./newExam/NewExam";
+
+import { BrowserRouter, Route } from "react-router-dom";
 
 let examData = [
   {
@@ -93,6 +96,10 @@ class Teacher extends Component {
     });
   };
 
+  newExam = () => {
+    document.location.href = "http://localhost:3000/teacher/newexam";
+  };
+
   componentDidMount() {
     this.setExamData();
     this.forceUpdate();
@@ -101,56 +108,65 @@ class Teacher extends Component {
   render() {
     return (
       <div>
-        <NavBar>
-          {{
-            left: <h5>HOME</h5>,
-            right: (
-              <div className="container" id="NavBarRight">
-                <div className="row">
-                  <div
-                    className="col-sm-4 align-self-center"
-                    id="NavBarInfoText"
-                  >
-                    <p>Select Class and Batch : </p>
+        <BrowserRouter>
+          <Route path="/teacher" exact>
+            <NavBar>
+              {{
+                left: <h5>HOME</h5>,
+                right: (
+                  <div className="container" id="NavBarRight">
+                    <div className="row">
+                      <div
+                        className="col-sm-4 align-self-center"
+                        id="NavBarInfoText"
+                      >
+                        <p>Select Class and Batch : </p>
+                      </div>
+                      <div className="col-sm-4">
+                        <select
+                          className="form-select mt-3"
+                          name="class"
+                          id="class"
+                        >
+                          <option value="">Class</option>
+                          <option value="CS">CS</option>
+                          <option value="Commerce">Commerce</option>
+                        </select>
+                      </div>
+                      <div className="col-sm-4">
+                        <select
+                          className="form-select mt-3"
+                          name="batch"
+                          id="batch"
+                        >
+                          <option value="">Batch</option>
+                          <option value="2018-21">2018-21</option>
+                          <option value="2019-22">2019-22</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-sm-4">
-                    <select
-                      className="form-select mt-3"
-                      name="class"
-                      id="class"
-                    >
-                      <option value="">Class</option>
-                      <option value="CS">CS</option>
-                      <option value="Commerce">Commerce</option>
-                    </select>
-                  </div>
-                  <div className="col-sm-4">
-                    <select
-                      className="form-select mt-3"
-                      name="batch"
-                      id="batch"
-                    >
-                      <option value="">Batch</option>
-                      <option value="2018-21">2018-21</option>
-                      <option value="2019-22">2019-22</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            ),
-          }}
-        </NavBar>
-        <TabView>
-          {{
-            leftTab: <span>SCHEDULED EXAMS</span>,
-            rightTab: <span>PREVIOUS EXAMS</span>,
-            leftTabBody: <div id="leftTabBody">{this.examList}</div>,
-            rightTabBody: <div id="rightTabBody">{this.previousExamList}</div>,
-          }}
-        </TabView>
-        <div id="new-exam">
-          <div id="floatButtonText">+</div>
-        </div>
+                ),
+              }}
+            </NavBar>
+            <TabView>
+              {{
+                leftTab: <span>SCHEDULED EXAMS</span>,
+                rightTab: <span>PREVIOUS EXAMS</span>,
+                leftTabBody: <div id="leftTabBody">{this.examList}</div>,
+                rightTabBody: (
+                  <div id="rightTabBody">{this.previousExamList}</div>
+                ),
+              }}
+            </TabView>
+            <div id="new-exam" onClick={this.newExam}>
+              <div id="floatButtonText">+</div>
+            </div>
+          </Route>
+          <Route path="/teacher/newexam">
+            <NewExam />
+          </Route>
+        </BrowserRouter>
       </div>
     );
   }
