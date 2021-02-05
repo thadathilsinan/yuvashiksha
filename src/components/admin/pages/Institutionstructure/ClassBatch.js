@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button, Row, Form, Col, Modal } from "react-bootstrap";
 
 import { FaMinus, FaPencilAlt, FaPlus } from "react-icons/fa";
-import ListItem from "../../ui-elements/ListItem/ListItem";
+import ListItem from "../../../ui-elements/ListItem/ListItem";
 export default class ClassBatch extends Component {
   constructor(props) {
     super(props);

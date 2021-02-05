@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Form, Col, Row, Container, Modal } from "react-bootstrap";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import { FaMinus, FaPencilAlt, FaPlus } from "react-icons/fa";
-import ListItem from "../../ui-elements/ListItem/ListItem";
+import ListItem from "../../../ui-elements/ListItem/ListItem";
 class Departments extends React.Component {
   constructor(props) {
     super(props);

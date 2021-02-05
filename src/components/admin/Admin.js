@@ -4,12 +4,12 @@ import "./Admin.css";
 import NavBar from "../ui-elements/navBar/NavBar";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
-import Institutionstructure from "./pages/Institutionstructure";
-import Messagelist from "./pages/Messagelist";
+import Institutionstructure from "./pages/Institutionstructure/Institutionstructure";
+import Messagelist from "./pages/Message/Messagelist";
 import Report from "./pages/Report";
-import UserMangamenet from "./pages/UserMangamenet";
+import UserMangamenet from "./pages/UserManagment/UserMangamenet";
 import VerifyAccount from "./pages/VerifyAccounts";
-import Messagecontent from "./pages/Messagecontent";
+import Messagecontent from "./pages/Message/Messagecontent";
 import { SidebarData } from "./Component/Sidebardata";
 class Admin extends Component {
   isHome = () => {

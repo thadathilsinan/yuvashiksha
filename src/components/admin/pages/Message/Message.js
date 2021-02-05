@@ -4,7 +4,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import { Link, Route, withRouter } from "react-router-dom";
 import Messagecontent from "./Messagecontent";
 import Messagelist from "./Messagelist";
-import ListItem from "../../ui-elements/ListItem/ListItem";
+import ListItem from "../../../ui-elements/ListItem/ListItem";
 import { connect } from "react-redux";
 
 let mapDispatchToProps = (dispatch) => {
