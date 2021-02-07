@@ -7,9 +7,11 @@ export default class ClassBatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false,
-      modalShow: false,
+      showHide: false,
     };
+  }
+  handleModalShowHide() {
+    this.setState({ showHide: !this.state.showHide });
   }
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
@@ -65,7 +67,7 @@ export default class ClassBatch extends Component {
                 </Button>
                 <Button
                   className="btn btn-secondary"
-                  onClick={() => this.setState({ modalShow: true })}
+                  onClick={() => this.handleModalShowHide()}
                 >
                   <FaPencilAlt />
                 </Button>
@@ -75,7 +77,7 @@ export default class ClassBatch extends Component {
         </ListItem>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Add Classbatch</Modal.Title>
+            <Modal.Title>Add Class Batch</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>
@@ -105,12 +107,10 @@ export default class ClassBatch extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Modal
-          show={this.state.modalShow}
-          onHide={() => this.setState({ modalShow: false })}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Classbatch</Modal.Title>
+
+        <Modal show={this.state.showHide}>
+          <Modal.Header closeButton onClick={() => this.handleModalShowHide()}>
+            <Modal.Title>Edit Class Batch</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>
@@ -130,11 +130,18 @@ export default class ClassBatch extends Component {
               />
             </p>
           </Modal.Body>
+
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.props.onHide}>
+            <Button
+              variant="secondary"
+              onClick={() => this.handleModalShowHide()}
+            >
               Close
             </Button>
-            <Button variant="primary" onClick={this.props.onHide}>
+            <Button
+              variant="primary"
+              onClick={() => this.handleModalShowHide()}
+            >
               Save Changes
             </Button>
           </Modal.Footer>

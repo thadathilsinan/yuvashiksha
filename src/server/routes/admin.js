@@ -84,4 +84,41 @@ router.post("/usermanagement/teacher/disable", (req, res, next) => {
     })
     .catch((err) => next(err));
 });
+router.get("/usermanagement/student", (req, res, next) => {
+  Students.find({})
+    .then((response) => {
+      res.statusCode = 200;
+      res.json({ data: response });
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+router.post("/usermanagement/student/delete", (req, res, next) => {
+  Students.findOneAndDelete({ _id: req.body.student._id })
+    .then((response) => {
+      res.statusCode = 200;
+      res.end("Successfully deleted student");
+    })
+    .catch((err) => next(err));
+});
+
+router.post("/usermanagement/student/disable", (req, res, next) => {
+  Students.findOne({ _id: req.body.student._id })
+    .then((response) => {
+      if (response) {
+        Signin.findOneAndUpdate(
+          { username: req.body.student.username },
+          { accountStatus: "disabled" }
+        )
+          .then((resp) => {
+            res.statusCode = 200;
+            res.end("Student account disabled successfully");
+          })
+          .catch((err) => next(err));
+      }
+    })
+    .catch((err) => next(err));
+});
 module.exports = router;

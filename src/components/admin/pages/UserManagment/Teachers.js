@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
-import { Row, Col, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import http from "../../../../shared/http";
 export default class Teachers extends Component {
   constructor(props) {
@@ -73,6 +73,7 @@ export default class Teachers extends Component {
 
   getTeacherList = () => {
     let teachers = this.state.userData.map((item) => {
+      console.log(item);
       return (
         <div className="container  col-md-10 mt-1 " id={item._id}>
           <ListItem height="180px">
@@ -80,23 +81,18 @@ export default class Teachers extends Component {
               left: (
                 <div>
                   <span>
-                    <Row>
-                      <Col>
-                        <p class="text-left">{item.name}d</p>
-                      </Col>
-                    </Row>
+                    <p class="text-left">{item.name}d</p>
+
                     <p class="text-left">{item.email}</p>
                     <p class="text-left">{item.department}</p>
                   </span>{" "}
-                  <Col className="text-left">
-                    <Button
-                      type="submit"
-                      className=" mr-3 btn btn-danger"
-                      onClick={() => this.deleteClickListener(item)}
-                    >
-                      Delete
-                    </Button>
-                  </Col>
+                  <Button
+                    type="submit"
+                    className=" mr-3 btn btn-danger"
+                    onClick={() => this.deleteClickListener(item)}
+                  >
+                    Delete
+                  </Button>
                 </div>
               ),
               right: (
