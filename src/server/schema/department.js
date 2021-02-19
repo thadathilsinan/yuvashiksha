@@ -1,17 +1,16 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const DepartmentSchema = new Schema({
-  Name: {
+  name: {
     type: String,
     required: true,
+    unique: true,
   },
   hod: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    res: Users,
     required: true,
-  },
-  Classes: {
-    type: Array,
-    required: true,
+    unique: true,
   },
 });
 let Department = mongoose.model("Department", DepartmentSchema);

@@ -1,25 +1,23 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const MessageSchema = new Schema({
-  Message: {
+const BugReportSchema = new Schema({
+  userEmail: {
+    type: String,
+    required: true,
+  },
+  message: {
     type: String,
     required: true,
   },
   Date: {
     type: Date,
-  },
-  Email: {
-    type: String,
     required: true,
-  },
-  Resolved: {
-    type: Boolean,
   },
   Reply: {
     type: string,
     required: true,
   },
 });
-let Message = mongoose.model("Message", MessageSchema);
-module.exports = Message;
+let BugReport = mongoose.model("BugReport", BugReportSchema);
+module.exports = BugReport;

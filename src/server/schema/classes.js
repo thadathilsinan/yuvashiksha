@@ -1,25 +1,26 @@
 const mongoose = require("mongoose");
+const Users = require("./Users");
 const Schema = mongoose.Schema;
 const ClassesSchema = new Schema({
   Department: {
+    type: Schema.Types.ObjectId,
+    res: Department,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  batch: {
     type: String,
     required: true,
   },
-  ClassName: {
-    type: String,
+  mentor: {
+    type: Schema.Types.ObjectId,
+    res: Users,
     required: true,
-  },
-  Batch: {
-    type: String,
-    required: true,
-  },
-  Mentor: {
-    type: String,
-    required: true,
-  },
-  Subjects: {
-    type: String,
-    required: true,
+    unique: true,
   },
 });
 let Classes = mongoose.model("Classes", ClassesSchema);
