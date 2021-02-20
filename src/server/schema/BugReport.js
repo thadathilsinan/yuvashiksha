@@ -10,14 +10,14 @@ const BugReportSchema = new Schema({
     type: String,
     required: true,
   },
-  Date: {
+  date: {
     type: Date,
     required: true,
   },
-  Reply: {
-    type: string,
-    required: true,
+  reply: {
+    type: String,
   },
 });
-let BugReport = mongoose.model("BugReport", BugReportSchema);
-module.exports = BugReport;
+
+let BugReports = mongoose.model("BugReport", BugReportSchema);
+module.exports = BugReports;

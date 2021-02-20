@@ -1,3 +1,7 @@
+/**
+ * This is the router in the client side to navigate user in the browser without page refresh
+ * THIS IS THE ROUTER ONLY FOR THE LOGIN MODULE
+ */
 import { Component } from "react";
 import {
   BrowserRouter,
@@ -12,6 +16,9 @@ import Login from "./Login";
 class LoginRoute extends Component {
   render() {
     return (
+      /**
+       * DISPLAYING CORRESPONDING COMPONENTS IN DIFFERENT ROUTES
+       */
       <BrowserRouter>
         <Switch>
           <Route path="/" exact>

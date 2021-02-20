@@ -1,19 +1,23 @@
+/**
+ * EXPRESS ROUTER FOR /register
+ *
+ */
+
 var express = require("express");
 let passport = require("passport");
 const bodyParser = require("body-parser");
 
+//Helper function for sending emails
 let sendMail = require("../functions/sendMail");
 
-let StudentSignup = require("../schema/student-signup");
-let TeacherSignup = require("../schema/teacher-signup");
-let Students = require("../schema/students");
-let Teachers = require("../schema/teachers");
-let Signin = require("../schema/signin");
+//Importing required Mongoose Models
+let Users = require("../schema/Users");
 
 var router = express.Router();
 
 router.use(bodyParser.json());
 
+//Function for generating a random otp and return it
 let generateOtp = () => {
   //Creating a random number for OTP
   //Minimum range of OTP
@@ -27,6 +31,7 @@ let generateOtp = () => {
   return otp;
 };
 
+//Funtion to send email to the user with OTP
 let sendOtpMail = (otp, destination) => {
   //Subject For OTP Email
   let mailSubject = "OTP For Yuvashiksha Signup";
@@ -41,92 +46,7 @@ router
   .post("/", (req, res, next) => {
     let otp = generateOtp();
 
-    if (req.body.accountType == "student") {
-      StudentSignup.findOne({ admissionNumber: req.body.admissionNumber })
-        .then((user) => {
-          if (user) {
-            let error = new Error("User already Exist.");
-            next(error);
-            res.end();
-          } else {
-            StudentSignup.create({
-              name: req.body.name,
-              admissionNumber: req.body.admissionNumber,
-              class: req.body.class,
-              batch: req.body.batch,
-              email: req.body.email,
-              parentEmail: req.body.parentEmail,
-              otp: otp,
-              password: null,
-              googleSignup: null,
-            })
-              .then(
-                (student) => {
-                  console.log(
-                    "New user data added to StudentSignup collection : " +
-                      student
-                  );
-                  sendOtpMail(otp, req.body.email);
-                  res.statusCode = 200;
-                  res.setHeader("Content-Type", "application/json");
-                  res.json({
-                    admissionNumber: student.admissionNumber,
-                    email: student.email,
-                    accountType: req.body.accountType,
-                  });
-                },
-                (err) => next(err)
-              )
-              .catch((err) => next(err));
-          }
-        })
-        .catch((err) => {
-          next(err);
-        });
-    } else if (req.body.accountType == "teacher") {
-      TeacherSignup.findOne({ idNumber: req.body.idNumber })
-        .then((user) => {
-          if (user) {
-            let error = new Error("User already Exist.");
-            next(error);
-          } else {
-            TeacherSignup.create({
-              name: req.body.name,
-              idNumber: req.body.idNumber,
-              email: req.body.email,
-              department: req.body.department,
-              otp: otp,
-              password: null,
-              googleSignup: null,
-            })
-              .then(
-                (teacher) => {
-                  console.log(
-                    "New user data added to TeacherSignup collection : " +
-                      teacher
-                  );
-                  sendOtpMail(otp, req.body.email);
-                  res.statusCode = 200;
-                  res.setHeader("Content-Type", "application/json");
-                  res.json({
-                    idNumber: teacher.idNumber,
-                    email: teacher.email,
-                    accountType: req.body.accountType,
-                  });
-                },
-                (err) => next(err)
-              )
-              .catch((err) => next(err));
-          }
-        })
-        .catch((err) => {
-          next(err);
-        });
-    } else {
-      console.log(req);
-      res.statusCode = 404;
-      res.end("Invalid Account type");
-    }
+    Users.findOne({ registerNumber: req.body.registerNumber });
   })
   .post("/resendotp", (req, res, next) => {
     let otp = generateOtp();

@@ -1,6 +1,12 @@
+/**
+ * ROUTER FOR /login
+ *
+ */
+
 var express = require("express");
 const bodyParser = require("body-parser");
 
+//Importing required Monggose Models
 let Signin = require("../schema/signin");
 let Students = require("../schema/students");
 let Teachers = require("../schema/teachers");
@@ -33,5 +39,10 @@ router.post("/", function (req, res, next) {
 });
 
 router.post("/google", (req, res, next) => {});
+
+router.get("/test", (req, res, next) => {
+  res.cookie("test", "hello");
+  res.end("Successful");
+});
 
 module.exports = router;

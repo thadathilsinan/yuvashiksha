@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
 const DepartmentSchema = new Schema({
   name: {
     type: String,
@@ -8,10 +9,11 @@ const DepartmentSchema = new Schema({
   },
   hod: {
     type: Schema.Types.ObjectId,
-    res: Users,
+    ref: "User",
     required: true,
     unique: true,
   },
 });
-let Department = mongoose.model("Department", DepartmentSchema);
-module.exports = Department;
+
+let Departments = mongoose.model("Department", DepartmentSchema);
+module.exports = Departments;

@@ -1,19 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+
 const OtpSchema = new Schema({
-  UserId: {
+  userId: {
     type: Schema.Types.ObjectId,
-    res: Users,
+    ref: "User",
     required: true,
     unique: true,
   },
   otp: {
-    type: number,
+    type: Number,
+    required: true,
   },
   expiry: {
-    type: date,
+    type: Date,
     required: true,
   },
 });
-let Otp = mongoose.modal("Otp", OtpSchema);
-module.exports = Otp;
+
+let otp = mongoose.model("Otp", OtpSchema);
+module.exports = otp;

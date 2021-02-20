@@ -1,0 +1,10 @@
+h3 {
+  display: inline;
+}
+
+#navBarBackButton {
+  font-size: 40px;
+  margin: 10px;
+
+  margin-right: 20px;
+}

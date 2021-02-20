@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const Users = require("./Users");
 const Schema = mongoose.Schema;
-const ClassesSchema = new Schema({
-  Department: {
+
+const ClassSchema = new Schema({
+  department: {
     type: Schema.Types.ObjectId,
-    res: Department,
+    ref: "Department",
     required: true,
   },
   name: {
@@ -18,10 +18,11 @@ const ClassesSchema = new Schema({
   },
   mentor: {
     type: Schema.Types.ObjectId,
-    res: Users,
+    ref: "User",
     required: true,
     unique: true,
   },
 });
-let Classes = mongoose.model("Classes", ClassesSchema);
+
+let Classes = mongoose.model("Class", ClassSchema);
 module.exports = Classes;

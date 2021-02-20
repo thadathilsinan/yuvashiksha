@@ -1,3 +1,7 @@
+/**
+ * CONTENT OF THE SIGNIN TAB
+ */
+
 import { Component } from "react";
 import { withRouter } from "react-router-dom";
 import "./signin.css";
@@ -10,9 +14,9 @@ class Signin extends Component {
     super(props);
 
     this.state = {
-      username: "",
-      password: "",
-      erroMessage: null,
+      username: "", //USERNAME entered in the login form
+      password: "", //PASSWORD entered in the login form
+      erroMessage: null, //Error messsage if any (These are displayed bottom side of the login form)
     };
   }
 
@@ -26,12 +30,17 @@ class Signin extends Component {
     }
   };
 
+  //Setting form data into the component state
   inputChange = (event) => {
     let newState = {};
     newState[event.target.name] = event.target.value;
 
     this.setState(newState);
   };
+
+  /**
+   * When LOGIN button clicked
+   */
 
   login = () => {
     if (this.state.username.length > 0 && this.state.password.length > 0) {
@@ -61,6 +70,7 @@ class Signin extends Component {
     }
   };
 
+  // When googleSignin button clicked
   googleSignin = () => {
     document.location.href = "http://localhost:4000/register/google";
   };

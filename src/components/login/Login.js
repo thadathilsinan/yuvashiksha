@@ -1,3 +1,6 @@
+/**
+ * MAIN SIGNIN/SIGNUP COMPONENT
+ */
 import { Component } from "react";
 import { connect } from "react-redux";
 import "./login.css";
@@ -9,22 +12,24 @@ import SetPassword from "./setPassword/SetPassword";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import GoogleSignup from "./sigup/googleSignup/GoogleSignup";
 
+//DISPATH ACTIONS TO CHANGE REDUX STORE DATA (USED FOR SIGNUP PROCEDURE)
 const mapDispatchToProps = (dispatch) => {
   return {
     updateData: (payload) => dispatch({ type: "updateSignupData", payload }),
     clearData: () => dispatch({ type: "clearSignupData" }),
   };
 };
+
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      signin: true,
-      signup: false,
+      signin: true, //IF SIGNIN TAB ACTIVE
+      signup: false, //IF SIGNUP TAB ACTIVE
 
-      googleSignup: false,
-      showVerifyOtp: false,
-      showSetPassword: false,
+      googleSignup: false, //IF GOOGLE SIGNUP WINDOW VISIBLE
+      showVerifyOtp: false, //IF OTP VERIFICATION SCREEN IS VISIBLE (DURING SIGNUP)
+      showSetPassword: false, //IF PASSWORD ENTRY SCREEN IS VISIBLE (DURING SIGNUP)
     };
   }
 
@@ -67,6 +72,10 @@ class Login extends Component {
     });
   };
 
+  /**
+   * INITIALLY SETTING THE VIEW OF THE COMPONENT BASED ON THE RECIEVED PROPS
+   * PROPS CAN BE EITHER: signin, signup or googleSignup
+   */
   setView = () => {
     if (this.props.signin) {
       this.changeTabToSignin();
@@ -84,14 +93,17 @@ class Login extends Component {
   };
 
   componentDidMount() {
+    //Setting initial view of the component base on the props
     this.setView();
   }
 
   render() {
+    //CSS Style to apply for the active tab SIGNIN or SIGNUP
     let style = {
       "background-color": "rgb(37, 35, 34)",
       color: "white",
     };
+
     return (
       <BrowserRouter>
         <div className="container">

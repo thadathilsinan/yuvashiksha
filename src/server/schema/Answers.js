@@ -1,23 +1,35 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const AnswersSchema = new Schema({
+
+const AnswerSchema = new Schema({
   exam: {
     type: Schema.Types.ObjectId,
-    res: exam,
+    ref: "Exam",
     required: true,
     unique: true,
   },
   student: {
     type: Schema.Types.ObjectId,
-    res: users,
+    ref: "User",
     required: true,
   },
   answers: {
     type: Array,
+    required: true,
   },
   images: {
     type: Array,
+    required: true,
+  },
+  totalMarks: {
+    type: Number,
+    required: true,
+  },
+  completed: {
+    type: Boolean,
+    required: true,
   },
 });
-let Answer = mongoose.model("Answer", AnswersSchema);
-module.exports = Answer;
+
+let Answers = mongoose.model("Answer", AnswerSchema);
+module.exports = Answers;

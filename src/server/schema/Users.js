@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const UsersSchema = new Schema({
+
+const UserSchema = new Schema({
   accountType: {
     type: String,
     required: true,
-    unique: true,
   },
   accountStatus: {
     type: String,
@@ -21,14 +21,14 @@ const UsersSchema = new Schema({
   registerNumber: {
     type: String,
     required: true,
+    unique: true,
   },
   photo: {
-    type: Schema.Types.ObjectId,
-    res: Assets,
+    type: String,
   },
   class: {
     type: Schema.Types.ObjectId,
-    res: Classes,
+    ref: "Class",
   },
   parentEmail: {
     type: String,
@@ -42,8 +42,9 @@ const UsersSchema = new Schema({
   },
   department: {
     type: Schema.Types.ObjectId,
-    res: Departments,
+    ref: "Department",
   },
 });
-let Users = mongoose.model("Users", UsersSchema);
+
+let Users = mongoose.model("User", UserSchema);
 module.exports = Users;
