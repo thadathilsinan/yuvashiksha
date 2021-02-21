@@ -30,10 +30,9 @@ class Signup extends Component {
   verifyEmail = () => {
     if (this.props.validSignupData) {
       http("POST", "/register", this.props.signupData, (res) => {
-        // for (let item in res.data) {
-        //   document.cookie = `${item}=${res.data[item]}`;
-        // }
-        this.props.otpSent();
+        if (res.status === 200) {
+          this.props.otpSent();
+        }
       });
     }
   };

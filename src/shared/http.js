@@ -17,6 +17,7 @@ let http = (
     method: method,
     url: serverDomain + url,
     data: body,
+    withCredentials: true,
   })
     .then((response) => {
       console.log(`${method} request send to ${serverDomain + url}`);
