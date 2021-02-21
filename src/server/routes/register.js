@@ -7,6 +7,7 @@
 var express = require("express");
 let passport = require("passport");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcryptjs");
 
 //Helper function for sending emails
 let sendMail = require("../functions/sendMail");
@@ -14,7 +15,6 @@ let sendMail = require("../functions/sendMail");
 //Importing required Mongoose Models
 let Users = require("../schema/Users");
 let Otp = require("../schema/Otp");
-const { nativeTouchData } = require("react-dom/test-utils");
 
 var router = express.Router();
 
@@ -122,8 +122,7 @@ router.post("/", async (req, res, next) => {
   sendOtpMail(otp, newUser.email);
 
   res.cookie("userId", newUser._id, {
-    signed: true,
-    maxAge: 1000000,
+    maxAge: 86400000,
   });
   res.statusCode = 200;
   res.end("Registration part 1 completed");
@@ -132,93 +131,92 @@ router.post("/", async (req, res, next) => {
 /**
  * ROUTE TO RESEND OTP FOR THE USER
  */
-router.post("/resendotp", (req, res, next) => {
-  Otp.findOne({ userId: req.cookies.userId })
-    .then(async (otp) => {
-      if (otp) {
-        //Generating OTP for the user
-        let newOtp = generateOtp();
+router.post("/resendotp", async (req, res, next) => {
+  let otp = await Otp.findOne({ userId: req.cookies.userId });
+  // .then(async (otp) => {
+  if (otp) {
+    //Generating OTP for the user
+    let newOtp = generateOtp();
 
-        //Creating an expiry date for the new OTp
-        let expiryDate = new Date();
-        expiryDate.setMinutes(expiryDate.getMinutes() + 15);
+    //Creating an expiry date for the new OTp
+    let expiryDate = new Date();
+    expiryDate.setMinutes(expiryDate.getMinutes() + 15);
 
-        //Setting new otp and expiry date
-        otp.otp = newOtp;
-        otp.expiry = expiryDate;
+    //Setting new otp and expiry date
+    otp.otp = newOtp;
+    otp.expiry = expiryDate;
 
-        //Saving the changes to the db
-        await otp.save().catch((err) => next(err));
+    //Saving the changes to the db
+    await otp.save().catch((err) => next(err));
 
-        //Sending email to the user with new otp
-        await Users.findOne({ _id: req.body.userId })
-          .then((user) => {
-            sendOtpMail(newOtp, user.email);
-          })
-          .catch((err) => next(err));
+    //Sending email to the user with new otp
+    let user = await Users.findOne({ _id: req.cookies.userId });
+    sendOtpMail(newOtp, user.email);
 
-        res.statusCode = 200;
-        res.end("OTP resend successfully");
-      } else {
-        res.statusCode = 203;
-        res.end("User account does not exists, Cannot resend OTP");
-      }
-    })
-    .catch((err) => next(err));
+    res.statusCode = 200;
+    res.send("OTP resend successfully");
+  } else {
+    res.statusCode = 203;
+    res.end("User account does not exists, Cannot resend OTP");
+  }
+  // })
+  // .catch((err) => next(err));
 });
 
 /**
  * ROUTE FOR VERIFYING OTP FOR VERIFIYING USER EMAIL
  * PART 2 OF REGISTRATION OF NEW ACCOUNT
  */
-router.post("/otp", (req, res, next) => {
-  Otp.findOne({ userId: req.cookies.userId }).then((otp) => {
-    if (otp) {
-      //Current time
-      let currentTime = new Date();
-      //OTP Verification
-      if (
-        otp.otp === req.body.otp &&
-        otp.expiry.getTime() > currentTime.getTime()
-      ) {
+router.post("/otp", async (req, res, next) => {
+  let otp = await Otp.findOne({ userId: req.cookies.userId });
+
+  if (otp) {
+    //Current time
+    let currentTime = new Date();
+    //OTP Verification
+    if (otp.otp === parseInt(req.body.otp))
+      if (otp.expiry.getTime() > currentTime.getTime()) {
         res.statusCode = 200;
         res.end("OTP Verified successfully");
       } else {
         res.statusCode = 203;
-        res.end("OTP is incorrect");
+        res.end("OTP is expired");
       }
-    } else {
+    else {
       res.statusCode = 203;
-      res.end("User account not found");
+      res.end("OTP is incorrect");
     }
-  });
+  } else {
+    res.statusCode = 203;
+    res.end("User account not found");
+  }
 });
 
 /**
  * FINAL PART OF THE USER ACCOUNT REGISTERATION
  * setting the password the user account
  */
-router.post("/finish", (req, res, next) => {
-  Users.findOne({ _id: req.cookies.userId })
-    .then(async (user) => {
-      if (user) {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+router.post("/finish", async (req, res, next) => {
+  let user = await Users.findOne({ _id: req.cookies.userId });
+  // .then(async (user) => {
+  if (user) {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        //Setting the password for the user and changing accountStatus
-        user.password = hashedPassword;
-        user.accountStatus = "not-activated";
+    //Setting the password for the user and changing accountStatus
+    user.password = hashedPassword;
+    user.accountStatus = "not-activated";
 
-        //Saving changes to the db
-        await user.save().catch((err) => next(err));
+    //Saving changes to the db
+    await user.save().catch((err) => next(err));
 
-        res.statusCode = 200;
-        res.end("User registration completed");
-      } else {
-        res.statusCode = 203;
-        res.end("User account not found");
-      }
-    })
-    .catch((err) => next(err));
+    res.statusCode = 200;
+    res.end("User registration completed");
+  } else {
+    res.statusCode = 203;
+    res.end("User account not found");
+  }
+  // })
+  // .catch((err) => next(err));
 });
 
 /**

@@ -67,23 +67,23 @@ app.use(
   })
 );
 
-app.use(
-  session({
-    secret: "secretcode",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
-
-app.use(cookieParser("secretcode"));
-
-//Configure Session Storage
 // app.use(
-//   cookieSession({
-//     name: "session-name",
-//     keys: ["key1", "key2"],
+//   session({
+//     secret: "secretcode",
+//     resave: true,
+//     saveUninitialized: true,
 //   })
 // );
+
+app.use(cookieParser(/*"secretcode"*/));
+
+//Configure Session Storage
+app.use(
+  cookieSession({
+    name: "session-name",
+    keys: ["key1", "key2"],
+  })
+);
 
 require("./passport/localStrategy")(passport);
 

@@ -13,21 +13,29 @@ class SetPassword extends Component {
   }
 
   validatePassword = () => {
-    if (this.state.password === this.state.confirm) {
-      console.log("Password Validation Success");
-      this.setState({ errorMessage: null });
+    if (this.state.password.length > 0 && this.state.confirm.length > 0) {
+      if (this.state.password === this.state.confirm) {
+        console.log("Password Validation Success");
+        this.setState({ errorMessage: null });
 
-      http(
-        "POST",
-        "/register/finish",
-        { password: this.state.password },
-        (res) => {
-          alert("Signup Completed");
-          window.location.href = "http://localhost:3000/signin";
-        }
-      );
+        http(
+          "POST",
+          "/register/finish",
+          { password: this.state.password },
+          (res) => {
+            if (res.status === 200) {
+              alert("Signup Completed");
+              window.location.href = "http://localhost:3000/signin";
+            } else {
+              alert("Error: " + res.data);
+            }
+          }
+        );
+      } else {
+        this.setState({ errorMessage: <p>Passwords do not match</p> });
+      }
     } else {
-      this.setState({ errorMessage: <p>Passwords do not match</p> });
+      this.setState({ errorMessage: "No password entered" });
     }
   };
 
