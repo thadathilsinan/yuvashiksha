@@ -21,14 +21,15 @@ const UserSchema = new Schema({
   registerNumber: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
   },
   photo: {
     type: String,
   },
   class: {
-    type: Schema.Types.ObjectId,
-    ref: "Class",
+    //type: Schema.Types.ObjectId,
+    type: String,
+    //ref: "Class",
   },
   parentEmail: {
     type: String,
@@ -38,11 +39,12 @@ const UserSchema = new Schema({
   },
   googleId: {
     type: String,
-    unique: true,
+    // unique: true,
   },
   department: {
-    type: Schema.Types.ObjectId,
-    ref: "Department",
+    // type: Schema.Types.ObjectId,
+    // ref: "Department",
+    type: String,
   },
 });
 

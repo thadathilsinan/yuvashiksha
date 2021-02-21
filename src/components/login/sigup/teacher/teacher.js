@@ -23,7 +23,7 @@ class Teacher extends Component {
   validateForm = () => {
     if (
       this.inputValues.name &&
-      this.inputValues.idNumber &&
+      this.inputValues.registerNumber &&
       this.inputValues.department &&
       this.inputValues.email
     ) {
@@ -98,7 +98,7 @@ class Teacher extends Component {
           type="text"
           className="form-control mt-3"
           id="id-number"
-          name="idNumber"
+          name="registerNumber"
           onChange={this.onValueChange}
           placeholder="ID Number"
         />

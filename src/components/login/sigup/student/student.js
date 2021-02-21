@@ -32,7 +32,7 @@ class Student extends Component {
   validateForm = () => {
     if (
       this.inputValues.name &&
-      this.inputValues.admissionNumber &&
+      this.inputValues.registerNumber &&
       this.inputValues.class &&
       this.inputValues.batch &&
       this.inputValues.email &&
@@ -119,7 +119,7 @@ class Student extends Component {
           type="text"
           className="form-control mt-3"
           id="admission-number"
-          name="admissionNumber"
+          name="registerNumber"
           placeholder="Admission Number"
           onChange={this.onValueChange}
         />

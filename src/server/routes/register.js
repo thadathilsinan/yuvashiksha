@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /**
  * EXPRESS ROUTER FOR /register
  *
@@ -13,6 +14,7 @@ let sendMail = require("../functions/sendMail");
 //Importing required Mongoose Models
 let Users = require("../schema/Users");
 let Otp = require("../schema/Otp");
+const { nativeTouchData } = require("react-dom/test-utils");
 
 var router = express.Router();
 
@@ -43,80 +45,95 @@ Your OTP for the account signup is : ${otp}`;
   sendMail(destination, mailSubject, mailBody);
 };
 
-router.post("/", (req, res, next) => {
+//--------------------------------------ROUTES-----------------------------------------------------------------------------------
+
+router.post("/", async (req, res, next) => {
   /**
    * ROUTE FOR:
    * When user click 'Verify Email' Button in client side (FIRST STEP IN USER REGISTRATION)
    */
 
-  Users.findOne({ registerNumber: req.body.registerNumber })
-    .then((user) => {
-      if (user) {
+  await Users.findOne({ registerNumber: req.body.registerNumber }).then(
+    async (user) => {
+      if (user && user.accountStatus != "signup-incomplete") {
         //User with same register number already exists
         res.statusCode = 203;
-        res.end("User with the register number already exist");
+        res.json("User with the register number already exist");
       }
+    }
+  );
 
-      //Creating a new user
-      let newUser = new Users({
-        accountType: req.body.accountType,
-        accountStatus: "signup-incomplete",
-        name: req.body.name,
-        email: req.body.email,
-        registerNumber: req.body.registerNumber,
-      });
+  //Creating a new user
+  let newUser = {
+    accountType: req.body.accountType,
+    accountStatus: "signup-incomplete",
+    name: req.body.name,
+    email: req.body.email,
+    registerNumber: req.body.registerNumber,
+  };
 
-      //Checking user type and add neccessary data to the new User object
-      if (req.body.accountType == "student") {
-        newUser.class = req.body.class;
-        newUser.parentEmail = req.body.parentEmail;
-      } else if (req.body.accountType == "teacher") {
-        newUser.department = req.body.department;
-      }
+  //Checking user type and add neccessary data to the new User object
+  if (req.body.accountType === "student") {
+    newUser.class = req.body.class;
+    newUser.parentEmail = req.body.parentEmail;
+  } else if (req.body.accountType === "teacher") {
+    newUser.department = req.body.department;
+  }
 
-      //Saving the new user into the database
-      newUser
-        .save()
-        .then(async (user) => {
-          //Generating OTP for the user
-          let otp = generateOtp();
+  //Saving cahnges to the Users collection
+  await Users.findOneAndUpdate(
+    { registerNumber: req.body.registerNumber },
+    newUser,
+    { upsert: true } //Create a document if not found
+  ).catch((err) => next(err));
 
-          //Creating an expiry date for the new OTp
-          let expiryDate = new Date();
-          expiryDate.setMinutes(expiryDate.getMinutes() + 15);
+  await Users.findOne({ registerNumber: req.body.registerNumber }).then(
+    (user) => {
+      newUser = user;
+    }
+  );
 
-          //Creating a new document in the OTP collection
-          let newOtp = new Otp({
-            userId: user._id,
-            otp: otp,
-            expiry: expiryDate,
-          });
+  //Generating OTP for the user
+  let otp = generateOtp();
 
-          //Saving newOtp into the OTP collection
-          await newOtp.save().catch((err) => next(err));
+  //Creating an expiry date for the new OTp
+  let expiryDate = new Date();
+  expiryDate.setMinutes(expiryDate.getMinutes() + 15);
 
-          //All steps in the STEP 1 of REGISTRATION IS COMPLETED SUCCESSFULLY
-          console.log(
-            "New User account added to database",
-            "REGISTER ACCOUNT STEP 1 COMPLETED"
-          );
+  //Creating a new document in the OTP collection
+  let newOtp = {
+    userId: newUser._id,
+    otp: otp,
+    expiry: expiryDate,
+  };
 
-          //Sending Email with otp to the user
-          sendOtpMail(otp, user.email);
+  //Upsert the otp to the Otp collection
+  await Otp.findOneAndUpdate({ userId: newUser._id }, newOtp, {
+    upsert: true,
+  }).catch((err) => next(err));
 
-          res.statusCode = 200;
-          res.end("Registration part 1 completed");
-        })
-        .catch((err) => next(err));
-    })
-    .catch((err) => next(err));
+  //All steps in the STEP 1 of REGISTRATION IS COMPLETED SUCCESSFULLY
+  console.log(
+    "New User account added to database",
+    "REGISTER ACCOUNT STEP 1 COMPLETED"
+  );
+
+  //Sending Email with otp to the user
+  sendOtpMail(otp, newUser.email);
+
+  res.cookie("userId", newUser._id, {
+    signed: true,
+    maxAge: 1000000,
+  });
+  res.statusCode = 200;
+  res.end("Registration part 1 completed");
 });
 
 /**
  * ROUTE TO RESEND OTP FOR THE USER
  */
 router.post("/resendotp", (req, res, next) => {
-  Otp.findOne({ userId: req.body.userId })
+  Otp.findOne({ userId: req.cookies.userId })
     .then(async (otp) => {
       if (otp) {
         //Generating OTP for the user
@@ -155,10 +172,15 @@ router.post("/resendotp", (req, res, next) => {
  * PART 2 OF REGISTRATION OF NEW ACCOUNT
  */
 router.post("/otp", (req, res, next) => {
-  Otp.findOne({ userId: req.body.userId }).then((otp) => {
+  Otp.findOne({ userId: req.cookies.userId }).then((otp) => {
     if (otp) {
+      //Current time
+      let currentTime = new Date();
       //OTP Verification
-      if (otp.otp == req.body.otp) {
+      if (
+        otp.otp === req.body.otp &&
+        otp.expiry.getTime() > currentTime.getTime()
+      ) {
         res.statusCode = 200;
         res.end("OTP Verified successfully");
       } else {
@@ -177,15 +199,17 @@ router.post("/otp", (req, res, next) => {
  * setting the password the user account
  */
 router.post("/finish", (req, res, next) => {
-  Users.findOne({ _id: req.body.userId })
+  Users.findOne({ _id: req.cookies.userId })
     .then(async (user) => {
       if (user) {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
         //Setting the password for the user and changing accountStatus
-        user.password = req.body.password;
+        user.password = hashedPassword;
         user.accountStatus = "not-activated";
 
         //Saving changes to the db
-        await user.save().catch((err) => nativeTouchData(err));
+        await user.save().catch((err) => next(err));
 
         res.statusCode = 200;
         res.end("User registration completed");
@@ -217,9 +241,9 @@ router.get(
     Users.findOne({ googleId: req.user._json.sub })
       .then((user) => {
         if (user) {
-          if (user.accountType == "student")
+          if (user.accountType === "student")
             res.redirect("http://localhost:3000/student");
-          else if (user.accountType == "teacher")
+          else if (user.accountType === "teacher")
             res.redirect("http://localhost:3000/teacher");
         } else {
           //Continue to google user signup page
@@ -255,10 +279,10 @@ router.post("/googlesignup", async (req, res, next) => {
   });
 
   //Checking user type and add neccessary data to the new User object
-  if (req.body.accountType == "student") {
+  if (req.body.accountType === "student") {
     newUser.class = req.body.class;
     newUser.parentEmail = req.body.parentEmail;
-  } else if (req.body.accountType == "teacher") {
+  } else if (req.body.accountType === "teacher") {
     newUser.department = req.body.department;
   }
 

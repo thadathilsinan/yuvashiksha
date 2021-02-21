@@ -5,13 +5,16 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 const cookieSession = require("cookie-session");
+const passport = require("passport");
+const passportLocal = require("passport-local").Strategy;
 let cors = require("cors");
+const bcrypt = require("bcryptjs");
+const session = require("express-session");
 
 let loginRouter = require("./routes/login");
 let registerRouter = require("./routes/register");
-let adminRouter = require("./routes/admin");
+//let adminRouter = require("./routes/admin");
 
-var passport = require("passport");
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 mongoose.connect(
@@ -56,17 +59,33 @@ passport.deserializeUser(function (user, done) {
 
 // view engine setup
 app.set("view engine", "jade");
-app.use(cookieParser());
 
-app.use(cors());
-
-//Configure Session Storage
 app.use(
-  cookieSession({
-    name: "session-name",
-    keys: ["key1", "key2"],
+  cors({
+    origin: "http://localhost:3000", // <-- location of the react app were connecting to
+    credentials: true,
   })
 );
+
+app.use(
+  session({
+    secret: "secretcode",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+app.use(cookieParser("secretcode"));
+
+//Configure Session Storage
+// app.use(
+//   cookieSession({
+//     name: "session-name",
+//     keys: ["key1", "key2"],
+//   })
+// );
+
+require("./passport/localStrategy")(passport);
 
 //Configure Passport
 app.use(passport.initialize());
@@ -79,7 +98,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
-app.use("/admin", adminRouter);
+//app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
