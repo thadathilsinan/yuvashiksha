@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import NavBar from "../ui-elements/navBar/NavBar";
 import TabView from "../ui-elements/TabView/TabView";
-import ExamGuidlines from "./components/examguidelines/ExamGuidlines";
+import ExamGuidlines from "./components/ExamGuidlines";
 import ListItem from "../ui-elements/ListItem/ListItem";
+import StartExam from "./components/startexam/StartExam";
 import { Link, BrowserRouter, Route } from "react-router-dom";
+import "./Student.css";
 let examData = [
   {
     name: "Name of Exam",
@@ -97,7 +99,7 @@ export default class Student extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="root">
         <div>
           <BrowserRouter>
             <Route path="/student" exact>
