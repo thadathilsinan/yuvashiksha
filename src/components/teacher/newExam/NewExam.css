@@ -8,3 +8,8 @@ h3 {
 
   margin-right: 20px;
 }
+.modal-body {
+  position: relative;
+
+  padding: 15px;
+}

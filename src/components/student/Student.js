@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NavBar from "../ui-elements/navBar/NavBar";
 import TabView from "../ui-elements/TabView/TabView";
-import ExamGuidlines from "./components/ExamGuidlines";
+import ExamGuidlines from "./components/examguidelines/ExamGuidlines";
 import ListItem from "../ui-elements/ListItem/ListItem";
 import StartExam from "./components/startexam/StartExam";
 import { Link, BrowserRouter, Route } from "react-router-dom";
@@ -103,7 +103,7 @@ export default class Student extends Component {
         <div>
           <BrowserRouter>
             <Route path="/student" exact>
-              <NavBar>
+              {/* <NavBar>
                 {{
                   left: <h5>HOME</h5>,
                 }}
@@ -117,7 +117,8 @@ export default class Student extends Component {
                     <div id="rightTabBody">{this.previousExamList}</div>
                   ),
                 }}
-              </TabView>
+              </TabView> */}
+              <ExamGuidlines></ExamGuidlines>
             </Route>
           </BrowserRouter>
         </div>
