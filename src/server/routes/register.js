@@ -228,44 +228,51 @@ router.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-/**
- * This route is automatically called after the user successfully login to google
- */
-router.get(
-  "/redirect",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  function (req, res) {
-    //Checking if user account already exists with this google user
-    Users.findOne({ googleId: req.user._json.sub })
-      .then((user) => {
-        if (user) {
-          if (user.accountType === "student")
-            res.redirect("http://localhost:3000/student");
-          else if (user.accountType === "teacher")
-            res.redirect("http://localhost:3000/teacher");
-        } else {
-          //Continue to google user signup page
-          res.redirect(
-            `http://localhost:3000/signup/google?name=${req.user._json.name}&id=${req.user._json.sub}&email=${req.user._json.email}`
-          );
-        }
-      })
-      .catch((err) => next(err));
-  }
-);
+router.get("/redirect", function (req, res, next) {
+  passport.authenticate("google", function (err, user, info) {
+    //Handling the authentication using custom callback
+
+    //Check if error occured
+    if (err) {
+      return next(err);
+    }
+
+    //Check if user not authenticated
+    if (!user) {
+      //User not authenticated
+      //Redirecting to the signup page with retrieved google data
+      return res.redirect(
+        `http://localhost:3000/signup/google?name=${info._json.name}&id=${info._json.sub}&email=${info._json.email}`
+      );
+    }
+
+    //User authenticated successfully
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err);
+      }
+      //Based on accountType redirecting the users to corresponding page
+      if (req.user.accountType === "student")
+        return res.redirect("http://localhost:3000/student");
+      else if (req.user.accountType === "teacher")
+        return res.redirect("http://localhost:3000/teacher");
+    });
+  })(req, res, next);
+});
 
 /**
  * GOOGLE VERIFED ACCOUNT SIGNUP PROCEDURE
  */
 router.post("/googlesignup", async (req, res, next) => {
-  await Users.findOne({ registerNumber: req.body.registerNumber }).then(
-    (user) => {
-      if (user) {
-        res.statusCode = 203;
-        res.end("User already exist with same register number");
-      }
-    }
-  );
+  let oldUser = await Users.findOne({
+    registerNumber: req.body.registerNumber,
+  });
+
+  //Check if user already exist with same registerNumber
+  if (oldUser) {
+    res.statusCode = 203;
+    res.end("User already exist with same register number");
+  }
 
   let newUser = new Users({
     accountType: req.body.accountType,
@@ -288,6 +295,7 @@ router.post("/googlesignup", async (req, res, next) => {
   await newUser.save().catch((err) => next(err));
 
   res.statusCode = 200;
+  res.clearCookie("user-session");
   res.end("User registration completed.");
 });
 

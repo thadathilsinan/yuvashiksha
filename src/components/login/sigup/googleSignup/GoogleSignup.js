@@ -33,6 +33,7 @@ class Signup extends Component {
   };
 
   finishSignup = () => {
+    console.log(this.props.signupData, GOOGLE_DATA);
     http(
       "POST",
       "/register/googlesignup",
@@ -42,7 +43,7 @@ class Signup extends Component {
           alert("Signup Completed");
           document.location.href = "http://localhost:3000/signin";
         } else {
-          alert("Error During Signup. May be accoount already exist");
+          alert(res.data);
         }
       }
     );

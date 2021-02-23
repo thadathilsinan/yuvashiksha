@@ -51,16 +51,17 @@ class Signin extends Component {
         { username: this.state.username, password: this.state.password },
         (res) => {
           if (res.status == 200) {
-            let cookies = res.data.split(" %split% ");
-            for (let item in cookies) {
-              document.cookie = cookies[item];
-            }
+            // let cookies = res.data.split(" %split% ");
+            // for (let item in cookies) {
+            //   document.cookie = cookies[item];
+            // }
 
-            cookies = parseCookie();
-            this.props.history.push("/" + cookies.accountType);
+            // cookies = parseCookie();
+            // this.props.history.push("/" + cookies.accountType);
+            alert("Login Successful");
           } else {
             this.setState({
-              erroMessage: <p>Username or password incorrect</p>,
+              erroMessage: <p>{res.data}</p>,
             });
           }
         }
