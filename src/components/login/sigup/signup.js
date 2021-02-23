@@ -32,6 +32,8 @@ class Signup extends Component {
       http("POST", "/register", this.props.signupData, (res) => {
         if (res.status === 200) {
           this.props.otpSent();
+        } else {
+          alert(res.data);
         }
       });
     }

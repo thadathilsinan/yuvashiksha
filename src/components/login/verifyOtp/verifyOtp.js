@@ -73,6 +73,8 @@ class VerifyOtp extends Component {
     });
   };
 
+  showAlert = () => {};
+
   proceed = () => {
     if (this.state.otp.length > 0) {
       this.setState({ otpError: null });

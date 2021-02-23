@@ -1,13 +1,11 @@
 import { Provider } from "react-redux";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Redirect, Route } from "react-router-dom";
 import "./App.css";
 
 import LoginRoute from "./components/login/LoginRoute";
 import Student from "./components/student/Student";
 import Teacher from "./components/teacher/Teacher";
 import Admin from "./components/admin/Admin";
-
-import Signup from "./components/login/sigup/signup";
 
 import { store } from "./store/store";
 
@@ -20,6 +18,9 @@ function App() {
           <Route path="/student" component={Student} />
           <Route path="/teacher" component={Teacher} />
           <Route path="/admin" component={Admin} />
+
+          {/* <Route path="/test" /> */}
+          <Redirect to="/" />
         </div>
       </Provider>
     </BrowserRouter>

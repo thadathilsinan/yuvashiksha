@@ -53,15 +53,15 @@ router.post("/", async (req, res, next) => {
    * When user click 'Verify Email' Button in client side (FIRST STEP IN USER REGISTRATION)
    */
 
-  await Users.findOne({ registerNumber: req.body.registerNumber }).then(
-    async (user) => {
-      if (user && user.accountStatus != "signup-incomplete") {
-        //User with same register number already exists
-        res.statusCode = 203;
-        res.json("User with the register number already exist");
-      }
-    }
-  );
+  let oldUser = await Users.findOne({
+    registerNumber: req.body.registerNumber,
+  });
+
+  if (oldUser && oldUser.accountStatus != "signup-incomplete") {
+    //User with same register number already exists
+    res.statusCode = 203;
+    return res.end("User with the register number already exist");
+  }
 
   //Creating a new user
   let newUser = {
@@ -215,8 +215,6 @@ router.post("/finish", async (req, res, next) => {
     res.statusCode = 203;
     res.end("User account not found");
   }
-  // })
-  // .catch((err) => next(err));
 });
 
 /**

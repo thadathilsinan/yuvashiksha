@@ -7,7 +7,6 @@ import { withRouter } from "react-router-dom";
 import "./signin.css";
 
 import http from "../../../shared/http";
-import parseCookie from "../../../shared/parseCookie";
 
 class Signin extends Component {
   constructor(props) {
@@ -51,13 +50,6 @@ class Signin extends Component {
         { username: this.state.username, password: this.state.password },
         (res) => {
           if (res.status == 200) {
-            // let cookies = res.data.split(" %split% ");
-            // for (let item in cookies) {
-            //   document.cookie = cookies[item];
-            // }
-
-            // cookies = parseCookie();
-            // this.props.history.push("/" + cookies.accountType);
             alert("Login Successful");
           } else {
             this.setState({
