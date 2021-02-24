@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import ListItem from "../../ui-elements/ListItem/ListItem";
+import ListItem from "../../../ui-elements/ListItem/ListItem";
 import { Button, Row, Col, Form } from "react-bootstrap";
 
-import http from "../../../shared/http";
+import http from "../../../../shared/http";
 export default class VerifyAccounts extends Component {
   constructor(props) {
     super(props);

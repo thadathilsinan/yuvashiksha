@@ -5,15 +5,26 @@ import "./Admin.css";
 import NavBar from "../ui-elements/navBar/NavBar";
 import { Switch, Route, withRouter } from "react-router-dom";
 
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 import Institutionstructure from "./pages/Institutionstructure/Institutionstructure";
 import Messagelist from "./pages/Message/Messagelist";
-import Report from "./pages/Report";
+import Report from "./pages/Report/Report";
 import UserMangamenet from "./pages/UserManagment/UserMangamenet";
-import VerifyAccount from "./pages/VerifyAccounts";
+import VerifyAccount from "./pages/VerifyAccounts/VerifyAccounts";
 import Messagecontent from "./pages/Message/Messagecontent";
 
+import { Button } from "react-bootstrap";
+import { FaPlus } from "react-icons/fa";
+
 class Admin extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeItem: $("#adminSidebar .active").attr("name"),
+    };
+  }
+
   changePage = (event) => {
     //Get active item
     let activeItem = $("#adminSidebar .active");
@@ -27,26 +38,61 @@ class Admin extends Component {
     clickedItem.addClass("active");
 
     //Changing the browser Route
-    this.props.history.push("/admin/" + clickedItem.attr("name"));
+    this.props.history.push(
+      "/admin/" + clickedItem.attr("name").toLocaleLowerCase()
+    );
+
+    //Setting the states correctly
+    this.setState({ activeItem: clickedItem.attr("name") });
   };
 
+  componentDidMount() {
+    $(
+      ".list-group-item[name=" +
+        this.props.history.location.pathname.split("/")[2] +
+        "]"
+    ).addClass("active");
+
+    this.setState({ activeItem: $("#adminSidebar .active").attr("name") });
+  }
+
   render() {
+    //Target modal to open when InstitutionStructure + button clicked
+    let targetModal = "#adddept";
+
+    //Check if the path is in the /class inside /Institutionstructure
+    let path = this.props.history.location.pathname.split("/")[3];
+
+    if (path == "class") {
+      targetModal = "#addclass";
+    }
+
+    //The content of the right side of the navBar
+    let navBarRight = {
+      home: null,
+      institutionStructure: (
+        <Button className="mr-4" data-toggle="modal" data-target={targetModal}>
+          <FaPlus />
+        </Button>
+      ),
+      message: null,
+      report: null,
+      verifyAccount: null,
+      userManagement: null,
+    };
+
     return (
       <div className="root">
         <NavBar>
           {{
             left: <h3>ADMIN</h3>,
-            right: this.navBarRight,
+            right: navBarRight[this.state.activeItem],
           }}
         </NavBar>
         <div id="adminBody">
           <div id="adminSidebar">
             <div class="list-group">
-              <a
-                class="list-group-item active"
-                onClick={this.changePage}
-                name="home"
-              >
+              <a class="list-group-item" onClick={this.changePage} name="home">
                 Home
               </a>
               <a

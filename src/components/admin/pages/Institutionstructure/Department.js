@@ -62,7 +62,7 @@ class Departments extends React.Component {
             </>
           )}
 
-          <a
+          {/* <a
             href="#"
             data-toggle="modal"
             data-target="#adddept"
@@ -71,7 +71,7 @@ class Departments extends React.Component {
             <Button className="mr-4">
               <FaPlus />
             </Button>
-          </a>
+          </a> */}
         </div>
         <ListItem height="90px">
           {{

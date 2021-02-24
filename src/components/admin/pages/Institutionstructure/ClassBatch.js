@@ -81,7 +81,7 @@ export default class ClassBatch extends Component {
               <button className="btn btn-primary">Ok</button>
             </>
           )}
-          <a
+          {/* <a
             href="#"
             data-toggle="modal"
             data-target="#addclass"
@@ -90,7 +90,7 @@ export default class ClassBatch extends Component {
             <Button className="mr-4">
               <FaPlus />
             </Button>
-          </a>
+          </a> */}
         </div>
         <ListItem height="120px">
           {{
