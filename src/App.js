@@ -7,6 +7,8 @@ import Student from "./components/student/Student";
 import Teacher from "./components/teacher/Teacher";
 import Admin from "./components/admin/Admin";
 
+import configuireDialogBox from "./shared/dailogBox";
+
 import { store } from "./store/store";
 import { Modal } from "react-bootstrap";
 import React from "react";
@@ -44,11 +46,17 @@ class App extends React.Component {
               <Modal.Body>{this.state.alertText}</Modal.Body>
               <Modal.Footer></Modal.Footer>
             </Modal>
+
+            {/* Routes of the app */}
             <Route path="/" component={LoginRoute} />
             <Route path="/student" component={Student} />
             <Route path="/teacher" component={Teacher} />
             <Route path="/admin" component={Admin} />
-            <Route path="/test"></Route>
+
+            {/* //Test route for development purposes */}
+            <Route path="/test">
+              <></>
+            </Route>
           </div>
         </Provider>
       </BrowserRouter>
