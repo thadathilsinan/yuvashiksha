@@ -5,10 +5,9 @@ import "./App.css";
 import LoginRoute from "./components/login/LoginRoute";
 import Student from "./components/student/Student";
 import Teacher from "./components/teacher/Teacher";
-import Admin from "./components/admin/Admin";
+import AdminMain from "./components/admin/AdminMain";
 
 import { store } from "./store/store";
-import { Modal } from "react-bootstrap";
 import React from "react";
 
 import $ from "jquery";
@@ -40,7 +39,7 @@ class App extends React.Component {
             <Route path="/" component={LoginRoute} />
             <Route path="/student" component={Student} />
             <Route path="/teacher" component={Teacher} />
-            <Route path="/admin" component={Admin} />
+            <Route path="/admin" component={AdminMain} />
 
             {/* //Test route for development purposes */}
             <Route path="/test">
