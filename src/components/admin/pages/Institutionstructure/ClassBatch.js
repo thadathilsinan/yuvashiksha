@@ -3,26 +3,94 @@ import { Button, Row, Form, Col, Modal } from "react-bootstrap";
 
 import { FaMinus, FaPencilAlt, FaPlus } from "react-icons/fa";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
+import configureDialogBox from "../../../../shared/dailogBox";
 export default class ClassBatch extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showHide: false,
-    };
+    this.state = {};
   }
-  handleModalShowHide() {
-    this.setState({ showHide: !this.state.showHide });
-  }
-  handleClose = () => this.setState({ show: false });
-  handleShow = () => this.setState({ show: true });
 
   render() {
     return (
       <div className="container  col-md-8 mt-1 ">
         <div className="text-right">
-          <Button onClick={this.handleShow} className="mr-4">
-            <FaPlus />
-          </Button>
+          {/* Configuring The add department */}
+          {configureDialogBox(
+            "addclass",
+            "ADD CLASS",
+            <>
+              <form>
+                <label className="black" for="class">
+                  class Name:{" "}
+                </label>
+                <input
+                  type="text"
+                  size="lg"
+                  name="class name"
+                  id="class name"
+                  className="m-3"
+                ></input>
+                <br />
+                <label className="black" for="batch">
+                  Batch:{" "}
+                </label>
+                <input
+                  type="text"
+                  size="lg"
+                  name="batch"
+                  id="batch"
+                  className="m-3"
+                ></input>
+                <br />
+              </form>
+            </>,
+            <>
+              <button className="btn btn-primary">Ok</button>
+            </>
+          )}
+          {/* Configuring The edit class */}
+          {configureDialogBox(
+            "editclass",
+            "EDIT CLASS",
+            <>
+              <form>
+                <label className="black" for="class">
+                  class Name:{" "}
+                </label>
+                <input
+                  type="text"
+                  size="lg"
+                  name="class name"
+                  id="class name"
+                  className="m-3"
+                ></input>
+                <br />
+                <label className="black" for="batch">
+                  Batch:{" "}
+                </label>
+                <input
+                  type="text"
+                  name="batch"
+                  id="batch"
+                  className="m-3"
+                ></input>
+                <br />
+              </form>
+            </>,
+            <>
+              <button className="btn btn-primary">Ok</button>
+            </>
+          )}
+          <a
+            href="#"
+            data-toggle="modal"
+            data-target="#addclass"
+            style={{ color: "white" }}
+          >
+            <Button className="mr-4">
+              <FaPlus />
+            </Button>
+          </a>
         </div>
         <ListItem height="120px">
           {{
@@ -62,90 +130,24 @@ export default class ClassBatch extends Component {
             ),
             right: (
               <div>
-                <Button className="btn btn-danger mr-3">
+                <Button className="mr-4 btn btn-danger">
                   <FaMinus />
                 </Button>
-                <Button
-                  className="btn btn-secondary"
-                  onClick={() => this.handleModalShowHide()}
+
+                <a
+                  href="#"
+                  data-toggle="modal"
+                  data-target="#editclass"
+                  style={{ color: "white" }}
                 >
-                  <FaPencilAlt />
-                </Button>
+                  <Button className="btn btn-secondary">
+                    <FaPencilAlt />
+                  </Button>{" "}
+                </a>
               </div>
             ),
           }}
         </ListItem>
-        <Modal show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Class Batch</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              <Form.Control
-                className="pt-2"
-                size="lg"
-                type="text"
-                placeholder="Class"
-              />
-            </p>
-            <p>
-              <Form.Control
-                className="pt-2"
-                size="lg"
-                type="text"
-                placeholder="Batch"
-              />
-            </p>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal show={this.state.showHide}>
-          <Modal.Header closeButton onClick={() => this.handleModalShowHide()}>
-            <Modal.Title>Edit Class Batch</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              <Form.Control
-                className="pt-2"
-                size="lg"
-                type="text"
-                placeholder="Class"
-              />
-            </p>
-            <p>
-              <Form.Control
-                className="pt-2"
-                size="lg"
-                type="text"
-                placeholder="Batch"
-              />
-            </p>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => this.handleModalShowHide()}
-            >
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => this.handleModalShowHide()}
-            >
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </div>
     );
   }
