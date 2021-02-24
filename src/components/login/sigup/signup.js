@@ -7,7 +7,6 @@ import Student from "./student/student";
 import Teacher from "./teacher/teacher";
 
 import http from "../../../shared/http";
-import parseCookie from "../../../shared/parseCookie";
 
 const mapStateToProps = (state) => {
   return {
@@ -34,6 +33,8 @@ class Signup extends Component {
           this.props.otpSent();
         } else {
           alert(res.data);
+
+          //TEST DATA
         }
       });
     }
