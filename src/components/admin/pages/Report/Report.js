@@ -1,16 +1,13 @@
 import React from "react";
-import { Form, Col } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
-import {
-  Button,
-  ButtonGroup,
-  DropdownButton,
-  MenuItem,
-  Dropdown,
-} from "react-bootstrap";
+import { Button } from "react-bootstrap";
+
+import "./Report.css";
+
 function Report() {
   return (
-    <div className="container  col-md-8 mt-5 bg-secondary">
+    <div className="container mt-5 mb-5">
       <Form className="">
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Department" />

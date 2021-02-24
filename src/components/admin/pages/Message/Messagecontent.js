@@ -16,24 +16,26 @@ class Messagecontent extends Component {
   render() {
     return (
       <div className="container col-md-6">
-        <h1>Messages</h1>
         <div className="row">
           <table className="table  table-borderless">
             <th scope="col"></th>
             <tr>
-              <td>FROM</td>
+              <td>FROM:</td>
               <td>{this.props.message.from}</td>
             </tr>
             <tr>
-              <td>DATE</td>
+              <td>DATE:</td>
               <td>{this.props.message.date}</td>
             </tr>
             <tr>
-              <td>TIME</td>
+              <td>TIME:</td>
               <td>{this.props.message.time}</td>
             </tr>
           </table>
-          <div className="mt-4">{this.props.message.message}</div>
+          <div className="mt-4">
+            Message : <br />
+            {this.props.message.message}
+          </div>
           <form>
             <textarea
               className="mt-4"

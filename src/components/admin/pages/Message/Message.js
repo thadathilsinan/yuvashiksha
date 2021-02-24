@@ -1,9 +1,5 @@
 import React from "react";
-import { Container, Button } from "react-bootstrap";
-import Jumbotron from "react-bootstrap/Jumbotron";
-import { Link, Route, withRouter } from "react-router-dom";
-import Messagecontent from "./Messagecontent";
-import Messagelist from "./Messagelist";
+import { withRouter } from "react-router-dom";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
 import { connect } from "react-redux";
 
@@ -24,7 +20,7 @@ class Message extends React.Component {
   };
   render() {
     return (
-      <div className="container  col-md-10 mt-1 " onClick={this.storeMessage}>
+      <div onClick={this.storeMessage}>
         <ListItem height="120px">
           {{
             left: (
