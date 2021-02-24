@@ -7,8 +7,6 @@ import Student from "./components/student/Student";
 import Teacher from "./components/teacher/Teacher";
 import Admin from "./components/admin/Admin";
 
-import configuireDialogBox from "./shared/dailogBox";
-
 import { store } from "./store/store";
 import { Modal } from "react-bootstrap";
 import React from "react";

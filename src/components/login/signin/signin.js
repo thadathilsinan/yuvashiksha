@@ -7,6 +7,7 @@ import { withRouter } from "react-router-dom";
 import "./signin.css";
 
 import http from "../../../shared/http";
+import configureDialogBox from "../../../shared/dailogBox";
 
 class Signin extends Component {
   constructor(props) {
@@ -71,6 +72,39 @@ class Signin extends Component {
   render() {
     return (
       <form>
+        {/* Configuring The reportModal */}
+        {configureDialogBox(
+          "reportModal",
+          "Report an Issue",
+          <>
+            <form>
+              <label className="black" for="email">
+                Enter your email:{" "}
+              </label>
+              <input
+                type="email"
+                name="userEmail"
+                id="email"
+                className="m-3"
+              ></input>
+              <br />
+
+              <label className="black" for="content">
+                Enter content:{" "}
+              </label>
+              <textarea
+                rows="10"
+                name="content"
+                id="content"
+                className="m-3"
+              ></textarea>
+            </form>
+          </>,
+          <>
+            <button className="btn btn-primary">Send</button>
+          </>
+        )}
+
         <div className="form-group">
           <label for="username">Username</label>
           <input
@@ -131,7 +165,12 @@ class Signin extends Component {
         <div className="d-flex align-items-center justify-content-center">
           <p style={{ "margin-top": "8px", color: "white" }}>
             Need help?{" "}
-            <a href="#" style={{ color: "white" }}>
+            <a
+              href="#"
+              data-toggle="modal"
+              data-target="#reportModal"
+              style={{ color: "white" }}
+            >
               Report
             </a>
           </p>

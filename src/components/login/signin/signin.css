@@ -20,3 +20,11 @@
 label {
   color: white;
 }
+
+.black {
+  color: black;
+}
+
+textarea {
+  width: 93%;
+}
