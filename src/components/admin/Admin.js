@@ -1,4 +1,5 @@
 import { Component } from "react";
+import $ from "jquery";
 import "./Admin.css";
 
 import NavBar from "../ui-elements/navBar/NavBar";
@@ -11,26 +12,19 @@ import UserMangamenet from "./pages/UserManagment/UserMangamenet";
 import VerifyAccount from "./pages/VerifyAccounts";
 import Messagecontent from "./pages/Message/Messagecontent";
 import { SidebarData } from "./Component/Sidebardata";
+
 class Admin extends Component {
-  isHome = () => {
-    console.log(this.props);
-    if (this.props.location.pathname === "/admin") {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  changePage = (event) => {
+    //Get active item
+    let activeItem = $("#adminSidebar .active");
+    //Clicked tab
+    let clickedItem = $(event.target);
 
-  navBarRight = null;
+    //Remove "active" class from the active item
+    activeItem.removeClass("active");
 
-  setHomeNavBar = () => {
-    if (this.isHome()) {
-      this.navBarRight = <p>IN HOME</p>;
-    } else {
-      this.navBarRight = null;
-    }
-    console.log(this.isHome());
-    console.log(this.navBarRight);
+    //Add active class to the clicked item
+    clickedItem.addClass("active");
   };
 
   render() {
@@ -43,7 +37,33 @@ class Admin extends Component {
               right: this.navBarRight,
             }}
           </NavBar>
-          <div className="container-fluid">
+          <div id="adminBody">
+            <div id="adminSidebar">
+              <div class="list-group">
+                <a class="list-group-item active" onClick={this.changePage}>
+                  Home
+                </a>
+                <a class="list-group-item" onClick={this.changePage}>
+                  Institution Structure
+                </a>
+                <a class="list-group-item" onClick={this.changePage}>
+                  Messages
+                </a>
+                <a class="list-group-item" onClick={this.changePage}>
+                  Report
+                </a>
+                <a class="list-group-item" onClick={this.changePage}>
+                  Verify Accoint
+                </a>
+                <a class="list-group-item" onClick={this.changePage}>
+                  User Management
+                </a>
+              </div>
+            </div>
+            <div>Body</div>
+          </div>
+
+          {/* <div className="container-fluid">
             <div className="row">
               <div className="col-md-2" id="admin-sidebar">
                 {SidebarData.map((item, index) => {
@@ -89,7 +109,7 @@ class Admin extends Component {
                 </Switch>
               </div>
             </div>
-          </div>
+          </div> */}
         </Router>
       </div>
     );

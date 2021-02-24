@@ -36,19 +36,6 @@ class App extends React.Component {
       <BrowserRouter>
         <Provider store={store}>
           <div id="root">
-            {/* Replacing system alert with custom modal */}
-            {/* <Modal
-              show={this.state.alertShow}
-              onHide={this.closeAlert}
-              className="modal-body"
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Message</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>{this.state.alertText}</Modal.Body>
-              <Modal.Footer></Modal.Footer>
-            </Modal> */}
-
             {/* Routes of the app */}
             <Route path="/" component={LoginRoute} />
             <Route path="/student" component={Student} />

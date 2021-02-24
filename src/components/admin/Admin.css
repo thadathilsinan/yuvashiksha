@@ -3,7 +3,7 @@
   /* width: calc(100% - 200px); */
 }
 
-#admin-sidebar {
+/* #admin-sidebar {
   width: 200px;
   height: calc(100vh - 80px);
   background-color: #060b26;
@@ -21,4 +21,33 @@
 #adminContent {
   height: calc(100vh - 80px);
   overflow: auto;
+} */
+
+#adminBody {
+  width: 100%;
+  height: calc(100vh - 80px);
+
+  display: flex;
+  flex-direction: row;
+}
+
+#adminSidebar {
+  width: 300px;
+  height: calc(100vh - 80px);
+
+  background-color: #060b26;
+  overflow: auto;
+}
+
+#adminSidebar .list-group-item {
+  background-color: #060b26;
+  text-decoration: none;
+  border-radius: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+#adminSidebar .active {
+  background-color: #82b1ff;
+  border-right: 8px solid white;
 }
