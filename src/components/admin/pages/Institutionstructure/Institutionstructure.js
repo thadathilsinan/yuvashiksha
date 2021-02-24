@@ -8,7 +8,6 @@ export default class Institutionstructure extends Component {
       <div>
         <Department></Department>
         <ClassBatch></ClassBatch>
-        <Subject></Subject>
       </div>
     );
   }
