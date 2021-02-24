@@ -9,6 +9,9 @@ const passport = require("passport");
 
 var router = express.Router();
 
+//Importing required monggose models
+const BugReport = require("../schema/BugReport");
+
 router.use(bodyParser.json());
 
 router.post("/", function (req, res, next) {
@@ -26,6 +29,23 @@ router.post("/", function (req, res, next) {
       });
     }
   })(req, res, next);
+});
+
+router.post("/report", async (req, res, next) => {
+  let newReport = new BugReport({
+    userEmail: req.body.email,
+    message: req.body.message,
+  });
+
+  let currentDate = new Date();
+
+  newReport.date = currentDate;
+
+  //Saving new report document to the database
+  await newReport.save().catch((err) => next(err));
+
+  res.statusCode = 200;
+  res.end("Bug report successfully submitted");
 });
 
 router.get("/test", (req, res, next) => {

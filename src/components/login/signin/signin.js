@@ -17,6 +17,9 @@ class Signin extends Component {
       username: "", //USERNAME entered in the login form
       password: "", //PASSWORD entered in the login form
       erroMessage: null, //Error messsage if any (These are displayed bottom side of the login form)
+      reportEmail: "", //Email id of the user (REPORT form)
+      reportContent: "", //Content of the report (REPORT from)
+      reportError: null,
     };
   }
 
@@ -69,6 +72,61 @@ class Signin extends Component {
     document.location.href = "http://localhost:4000/register/google";
   };
 
+  //Validate Email ID
+  validateEmail = (email) => {
+    if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  reportFormChange = (e) => {
+    let newState = {};
+
+    newState[e.target.name] = e.target.value;
+    this.setState(newState);
+
+    this.validateReportForm();
+  };
+
+  validateReportForm = () => {
+    if (this.validateEmail(this.state.reportEmail)) {
+      if (this.state.reportContent === "") {
+        this.setState({ reportError: "Content is empty" });
+        return false;
+      } else {
+        this.setState({ reportError: null });
+        return true;
+      }
+    } else {
+      this.setState({ reportError: "Email not valid" });
+      return false;
+    }
+  };
+
+  //When clicking Send in report form
+  sendReport = (e) => {
+    e.preventDefault();
+    if (this.validateReportForm()) {
+      http(
+        "POST",
+        "/login/report",
+        {
+          email: this.state.reportEmail,
+          message: this.state.reportContent,
+        },
+        (res) => {
+          if (res.status == 200) {
+            alert("Report sent successfully");
+          } else {
+            alert(res.data);
+          }
+        }
+      );
+    }
+  };
+
   render() {
     return (
       <form>
@@ -82,10 +140,12 @@ class Signin extends Component {
                 Enter your email:{" "}
               </label>
               <input
+                onChange={this.reportFormChange}
                 type="email"
-                name="userEmail"
+                name="reportEmail"
                 id="email"
                 className="m-3"
+                value={this.state.reportEmail}
               ></input>
               <br />
 
@@ -93,15 +153,19 @@ class Signin extends Component {
                 Enter content:{" "}
               </label>
               <textarea
+                onChange={this.reportFormChange}
                 rows="10"
-                name="content"
+                name="reportContent"
                 id="content"
                 className="m-3"
               ></textarea>
             </form>
+            {this.state.reportError ? <p>{this.state.reportError}</p> : null}
           </>,
           <>
-            <button className="btn btn-primary">Send</button>
+            <button className="btn btn-primary" onClick={this.sendReport}>
+              Send
+            </button>
           </>
         )}
 
