@@ -12,8 +12,8 @@ export default class ClassBatch extends Component {
 
   render() {
     return (
-      <div className="container  col-md-8 mt-1 ">
-        <div className="text-right">
+      <div>
+        <div>
           {/* Configuring The add department */}
           {configureDialogBox(
             "addclass",
@@ -21,31 +21,17 @@ export default class ClassBatch extends Component {
             <>
               <form>
                 <label className="black" for="class">
-                  class Name:{" "}
+                  Class Name:{" "}
                 </label>
-                <input
-                  type="text"
-                  size="lg"
-                  name="class name"
-                  id="class name"
-                  className="m-3"
-                ></input>
-                <br />
+                <input type="text" name="class" id="class"></input>
                 <label className="black" for="batch">
                   Batch:{" "}
                 </label>
-                <input
-                  type="text"
-                  size="lg"
-                  name="batch"
-                  id="batch"
-                  className="m-3"
-                ></input>
-                <br />
+                <input type="text" name="batch" id="batch"></input>
               </form>
             </>,
             <>
-              <button className="btn btn-primary">Ok</button>
+              <button className="btn btn-primary">OK</button>
             </>
           )}
           {/* Configuring The edit class */}
@@ -81,16 +67,6 @@ export default class ClassBatch extends Component {
               <button className="btn btn-primary">Ok</button>
             </>
           )}
-          {/* <a
-            href="#"
-            data-toggle="modal"
-            data-target="#addclass"
-            style={{ color: "white" }}
-          >
-            <Button className="mr-4">
-              <FaPlus />
-            </Button>
-          </a> */}
         </div>
         <ListItem height="120px">
           {{
@@ -110,13 +86,14 @@ export default class ClassBatch extends Component {
                     </Row>
                     <Row>
                       <Col>
-                        <Form.Label className="text-dark">Mentor</Form.Label>
+                        <Form.Label className="text-dark">Mentor:</Form.Label>
                       </Col>
                       <Col>
                         <Form.Control
                           as="select"
                           defaultValue="Class Mentor"
                           placeholder="Class Mentor"
+                          style={{ width: "200px" }}
                         >
                           <option>Class Mentor</option>
                           <option>Teacher name</option>

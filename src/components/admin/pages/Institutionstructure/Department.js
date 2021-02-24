@@ -1,9 +1,10 @@
 import React from "react";
-import { Button, Form, Col, Row, Container, Modal } from "react-bootstrap";
-import Jumbotron from "react-bootstrap/Jumbotron";
-import { FaMinus, FaPencilAlt, FaPlus } from "react-icons/fa";
+import { Button, Form, Col, Row } from "react-bootstrap";
+import { FaMinus, FaPencilAlt } from "react-icons/fa";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
 import configureDialogBox from "../../../../shared/dailogBox";
+import "./Department.css";
+
 class Departments extends React.Component {
   constructor(props) {
     super(props);
@@ -12,29 +13,20 @@ class Departments extends React.Component {
 
   render() {
     return (
-      <div className="container  col-md-8 mt-1 ">
-        <div className="text-right">
+      <div id="departmentList">
+        <div>
           {/* Configuring The add department */}
           {configureDialogBox(
             "adddept",
             "ADD DEPARTMENT",
             <>
-              <form>
-                <label className="black" for="dept">
-                  Add Department:{" "}
-                </label>
-                <input
-                  type="text"
-                  size="lg"
-                  name="department name"
-                  id="department name"
-                  className="m-3"
-                ></input>
-                <br />
-              </form>
+              <label className="black" for="dept">
+                Name of department:{" "}
+              </label>
+              <input type="text" name="dept" id="dept"></input>
             </>,
             <>
-              <button className="btn btn-primary">Ok</button>
+              <button className="btn btn-primary">OK</button>
             </>
           )}
           {/* Configuring The edit department */}
@@ -44,34 +36,16 @@ class Departments extends React.Component {
             <>
               <form>
                 <label className="black" for="dept">
-                  Add Department:{" "}
+                  Name of department:{" "}
                 </label>
-                <input
-                  type="text"
-                  size="lg"
-                  name="department name"
-                  id="department name"
-                  className="m-3"
-                  placeholder="department old name"
-                ></input>
+                <input type="text" name="dept" id="dept"></input>
                 <br />
               </form>
             </>,
             <>
-              <button className="btn btn-primary">Ok</button>
+              <button className="btn btn-primary">OK</button>
             </>
           )}
-
-          {/* <a
-            href="#"
-            data-toggle="modal"
-            data-target="#adddept"
-            style={{ color: "white" }}
-          >
-            <Button className="mr-4">
-              <FaPlus />
-            </Button>
-          </a> */}
         </div>
         <ListItem height="90px">
           {{
@@ -88,8 +62,7 @@ class Departments extends React.Component {
                   <Row>
                     <Col>
                       <Form.Label className="text-dark">
-                        {" "}
-                        Name of hod
+                        Head of the department:
                       </Form.Label>
                     </Col>
                     <Col>
@@ -97,6 +70,7 @@ class Departments extends React.Component {
                         as="select"
                         defaultValue="Department"
                         placeholder="Department"
+                        style={{ width: "200px" }}
                       >
                         <option>HOD</option>
                         <option>Teacher name</option>

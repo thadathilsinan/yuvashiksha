@@ -38,9 +38,7 @@ class Admin extends Component {
     clickedItem.addClass("active");
 
     //Changing the browser Route
-    this.props.history.push(
-      "/admin/" + clickedItem.attr("name").toLocaleLowerCase()
-    );
+    this.props.history.push("/admin/" + clickedItem.attr("name"));
 
     //Setting the states correctly
     this.setState({ activeItem: clickedItem.attr("name") });

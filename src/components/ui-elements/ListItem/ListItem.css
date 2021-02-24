@@ -10,3 +10,7 @@
 #right-list-item-content {
   margin: 20px;
 }
+
+#list-item-container:hover {
+  background-color: rgb(243, 243, 243);
+}

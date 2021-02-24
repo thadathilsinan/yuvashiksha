@@ -8,14 +8,14 @@ import { Route, Switch, withRouter } from "react-router-dom";
 export default class Institutionstructure extends Component {
   render() {
     return (
-      <div>
+      <div style={{ width: "100%" }}>
         <Switch>
           <Route path="/admin/institutionstructure/" exact>
-            <Department></Department>
+            <Department />
           </Route>
 
           <Route path="/admin/institutionstructure/class" exact>
-            <ClassBatch></ClassBatch>
+            <ClassBatch />
           </Route>
         </Switch>
       </div>
