@@ -10,92 +10,21 @@ import {
   BsPlus,
 } from "react-icons/bs";
 import { Button, Modal, Form, Row, Col, Dropdown } from "react-bootstrap";
+import configureDialogBox from "../../../shared/dailogBox";
 class NewExam extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showHide: false,
-    };
+    this.state = {};
   }
-
-  handleClose = () => this.setState({ show: false });
-  handleShow = () => this.setState({ show: true });
 
   render() {
     return (
       <div>
-        <NavBar>
-          {{
-            left: (
-              <div>
-                <span id="navBarBackButton">{"<"}</span>
-                <h3>CREATE QUESTION PAPER</h3>
-              </div>
-            ),
-            right: (
-              <div>
-                <Row>
-                  <Col>
-                    {" "}
-                    <Button className="btn btn-light ">
-                      <BsFillCaretDownFill />
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button className="btn btn-light ml-3 ">
-                      <BsFillCaretUpFill />
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button className="btn btn-light ml-3 ">
-                      <BsPencil />
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button className="btn btn-light ml-3 ">
-                      <BsDash />
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Dropdown>
-                      <Dropdown.Toggle variant="light" id="dropdown-basic">
-                        <BsPlus />
-                      </Dropdown.Toggle>
-
-                      <Dropdown.Menu>
-                        <Dropdown.Item href="#/action-1">Text</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">
-                          Multiple Choice question
-                        </Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">
-                          Short answer
-                        </Dropdown.Item>
-                        <Dropdown.Item href="#/action-4 ">
-                          Essay Question
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Col>
-                  <Button
-                    className="btn btn-success ml-3"
-                    onClick={this.handleShow}
-                  >
-                    <BsCheck />
-                  </Button>
-                </Row>
-              </div>
-            ),
-          }}
-        </NavBar>
-        <Modal
-          show={this.state.show}
-          onHide={this.handleClose}
-          className="modal-body"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>SCHEDULE EXAM</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+        {/* Configuring The scheduleexam */}
+        {configureDialogBox(
+          "scheduleexam",
+          "SCHEDULE EXAM",
+          <>
             <Row>
               <Col>
                 <Form.Label className="text-dark">Exam name</Form.Label>
@@ -180,39 +109,259 @@ class NewExam extends Component {
                 </Form.Control>
               </Col>
             </Row>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          </>,
+          <>
+            {" "}
+            <button variant="light" className="btn btn-primary">
+              Cancel
+            </button>
+            <button variant="light" className="btn btn-primary">
+              Ok
+            </button>
+          </>
+        )}
+        {/* Configuring The add text */}
+        {configureDialogBox(
+          "text",
+          "ADD TEXT",
+          <>
+            <form>
+              <label className="black" for="text">
+                Enter text:{" "}
+              </label>
+              <textarea
+                rows="10"
+                name="text"
+                id="text"
+                className="m-3"
+              ></textarea>
+            </form>
+          </>,
+          <>
+            <button className="btn btn-primary">Cancel</button>
+            <button className="btn btn-primary">Add</button>
+          </>
+        )}
+        {/* Configuring The add mcq */}
+        {configureDialogBox(
+          "mcq",
+          "ADD MULTIPLE CHOICE QUESTION",
+          <>
+            <form>
+              <label className="black" for="mcq">
+                Enter Question:{" "}
+              </label>
+              <input
+                type="text"
+                name="mcq"
+                id="mcq"
+                className="  mr-3 form-control from-control-lg"
+              ></input>
+              <br />
+              <label className="black" for="mcq">
+                Mark:{" "}
+              </label>
+              <input
+                type="number"
+                name="mark"
+                id="mark"
+                className="ml-3 "
+              ></input>
+              <br />
+              <input
+                className="form-check-input ml-3"
+                type="checkbox"
+                value=""
+                id="defaultCheck1"
+              ></input>
+              <label
+                className="black form-check-label ml-5"
+                for="defaultCheck1"
+              >
+                Allow Multiple Selctions
+              </label>
+              <br />
+            </form>
+          </>,
+          <>
+            <button className="btn btn-primary">Add option</button>
+            <button className="btn btn-primary">Canvas </button>
+            <button className="btn btn-primary">Upload</button>
+            <button className="btn btn-primary">Cancel</button>
+            <button className="btn btn-primary">Add</button>
+          </>
+        )}
+        {/* Configuring The add SHORT */}
+        {configureDialogBox(
+          "short",
+          "ADD SHORT ANSWER QUESTION",
+          <>
+            <form>
+              <label className="black mr-3" for="mcq">
+                Enter Question:{" "}
+              </label>
+              <input
+                type="text"
+                name="short"
+                id="short"
+                className="mr-3 form-control from-control-lg"
+              ></input>
+              <br />
+              <label className="black" for="mcq">
+                Mark:{" "}
+              </label>
+              <input
+                type="number"
+                name="mark"
+                id="mark"
+                className="ml-3 "
+              ></input>
+              <br />
+            </form>
+          </>,
+          <>
+            <button className="btn btn-primary">Canvas </button>
+            <button className="btn btn-primary">Upload</button>
+            <button className="btn btn-primary">Cancel</button>
+            <button className="btn btn-primary">Add</button>
+          </>
+        )}
+        {/* Configuring The add SHORT */}
+        {configureDialogBox(
+          "essay",
+          "ADD ESSAY QUESTION",
+          <>
+            <form>
+              <label className="black mr-3" for="mcq">
+                Enter Question:{" "}
+              </label>
+              <input
+                type="text"
+                name="short"
+                id="short"
+                className="mr-3 form-control from-control-lg"
+              ></input>
+              <br />
+              <label className="black" for="mcq">
+                Mark:{" "}
+              </label>
+              <input
+                type="number"
+                name="mark"
+                id="mark"
+                className="ml-3 "
+              ></input>
+              <br />
+            </form>
+          </>,
+          <>
+            <button className="btn btn-primary">Canvas </button>
+            <button className="btn btn-primary">Upload</button>
+            <button className="btn btn-primary">Cancel</button>
+            <button className="btn btn-primary">Add</button>
+          </>
+        )}
+        <NavBar>
+          {{
+            left: (
+              <div>
+                <span id="navBarBackButton">{"<"}</span>
+                <h3>CREATE QUESTION PAPER</h3>
+              </div>
+            ),
+            right: (
+              <div>
+                <Row>
+                  <Col>
+                    {" "}
+                    <Button className="btn btn-light ">
+                      <BsFillCaretDownFill />
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button className="btn btn-light ml-3 ">
+                      <BsFillCaretUpFill />
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button className="btn btn-light ml-3 ">
+                      <BsPencil />
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button className="btn btn-light ml-3 ">
+                      <BsDash />
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Dropdown>
+                      <Dropdown.Toggle variant="light" id="dropdown-basic">
+                        <BsPlus />
+                      </Dropdown.Toggle>
 
-        <Modal show={this.state.showHide}>
-          <Modal.Header closeButton onClick={() => this.handleModalShowHide()}>
-            <Modal.Title>Edit Department</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form.Control size="lg" type="text" placeholder="Department name" />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => this.handleModalShowHide()}
-            >
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => this.handleModalShowHide()}
-            >
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+                      <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">
+                          <a
+                            className="text-decoration-none"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#text"
+                            style={{ color: "black" }}
+                          >
+                            Text
+                          </a>
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-2">
+                          <a
+                            className="text-decoration-none"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#mcq"
+                            style={{ color: "black" }}
+                          >
+                            Multiple Choice question{" "}
+                          </a>
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-3">
+                          <a
+                            className="text-decoration-none"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#short"
+                            style={{ color: "black" }}
+                          >
+                            Short answer{" "}
+                          </a>
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-4 ">
+                          <a
+                            className="text-decoration-none"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#essay"
+                            style={{ color: "black" }}
+                          >
+                            Essay Question
+                          </a>
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                  <a
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#scheduleexam"
+                    style={{ color: "white" }}
+                  >
+                    <Button className="btn btn-success ml-3">
+                      <BsCheck />
+                    </Button>
+                  </a>
+                </Row>
+              </div>
+            ),
+          }}
+        </NavBar>
       </div>
     );
   }
