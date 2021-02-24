@@ -11,21 +11,25 @@ import { store } from "./store/store";
 import { Modal } from "react-bootstrap";
 import React from "react";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { alertText: "", alertShow: false };
-  }
+import $ from "jquery";
 
+class App extends React.Component {
   componentDidMount() {
     window.alert = (text) => {
-      this.setState({ alertText: text, alertShow: true });
+      $("body").append(
+        `<div class="alert alert-info alert-dismissible" role="alert" id="systemAlert">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>${text}
+        </div>`
+      );
     };
   }
-
-  closeAlert = () => {
-    this.setState({ alertShow: false });
-  };
 
   render() {
     return (
@@ -33,7 +37,7 @@ class App extends React.Component {
         <Provider store={store}>
           <div id="root">
             {/* Replacing system alert with custom modal */}
-            <Modal
+            {/* <Modal
               show={this.state.alertShow}
               onHide={this.closeAlert}
               className="modal-body"
@@ -43,7 +47,7 @@ class App extends React.Component {
               </Modal.Header>
               <Modal.Body>{this.state.alertText}</Modal.Body>
               <Modal.Footer></Modal.Footer>
-            </Modal>
+            </Modal> */}
 
             {/* Routes of the app */}
             <Route path="/" component={LoginRoute} />

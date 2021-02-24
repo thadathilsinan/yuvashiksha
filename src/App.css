@@ -1,3 +1,12 @@
 #root {
   background-color: rgb(160, 160, 160);
 }
+
+#systemAlert {
+  position: fixed;
+  top: 10px;
+  left: 5%;
+  z-index: 100000;
+  width: 90%;
+  opacity: 90%;
+}
