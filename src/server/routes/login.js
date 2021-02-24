@@ -64,4 +64,22 @@ router.post("/checkAdmin", (req, res, next) => {
   }
 });
 
+//Login admin
+router.post("/admin", (req, res, next) => {
+  //Using the passport local strategy login admn
+  passport.authenticate("local", (err, user, info) => {
+    if (err) throw err;
+    if (!user) {
+      res.statusCode = 203;
+      res.end("Username or password wrong");
+    } else {
+      req.logIn(user, (err) => {
+        if (err) throw err;
+        res.statusCode = 200;
+        res.end("Successfully Authenticated");
+      });
+    }
+  })(req, res, next);
+});
+
 module.exports = router;
