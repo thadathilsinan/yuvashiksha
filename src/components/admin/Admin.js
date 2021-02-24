@@ -3,7 +3,8 @@ import $ from "jquery";
 import "./Admin.css";
 
 import NavBar from "../ui-elements/navBar/NavBar";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
+
 import Home from "./pages/Home";
 import Institutionstructure from "./pages/Institutionstructure/Institutionstructure";
 import Messagelist from "./pages/Message/Messagelist";
@@ -11,7 +12,6 @@ import Report from "./pages/Report";
 import UserMangamenet from "./pages/UserManagment/UserMangamenet";
 import VerifyAccount from "./pages/VerifyAccounts";
 import Messagecontent from "./pages/Message/Messagecontent";
-import { SidebarData } from "./Component/Sidebardata";
 
 class Admin extends Component {
   changePage = (event) => {
@@ -25,95 +25,103 @@ class Admin extends Component {
 
     //Add active class to the clicked item
     clickedItem.addClass("active");
+
+    //Changing the browser Route
+    this.props.history.push("/admin/" + clickedItem.attr("name"));
   };
 
   render() {
     return (
       <div className="root">
-        <Router>
-          <NavBar>
-            {{
-              left: <h3>ADMIN</h3>,
-              right: this.navBarRight,
-            }}
-          </NavBar>
-          <div id="adminBody">
-            <div id="adminSidebar">
-              <div class="list-group">
-                <a class="list-group-item active" onClick={this.changePage}>
-                  Home
-                </a>
-                <a class="list-group-item" onClick={this.changePage}>
-                  Institution Structure
-                </a>
-                <a class="list-group-item" onClick={this.changePage}>
-                  Messages
-                </a>
-                <a class="list-group-item" onClick={this.changePage}>
-                  Report
-                </a>
-                <a class="list-group-item" onClick={this.changePage}>
-                  Verify Accoint
-                </a>
-                <a class="list-group-item" onClick={this.changePage}>
-                  User Management
-                </a>
-              </div>
+        <NavBar>
+          {{
+            left: <h3>ADMIN</h3>,
+            right: this.navBarRight,
+          }}
+        </NavBar>
+        <div id="adminBody">
+          <div id="adminSidebar">
+            <div class="list-group">
+              <a
+                class="list-group-item active"
+                onClick={this.changePage}
+                name="home"
+              >
+                Home
+              </a>
+              <a
+                class="list-group-item"
+                onClick={this.changePage}
+                name="institutionStructure"
+              >
+                Institution Structure
+              </a>
+              <a
+                class="list-group-item"
+                onClick={this.changePage}
+                name="message"
+              >
+                Messages
+              </a>
+              <a
+                class="list-group-item"
+                onClick={this.changePage}
+                name="report"
+              >
+                Report
+              </a>
+              <a
+                class="list-group-item"
+                onClick={this.changePage}
+                name="verifyAccount"
+              >
+                Verify Accoint
+              </a>
+              <a
+                class="list-group-item"
+                onClick={this.changePage}
+                name="userManagement"
+              >
+                User Management
+              </a>
             </div>
-            <div>Body</div>
           </div>
+          <div id="adminContent">
+            <Switch>
+              <Route
+                path="/admin/message/messagecontent"
+                exact
+                component={Messagecontent}
+              />
+              <Route path="/admin/home" exact>
+                <Home />
+              </Route>
 
-          {/* <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-2" id="admin-sidebar">
-                {SidebarData.map((item, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className={item.cName}
-                      onClick={this.setHomeNavBar}
-                    >
-                      <Link to={item.path}>
-                        <span>{item.title}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </div>
-              <div className="col-lg-10" id="adminContent">
-                <Switch>
-                  <Route
-                    path="/admin/message/messagecontent"
-                    exact
-                    component={Messagecontent}
-                  />
-                  <Route path="/admin" exact>
-                    <Home />
-                  </Route>
-                  <Route
-                    path="/admin/institutionstructure"
-                    component={Institutionstructure}
-                  />
-                  <Route path="/admin/message" component={Messagelist} exact />
-                  <Route path="/admin/report" component={Report} exact />
-                  <Route
-                    path="/admin/usermangamenet"
-                    component={UserMangamenet}
-                    exact
-                  />
-                  <Route
-                    path="/admin/verifyaccounts"
-                    component={VerifyAccount}
-                    exact
-                  />
-                </Switch>
-              </div>
-            </div>
-          </div> */}
-        </Router>
+              <Route path="/admin/institutionstructure">
+                <Institutionstructure />
+              </Route>
+
+              <Route path="/admin/message" exact>
+                <Messagelist />
+              </Route>
+
+              <Route path="/admin/report" exact>
+                <Report />
+              </Route>
+
+              <Route path="/admin/usermangamenet" exact>
+                <UserMangamenet />
+              </Route>
+
+              <Route path="/admin/verifyaccounts" exact>
+                <VerifyAccount />
+              </Route>
+            </Switch>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-export default Admin;
+export default withRouter(Admin);
