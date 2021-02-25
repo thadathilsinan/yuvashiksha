@@ -9,6 +9,9 @@ let http = (
   callback = null,
   errorCallback = null
 ) => {
+  //Variable for storing response from server
+  let responseFromServer;
+
   if (method == "POST") {
     body = { ...body, cookies: parseCookie() };
   }
@@ -22,6 +25,7 @@ let http = (
     .then((response) => {
       console.log(`${method} request send to ${serverDomain + url}`);
       console.log("Response from server: ", response);
+      responseFromServer = response;
 
       if (callback) callback(response);
     })
@@ -30,6 +34,8 @@ let http = (
       console.log(err);
       if (errorCallback) errorCallback(err);
     });
+
+  return responseFromServer;
 };
 
 export default http;
