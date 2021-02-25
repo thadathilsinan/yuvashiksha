@@ -76,7 +76,7 @@ router.post("/admin", (req, res, next) => {
       req.logIn(user, (err) => {
         if (err) throw err;
         res.statusCode = 200;
-        res.end("Successfully Authenticated");
+        res.end("Login Success");
       });
     }
   })(req, res, next);

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import "./AdminLogin.css";
-import httml from "../../../shared/http";
 import http from "../../../shared/http";
 
-export default class AdminLogin extends Component {
+class AdminLogin extends Component {
   //Creating ref for the input fields
   username = React.createRef();
   password = React.createRef();
@@ -20,10 +19,12 @@ export default class AdminLogin extends Component {
       http(
         "POST",
         "/login/admin",
-        { username: { username }, password },
+        { username, password, adminLogin: true },
         (res) => {
           if (res.status == 200) {
             alert("Login Success");
+            //Refresh the page
+            window.location.href = "http://localhost:3000/admin/home";
           } else {
             alert(res.data);
           }
@@ -67,7 +68,7 @@ export default class AdminLogin extends Component {
                 placeholder="Password"
               />
             </div>
-            <button type="submit" class="btn btn-success" onClick={this.login}>
+            <button type="submit" class=" btn-success" onClick={this.login}>
               LOGIN
             </button>
           </form>
@@ -76,3 +77,5 @@ export default class AdminLogin extends Component {
     );
   }
 }
+
+export default AdminLogin;

@@ -5,48 +5,48 @@ const localStrategy = require("passport-local").Strategy;
 
 module.exports = function (passport) {
   passport.use(
-    new localStrategy(async (username, password, done) => {
-      if (typeof username === "object" && username !== null) {
-        //Admin account login
-        let admin = await Admin.findOne(
-          { username: username.username },
-          password
-        );
+    new localStrategy(
+      { passReqToCallback: true },
+      async (req, username, password, done) => {
+        if (req.body.adminLogin) {
+          //Admin account login
+          let admin = await Admin.findOne({ username, password });
 
-        if (admin) {
-          //Admin Login success
-          return done(null, { ...admin, accountType: "admin" });
+          if (admin) {
+            //Admin Login success
+            return done(null, { ...admin, accountType: "admin" });
+          } else {
+            //Login failed
+            return done(null, false);
+          }
         } else {
-          //Login failed
-          return done(null, false);
-        }
-      } else {
-        //Noraml user login
-        Users.findOne({ registerNumber: username }, (err, user) => {
-          if (err) throw err;
-          if (!user) return done(null, false);
-          bcrypt.compare(password, user.password, (err, result) => {
+          //Noraml user login
+          Users.findOne({ registerNumber: username }, (err, user) => {
             if (err) throw err;
-            if (result === true) {
-              return done(null, user);
-            } else {
-              return done(null, false);
-            }
+            if (!user) return done(null, false);
+            bcrypt.compare(password, user.password, (err, result) => {
+              if (err) throw err;
+              if (result === true) {
+                return done(null, user);
+              } else {
+                return done(null, false);
+              }
+            });
           });
-        });
+        }
       }
-    })
+    )
   );
 
   passport.serializeUser((user, cb) => {
-    if (user.accoountType == "admin") {
+    if (user.accountType == "admin") {
       cb(null, user);
     } else {
       cb(null, user.id);
     }
   });
   passport.deserializeUser((id, cb) => {
-    if (id.accoountType == "adminAccount") {
+    if (id.accountType == "admin") {
       cb(null, id);
     } else {
       Users.findOne({ _id: id }, (err, user) => {
