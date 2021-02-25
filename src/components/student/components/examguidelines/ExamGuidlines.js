@@ -4,11 +4,12 @@ import { Button } from "react-bootstrap";
 export default class ExamGuidlines extends Component {
   render() {
     return (
-      <div className>
+      <div className="root">
         <NavBar>
           {{
             left: (
               <h5>
+                <span id="navBarBackButton">{"<"}</span>
                 Class Test
                 <br />
                 Html
@@ -16,9 +17,9 @@ export default class ExamGuidlines extends Component {
             ),
           }}
         </NavBar>
-        <div className="root">
+        <div className="examguidelines">
           <div>
-            <h3 className="text-center">EXAM GUIDELNIES</h3>
+            <h3 className="text-center ml-4">EXAM GUIDELNIES</h3>
             <ul className="mt-3">
               <li className="mt-3">
                 Participants must have an active internet connction throughout
@@ -47,7 +48,7 @@ export default class ExamGuidlines extends Component {
           </div>
           <div className="text-right mr-3">
             {" "}
-            <Button className="text-right" variant="light">
+            <Button className="text-right" variant="primary">
               Start Exam
             </Button>
           </div>

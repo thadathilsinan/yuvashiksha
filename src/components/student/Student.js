@@ -103,7 +103,7 @@ export default class Student extends Component {
         <div>
           <BrowserRouter>
             <Route path="/student" exact>
-              {/* <NavBar>
+              <NavBar>
                 {{
                   left: <h5>HOME</h5>,
                 }}
@@ -117,8 +117,8 @@ export default class Student extends Component {
                     <div id="rightTabBody">{this.previousExamList}</div>
                   ),
                 }}
-              </TabView> */}
-              <ExamGuidlines></ExamGuidlines>
+              </TabView>
+              {/* <ExamGuidlines/> */}
             </Route>
           </BrowserRouter>
         </div>
