@@ -15,8 +15,12 @@ class Departments extends React.Component {
     };
   }
 
+  //Global member variables
+  departmentToEdit = "";
+
   //Creating necessary ref objects
   newDepartmentName = React.createRef();
+  departmentNewName = React.createRef(); //for editing department name
 
   getDepartments = () => {
     //getting department data from db
@@ -49,7 +53,7 @@ class Departments extends React.Component {
         );
       };
 
-      let departmentList = Object.keys(departments).map(function (key, index) {
+      let departmentList = Object.keys(departments).map((key, index) => {
         let department = departments[key];
 
         return (
@@ -85,7 +89,13 @@ class Departments extends React.Component {
               ),
               right: (
                 <div>
-                  <Button className="btn btn-danger mr-3">
+                  <Button
+                    className="btn btn-danger mr-3"
+                    data-id={department.id}
+                    onClick={() => {
+                      this.removeDepartment(department.id);
+                    }}
+                  >
                     <FaMinus />
                   </Button>
                   <a
@@ -94,7 +104,13 @@ class Departments extends React.Component {
                     data-target="#editdept"
                     style={{ color: "white" }}
                   >
-                    <Button className="btn btn-secondary">
+                    <Button
+                      className="btn btn-secondary"
+                      data-id={department.id}
+                      onClick={() => {
+                        this.setEditingDepartment(department.id);
+                      }}
+                    >
                       <FaPencilAlt />
                     </Button>
                   </a>
@@ -128,6 +144,40 @@ class Departments extends React.Component {
         }
       );
     }
+  };
+
+  setEditingDepartment = (departmentID) => {
+    this.departmentToEdit = departmentID;
+  };
+
+  //Edit an existing department
+  editDepartment = () => {
+    let newName = this.departmentNewName.current.value; //Getting new name
+
+    if (newName == "") {
+      alert("Please enter a new name for the department");
+    } else {
+      http(
+        "POST",
+        "/admin/institutionstructure/department/edit",
+        { departmentId: this.departmentToEdit, newName },
+        (res) => {
+          alert(res.data);
+        }
+      );
+    }
+  };
+
+  //Remove a department
+  removeDepartment = (departmentId) => {
+    http(
+      "POST",
+      "/admin/institutionstructure/department/remove",
+      { departmentId },
+      (res) => {
+        alert(res.data);
+      }
+    );
   };
 
   componentDidMount() {
@@ -169,12 +219,19 @@ class Departments extends React.Component {
                 <label className="black" for="dept">
                   Name of department:{" "}
                 </label>
-                <input type="text" name="dept" id="dept"></input>
+                <input
+                  type="text"
+                  name="dept"
+                  id="dept"
+                  ref={this.departmentNewName}
+                ></input>
                 <br />
               </form>
             </>,
             <>
-              <button className="btn btn-primary">OK</button>
+              <button className="btn btn-primary" onClick={this.editDepartment}>
+                OK
+              </button>
             </>
           )}
         </div>

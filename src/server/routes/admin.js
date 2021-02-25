@@ -77,6 +77,50 @@ router.post("/institutionstructure/department/add", async (req, res, next) => {
   }
 });
 
+//Editing a department
+router.post("/institutionstructure/department/edit", async (req, res, next) => {
+  let department = await Department.findOne({ _id: req.body.departmentId });
+
+  if (department) {
+    //If department exist with same name
+    let anyDept = await Department.findOne({ name: req.body.newName });
+
+    if (!anyDept) {
+      department.name = req.body.newName;
+
+      //Savng changes
+      await department.save();
+
+      res.statusCode = 200;
+      res.end("Department edited successfully");
+    } else {
+      res.statusCode = 203;
+      res.end("Department name already exists");
+    }
+  } else {
+    res.statusCode = 203;
+    res.end("Department doest not exists");
+  }
+});
+
+//Removing a department
+router.post(
+  "/institutionstructure/department/remove",
+  async (req, res, next) => {
+    let department = await Department.findOne({ _id: req.body.departmentId });
+
+    if (department) {
+      await department.remove();
+
+      res.statusCode = 200;
+      res.end("Department removed successfully");
+    } else {
+      res.statusCode = 203;
+      res.end("Department doest not exists");
+    }
+  }
+);
+
 // router.get("/verifyaccount", async function (req, res, next) {
 //   Signin.find({ accountStatus: "not-activated", accountType: "teacher" })
 //     .then(async (response) => {
