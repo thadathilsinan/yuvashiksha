@@ -55,7 +55,7 @@ router.get("/test", (req, res, next) => {
 
 //Check admin logged in or not
 router.post("/checkAdmin", (req, res, next) => {
-  if (req.user) {
+  if (req.user.accountType == "admin") {
     res.statusCode = 200;
     res.end("Admin Login success");
   } else {

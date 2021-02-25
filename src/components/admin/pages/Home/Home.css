@@ -1,3 +1,7 @@
 #changePasswordDiv {
   min-width: 530px;
 }
+
+#changePasswordDiv {
+  color: white;
+}
