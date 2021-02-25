@@ -8,9 +8,17 @@ var router = express.Router();
 
 router.use(bodyParser.json());
 
-// router.post("/changepassword", async (req, res, next) => {
-//   let adminAccount = await Admin.findOne({username:})
-// });
+router.post("/changepassword", async (req, res, next) => {
+  let adminAccount = await Admin.findOne({ _id: req.user.id });
+
+  adminAccount.password = req.body.password;
+
+  //saving new password to db
+  await adminAccount.save();
+
+  res.statusCode = 200;
+  res.end("Password changed successfully");
+});
 // router.get("/verifyaccount", async function (req, res, next) {
 //   Signin.find({ accountStatus: "not-activated", accountType: "teacher" })
 //     .then(async (response) => {

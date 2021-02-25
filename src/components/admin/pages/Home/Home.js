@@ -22,23 +22,23 @@ class Home extends React.Component {
     let confirmValue = this.confirm.current.value;
 
     //Validating password
-    if (
-      passwordValue === confirmValue &&
-      passwordValue != "" &&
-      confirmValue != ""
-    ) {
-      http(
-        "POST",
-        "/admin/changepassword",
-        { password: passwordValue },
-        (res) => {
-          if (res.status === 200) {
-            alert("Password changed successfully");
-          } else {
-            alert(res.data);
+    if (passwordValue != "" && confirmValue != "") {
+      if (passwordValue === confirmValue)
+        http(
+          "POST",
+          "/admin/changepassword",
+          { password: passwordValue },
+          (res) => {
+            if (res.status === 200) {
+              alert("Password changed successfully");
+            } else {
+              alert(res.data);
+            }
           }
-        }
-      );
+        );
+      else alert("Password does not match");
+    } else {
+      alert("Please fill all data");
     }
   };
 
