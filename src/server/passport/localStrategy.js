@@ -14,7 +14,7 @@ module.exports = function (passport) {
 
           if (admin) {
             //Admin Login success
-            return done(null, { ...admin, accountType: "admin" });
+            return done(null, { user: admin, accountType: "admin" });
           } else {
             //Login failed
             return done(null, false);
@@ -40,14 +40,16 @@ module.exports = function (passport) {
 
   passport.serializeUser((user, cb) => {
     if (user.accountType == "admin") {
-      cb(null, user);
+      cb(null, { id: user.user.id, accountType: "admin" });
     } else {
       cb(null, user.id);
     }
   });
   passport.deserializeUser((id, cb) => {
     if (id.accountType == "admin") {
-      cb(null, id);
+      Admin.findOne({ _id: id.id }, (err, user) => {
+        cb(null, id);
+      });
     } else {
       Users.findOne({ _id: id }, (err, user) => {
         cb(err, user);

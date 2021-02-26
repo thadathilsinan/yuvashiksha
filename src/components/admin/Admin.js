@@ -13,6 +13,8 @@ import UserMangamenet from "./pages/UserManagment/UserMangamenet";
 import VerifyAccount from "./pages/VerifyAccounts/VerifyAccounts";
 import Messagecontent from "./pages/Message/Messagecontent";
 
+import http from "../../shared/http";
+
 import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 
@@ -44,6 +46,15 @@ class Admin extends Component {
     this.setState({ activeItem: clickedItem.attr("name") });
   };
 
+  logout = () => {
+    http("GET", "/login/logout", {}, (res) => {
+      alert(res.data);
+      if (res.status == 200) {
+        window.location.href = "http://localhost:3000/";
+      }
+    });
+  };
+
   componentDidMount() {
     $(
       ".list-group-item[name=" +
@@ -67,7 +78,11 @@ class Admin extends Component {
 
     //The content of the right side of the navBar
     let navBarRight = {
-      home: null,
+      home: (
+        <Button variant="danger" className="mr-4" onClick={this.logout}>
+          Logout
+        </Button>
+      ),
       institutionStructure: (
         <Button className="mr-4" data-toggle="modal" data-target={targetModal}>
           <FaPlus />

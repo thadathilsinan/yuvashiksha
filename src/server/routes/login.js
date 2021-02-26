@@ -55,7 +55,7 @@ router.get("/test", (req, res, next) => {
 
 //Check admin logged in or not
 router.post("/checkAdmin", (req, res, next) => {
-  if (req.user.accountType == "admin") {
+  if (req.user && req.user.accountType == "admin") {
     res.statusCode = 200;
     res.end("Admin Login success");
   } else {
@@ -80,6 +80,18 @@ router.post("/admin", (req, res, next) => {
       });
     }
   })(req, res, next);
+});
+
+//Logout user
+router.get("/logout", (req, res, next) => {
+  if (req.user) {
+    req.logOut();
+    res.statusCode = 200;
+    res.end("User logged out succesfully");
+  } else {
+    res.statusCode = 203;
+    res.end("Cannot logout. User not logged in!");
+  }
 });
 
 module.exports = router;
