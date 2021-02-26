@@ -350,44 +350,55 @@ router.post("/messages/replay", async (req, res, next) => {
   }
 });
 
-// router.get("/verifyaccount", async function (req, res, next) {
-//   Signin.find({ accountStatus: "not-activated", accountType: "teacher" })
-//     .then(async (response) => {
-//       let teacherData = [];
-//       for (item of response) {
-//         await Teachers.findOne({ username: item.username }).then((teacher) => {
-//           teacherData.push(teacher);
-//         });
-//       }
-//       res.statusCode = 200;
-//       res.json({ data: teacherData });
-//     })
-//     .catch((err) => next(err));
-// });
+//Return User account details which are not activated yet
+router.get("/verifyaccount", async function (req, res, next) {
+  let responseObject = [];
 
-// router.post("/verifyaccount/accept", (req, res, next) => {
-//   Signin.findOneAndUpdate(
-//     { username: req.body.username },
-//     { accountStatus: "ok" }
-//   )
-//     .then((user) => {
-//       res.statusCode = 200;
-//       res.end("Suucessfully Verified");
-//     })
-//     .catch((err) => next(err));
-// });
+  Users.find({ accountStatus: "not-activated", accountType: "teacher" })
+    .then(async (teachers) => {
+      //Parsing department name from department id
+      for (let teacher of teachers) {
+        let departmentName = await Department.findOne({
+          _id: teacher.department,
+        });
 
-// router.post("/verifyaccount/reject", (req, res, next) => {
-//   Signin.findOneAndUpdate(
-//     { username: req.body.username },
-//     { accountStatus: "rejected" }
-//   )
-//     .then((user) => {
-//       res.statusCode = 200;
-//       res.end("Suucessfully Rejected");
-//     })
-//     .catch((err) => next(err));
-// });
+        responseObject.push({
+          name: teacher.name,
+          id: teacher._id,
+          email: teacher.email,
+          registerNumber: teacher.registerNumber,
+          accountStatus: teacher.accountStatus,
+          department: departmentName.name,
+        });
+      }
+      res.statusCode = 200;
+      res.json(responseObject);
+    })
+    .catch((err) => next(err));
+});
+
+//Accept a teacher account
+router.post("/verifyaccount/accept", (req, res, next) => {
+  Users.findOneAndUpdate({ _id: req.body.userId }, { accountStatus: "ok" })
+    .then((user) => {
+      res.statusCode = 200;
+      res.end("Successfully Verified");
+    })
+    .catch((err) => next(err));
+});
+
+//Reject a teacher account
+router.post("/verifyaccount/reject", (req, res, next) => {
+  Users.findOneAndUpdate(
+    { _id: req.body.userId },
+    { accountStatus: "rejected" }
+  )
+    .then((user) => {
+      res.statusCode = 200;
+      res.end("Successfully Rejected");
+    })
+    .catch((err) => next(err));
+});
 
 // router.get("/usermanagement/teacher", (req, res, next) => {
 //   Teachers.find({})

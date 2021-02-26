@@ -10,9 +10,15 @@ export default class VerifyAccounts extends Component {
       userData: [],
     };
   }
+
+  //Get users data from the server
   getUserData = () => {
     http("GET", "/admin/verifyaccount", null, (res) => {
-      this.setState({ userData: res.data.data });
+      if (res.status == 200) {
+        this.setState({ userData: res.data });
+      } else {
+        alert("Users data return failed");
+      }
     });
   };
 
@@ -27,11 +33,11 @@ export default class VerifyAccounts extends Component {
       http(
         "POST",
         "/admin/verifyaccount/accept",
-        { username: item.username },
+        { userId: item.id },
         (res) => {
           if (res.status == 200) {
             alert("Account Verified Successfully");
-            document.getElementById(item._id).style.display = "none";
+            document.getElementById(item.id).style.display = "none";
           } else {
             alert("Error during account verification");
           }
@@ -47,11 +53,11 @@ export default class VerifyAccounts extends Component {
       http(
         "POST",
         "/admin/verifyaccount/reject",
-        { username: item.username },
+        { userId: item.id },
         (res) => {
           if (res.status == 200) {
             alert("Account Rejected Successfully");
-            document.getElementById(item._id).style.display = "none";
+            document.getElementById(item.id).style.display = "none";
           } else {
             alert("Error during account rejection");
           }
@@ -63,7 +69,7 @@ export default class VerifyAccounts extends Component {
   getTeacherList = () => {
     let teachers = this.state.userData.map((item) => {
       return (
-        <div className="container  col-md-10 mt-1 " id={item._id}>
+        <div className=" mt-1 " id={item.id}>
           <ListItem height="180px">
             {{
               left: (
@@ -71,11 +77,11 @@ export default class VerifyAccounts extends Component {
                   <span>
                     <Row>
                       <Col>
-                        <p class="text-left">{item.name}</p>
+                        <p class="text-left">Name: {item.name}</p>
                       </Col>
                     </Row>
-                    <p class="text-left">{item.email}</p>
-                    <p class="text-left">{item.department}</p>
+                    <p class="text-left">Email: {item.email}</p>
+                    <p class="text-left">Department: {item.department}</p>
                   </span>{" "}
                   <Col className="text-left">
                     <Button
@@ -90,7 +96,9 @@ export default class VerifyAccounts extends Component {
               ),
               right: (
                 <div>
-                  <p class="text-right">{item.idNumber}</p>
+                  <p class="text-right">
+                    RegisterNumber: {item.registerNumber}
+                  </p>
                   <br />
                   <br />
                   <br />

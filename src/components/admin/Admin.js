@@ -134,7 +134,7 @@ class Admin extends Component {
                 onClick={this.changePage}
                 name="verifyAccount"
               >
-                Verify Accoint
+                Verify Account
               </a>
               <a
                 class="list-group-item"
@@ -172,7 +172,7 @@ class Admin extends Component {
                 <UserMangamenet />
               </Route>
 
-              <Route path="/admin/verifyaccounts" exact>
+              <Route path="/admin/verifyaccount" exact>
                 <VerifyAccount />
               </Route>
             </Switch>
