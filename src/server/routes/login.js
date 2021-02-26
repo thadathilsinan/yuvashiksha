@@ -11,6 +11,7 @@ var router = express.Router();
 
 //Importing required monggose models
 const BugReport = require("../schema/BugReport");
+const Department = require("../schema/department");
 
 router.use(bodyParser.json());
 
@@ -92,6 +93,14 @@ router.get("/logout", (req, res, next) => {
     res.statusCode = 203;
     res.end("Cannot logout. User not logged in!");
   }
+});
+
+//Get department lsit for teacher signup
+router.get("/departments", async (req, res, next) => {
+  let departments = await Department.find({});
+
+  res.statusCode = 200;
+  res.json(departments);
 });
 
 module.exports = router;

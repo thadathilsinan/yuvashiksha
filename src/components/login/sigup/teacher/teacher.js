@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { connect } from "react-redux";
+import http from "../../../../shared/http";
 
 import "./teacher.css";
 
@@ -15,6 +16,8 @@ class Teacher extends Component {
     this.state = {
       error: null,
       emailValidation: null,
+      departmentList: null,
+      departments: null,
     };
   }
 
@@ -72,9 +75,33 @@ class Teacher extends Component {
     }
   };
 
+  //Get department details from db
+  getDepartmentList = () => {
+    http("GET", "/login/departments", null, (res) => {
+      if (res.status == 200) {
+        this.setState({ departments: res.data });
+        this.setupDepartmentList();
+      } else {
+        alert("Error returning department list");
+      }
+    });
+  };
+
+  //Setup JSX element to show the department list using <option> tag
+  setupDepartmentList = () => {
+    let departmentList = this.state.departments.map(
+      (department, index, array) => {
+        return <option value={department._id}>{department.name}</option>;
+      }
+    );
+
+    this.setState({ departmentList });
+  };
+
   componentDidMount() {
     this.props.clearData();
     this.setView();
+    this.getDepartmentList();
   }
 
   render() {
@@ -109,10 +136,10 @@ class Teacher extends Component {
           onChange={this.onValueChange}
           id="department"
         >
-          <option value="CS" selected>
-            CS
+          <option selected value="">
+            --SELECT DEPARTMENT--
           </option>
-          <option value="Commerce">Commerce</option>
+          {this.state.departmentList}
         </select>
         <input
           type="email"

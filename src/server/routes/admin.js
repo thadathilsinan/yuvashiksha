@@ -29,11 +29,19 @@ router.get("/institutionstructure/department", async (req, res, next) => {
   //response to front end
   let responseObject = {};
 
-  departments.forEach(async (department, index, array) => {
+  for (let department of departments) {
     responseObject[department.name] = {};
 
     //Setting id of department
     responseObject[department.name].id = department._id;
+
+    //Getting list of teachers in that department
+    await Users.find({
+      accountType: "teacher",
+      department: department._id,
+    }).then(async (response) => {
+      responseObject[department.name].teachers = [...response];
+    });
 
     if (department.hod) {
       //HOD already assigned
@@ -45,15 +53,7 @@ router.get("/institutionstructure/department", async (req, res, next) => {
 
       if (hod) responseObject[department.name].assignedHod = hod;
     }
-
-    //Getting list of teachers in that department
-    let teachers = await Users.find({
-      accountType: "teacher",
-      department: department.name,
-    });
-
-    if (teachers) responseObject[department.name].teachers = teachers;
-  });
+  }
 
   res.statusCode = 200;
   res.json(responseObject);

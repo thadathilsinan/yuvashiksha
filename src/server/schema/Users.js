@@ -42,9 +42,8 @@ const UserSchema = new Schema({
     // unique: true,
   },
   department: {
-    // type: Schema.Types.ObjectId,
-    // ref: "Department",
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Department",
   },
 });
 
