@@ -1,6 +1,8 @@
 import { Component } from "react";
 import { connect } from "react-redux";
 
+import http from "../../../../shared/http";
+
 import "./student.css";
 
 const mapDispatchToProps = (dispatch) => {
@@ -16,6 +18,9 @@ class Student extends Component {
       error: null,
       parentEmailError: null,
       emailError: null,
+      classList: null,
+      classOptions: null,
+      batchOptions: null,
     };
   }
 
@@ -77,6 +82,11 @@ class Student extends Component {
     } else {
       this.props.clearData();
     }
+
+    if (event.target.name == "class") {
+      //Setup batch details based on the selected class
+      this.setupBatchOptions();
+    }
   };
 
   setView = () => {
@@ -93,9 +103,59 @@ class Student extends Component {
     }
   };
 
+  //Get Class data from the database
+  getClasses = () => {
+    http("GET", "/login/getclasses", {}, (res) => {
+      if (res.status == 200) {
+        this.setState({ classList: res.data });
+        this.setupClassOptions();
+      }
+    });
+  };
+
+  //Setup the options for the <select> for classes
+  setupClassOptions = () => {
+    //Options JSX
+    let options = [];
+
+    options = Object.keys(this.state.classList).map((key, array) => {
+      return (
+        <>
+          <option value={key}>{key}</option>
+        </>
+      );
+    });
+
+    //Setting class list options to display
+    this.setState({ classOptions: options });
+  };
+
+  //Setup the options for the <select> for batches based on the selected Class
+  setupBatchOptions = () => {
+    //Currently selected class
+    let Class = this.inputValues.class;
+
+    //Getting batches of the selected class
+    let batches = this.state.classList[Class].batches;
+
+    let options = batches.map((batch, index, array) => {
+      return (
+        <>
+          <option value={batch}>{batch}</option>
+        </>
+      );
+    });
+
+    //Setting options as state to diaplay it in screen
+    this.setState({ batchOptions: options });
+  };
+
   componentDidMount() {
     this.props.clearData();
     this.setView();
+
+    //Get class info
+    this.getClasses();
   }
 
   render() {
@@ -130,10 +190,10 @@ class Student extends Component {
           name="class"
           onChange={this.onValueChange}
         >
-          <option value="BCA" selected>
-            BCA
+          <option value="" selected>
+            --CLASS--
           </option>
-          <option value="BSC">BSC</option>
+          {this.state.classOptions}
         </select>
         <select
           className="form-select mt-3"
@@ -142,10 +202,10 @@ class Student extends Component {
           onChange={this.onValueChange}
           name="batch"
         >
-          <option value="2020-21" selected>
-            2018-21
+          <option value="" selected>
+            --BATCH--
           </option>
-          <option value="2019-22">2019-22</option>
+          {this.state.batchOptions}
         </select>
         <input
           type="email"

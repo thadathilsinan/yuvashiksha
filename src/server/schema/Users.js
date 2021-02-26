@@ -27,9 +27,8 @@ const UserSchema = new Schema({
     type: String,
   },
   class: {
-    //type: Schema.Types.ObjectId,
-    type: String,
-    //ref: "Class",
+    type: Schema.Types.ObjectId,
+    ref: "Class",
   },
   parentEmail: {
     type: String,

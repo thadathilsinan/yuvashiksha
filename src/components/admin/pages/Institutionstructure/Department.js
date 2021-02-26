@@ -57,8 +57,9 @@ class Departments extends React.Component {
 
         return (
           <div
-            onClick={() => {
-              this.props.departmentSelected(department.id);
+            onClick={(event) => {
+              if (event.target.id == "list-item-container")
+                this.props.departmentSelected(department.id);
             }}
           >
             <ListItem height="90px">

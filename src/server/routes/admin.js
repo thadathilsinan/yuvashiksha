@@ -128,6 +128,11 @@ router.post(
     let department = await Department.findOne({ _id: req.body.departmentId });
 
     if (department) {
+      //Removing classes in that department
+      await Classes.deleteMany({
+        department: department._id,
+      });
+
       await department.remove();
 
       res.statusCode = 200;

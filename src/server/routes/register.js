@@ -15,6 +15,7 @@ let sendMail = require("../functions/sendMail");
 //Importing required Mongoose Models
 let Users = require("../schema/Users");
 let Otp = require("../schema/Otp");
+const Classes = require("../schema/classes");
 
 var router = express.Router();
 
@@ -74,7 +75,19 @@ router.post("/", async (req, res, next) => {
 
   //Checking user type and add neccessary data to the new User object
   if (req.body.accountType === "student") {
-    newUser.class = req.body.class;
+    //Getting Class id
+    let Class = await Classes.findOne({
+      name: req.body.class,
+      batch: req.body.batch,
+    });
+
+    if (Class) {
+      newUser.class = Class._id;
+    } else {
+      res.statusCode = 203;
+      return res.end("Class/Batch not valid");
+    }
+
     newUser.parentEmail = req.body.parentEmail;
   } else if (req.body.accountType === "teacher") {
     newUser.department = req.body.department;

@@ -12,6 +12,7 @@ var router = express.Router();
 //Importing required monggose models
 const BugReport = require("../schema/BugReport");
 const Department = require("../schema/department");
+const Classes = require("../schema/classes");
 
 router.use(bodyParser.json());
 
@@ -101,6 +102,29 @@ router.get("/departments", async (req, res, next) => {
 
   res.statusCode = 200;
   res.json(departments);
+});
+
+//return class information for Student signup
+router.get("/getclasses", async (req, res, next) => {
+  let classes = await Classes.find({});
+
+  //Object with name of class as key and other data inside that key as object
+  let responseObject = {};
+
+  for (Class of classes) {
+    responseObject[Class.name] = {};
+    responseObject[Class.name].batches = [];
+
+    //Getting other batches of the same class
+    for (sameClass of classes) {
+      if (sameClass.name == Class.name) {
+        responseObject[Class.name].batches.push(sameClass.batch);
+      }
+    }
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
 });
 
 module.exports = router;
