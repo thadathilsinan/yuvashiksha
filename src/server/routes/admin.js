@@ -5,11 +5,15 @@ const bodyParser = require("body-parser");
 const Admin = require("../schema/Admin");
 const Department = require("../schema/department");
 const Users = require("../schema/Users");
+const Classes = require("../schema/classes");
+
+const mongoose = require("mongoose");
 
 var router = express.Router();
 
 router.use(bodyParser.json());
 
+//Change password of admin account
 router.post("/changepassword", async (req, res, next) => {
   let adminAccount = await Admin.findOne({ _id: req.user.id });
 
@@ -60,7 +64,6 @@ router.get("/institutionstructure/department", async (req, res, next) => {
         if (headOfDept) {
           //Removing HOD entry in teachers list to avoid duplication
           if (response[index]._id.toString() != headOfDept._id) {
-            console.log(response[index]._id, headOfDept._id);
             responseObject[department.name].teachers.push(response[index]);
           }
         } else {
@@ -147,6 +150,162 @@ router.post(
 
     res.statusCode = 200;
     res.end("HOD changed successfully");
+  }
+);
+
+//Return class details from DB
+router.post("/institutionstructure/class", async (req, res, next) => {
+  let classes = await Classes.find({
+    department: mongoose.Types.ObjectId(req.body.department),
+  });
+
+  //response to front end
+  let responseObject = [];
+
+  for (let Class of classes) {
+    //Class mentor
+    let mentor = null;
+
+    let newClass = {};
+
+    //Setting id of class
+    newClass.id = Class._id;
+    newClass.name = Class.name;
+    newClass.batch = Class.batch;
+
+    //Setting Mentor
+    if (Class.mentor) {
+      //HOD already assigned
+
+      //Getting hod data
+      mentor = await Users.findOne({
+        _id: Class.mentor,
+      });
+
+      if (mentor) newClass.assignedMentor = mentor;
+    }
+
+    //Getting list of teachers in that department
+    await Users.find({
+      accountType: "teacher",
+      department: req.body.department,
+    }).then((response) => {
+      newClass.teachers = [];
+
+      for (let index in response) {
+        if (mentor) {
+          //Removing Mentor entry in teachers list to avoid duplication
+          if (response[index]._id.toString() != mentor._id) {
+            newClass.teachers.push(response[index]);
+          }
+        } else {
+          newClass.teachers.push(response[index]);
+        }
+      }
+    });
+
+    responseObject.push(newClass);
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
+//Adding new class
+router.post("/institutionstructure/class/add", async (req, res, next) => {
+  let Class = await Classes.findOne({
+    name: req.body.className,
+    batch: req.body.batchName,
+    department: req.body.department,
+  });
+
+  if (Class) {
+    res.statusCode = 203;
+    res.end("Class already exists");
+  } else {
+    let newClass = new Classes({
+      name: req.body.className,
+      department: req.body.department,
+      batch: req.body.batchName,
+    });
+
+    //Saving new department
+    await newClass.save();
+
+    res.statusCode = 200;
+    res.end("New Class added successfully");
+  }
+});
+
+//Editing a class
+router.post("/institutionstructure/class/edit", async (req, res, next) => {
+  let Class = await Classes.findOne({ _id: req.body.classId });
+
+  if (Class) {
+    //If class exist with same name
+    let anyClass = await Classes.findOne({
+      name: req.body.newName,
+      batch: req.body.newBatch,
+    });
+
+    if (!anyClass) {
+      Class.name = req.body.newName;
+      Class.batch = req.body.newBatch;
+
+      //Savng changes
+      await Class.save();
+
+      res.statusCode = 200;
+      res.end("Class edited successfully");
+    } else {
+      res.statusCode = 203;
+      res.end("Class with same data already exists");
+    }
+  } else {
+    res.statusCode = 203;
+    res.end("Class doest not exists");
+  }
+});
+
+//Removing a Class
+router.post("/institutionstructure/class/remove", async (req, res, next) => {
+  let Class = await Classes.findOne({ _id: req.body.classId });
+
+  if (Class) {
+    await Class.remove();
+
+    res.statusCode = 200;
+    res.end("Class removed successfully");
+  } else {
+    res.statusCode = 203;
+    res.end("Class doest not exists");
+  }
+});
+
+//Change mentor
+router.post(
+  "/institutionstructure/class/changementor",
+  async (req, res, next) => {
+    let Class = await Classes.findOne({ _id: req.body.classId });
+
+    //Check if the Teacher is already a mentor of any class
+    let teacherAsMentor = await Classes.findOne({ mentor: req.body.mentor });
+
+    if (teacherAsMentor) {
+      res.statusCode = 203;
+      res.end(
+        "Cannot change Mentor :- This teacher is currently mentor of class: " +
+          teacherAsMentor.name +
+          ", batch: " +
+          teacherAsMentor.batch
+      );
+    } else {
+      Class.mentor = req.body.mentor;
+      await Class.save();
+
+      res.statusCode = 200;
+      res.end("Mentor changed successfully");
+    }
   }
 );
 

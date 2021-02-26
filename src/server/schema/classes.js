@@ -10,7 +10,6 @@ const ClassSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   batch: {
     type: String,
@@ -19,8 +18,6 @@ const ClassSchema = new Schema({
   mentor: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    required: true,
-    unique: true,
   },
 });
 

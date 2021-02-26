@@ -26,7 +26,6 @@ class Departments extends React.Component {
     //getting department data from db
     http("GET", "/admin/institutionstructure/department", {}, async (res) => {
       let departments = { ...res.data };
-      console.log(departments);
 
       //This will return options for the <select> to select HOD for each department
       let getHodOptions = (department) => {
@@ -57,70 +56,76 @@ class Departments extends React.Component {
         let department = departments[key];
 
         return (
-          <ListItem height="90px">
-            {{
-              left: (
-                <Form className="md-6">
-                  <Form.Group controlId="formBasicCheckbox">
-                    <Row>
-                      <Col>
-                        <Form.Label className="text-dark">{key}</Form.Label>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Label className="text-dark">
-                          Head of the department:
-                        </Form.Label>
-                      </Col>
-                      <Col>
-                        <Form.Control
-                          as="select"
-                          defaultValue="Department"
-                          placeholder="Department"
-                          style={{ width: "200px" }}
-                          onChange={(e) => {
-                            this.changeHod(e, department.id);
-                          }}
-                        >
-                          {getHodOptions(department)}
-                        </Form.Control>
-                      </Col>
-                    </Row>
-                  </Form.Group>
-                </Form>
-              ),
-              right: (
-                <div>
-                  <Button
-                    className="btn btn-danger mr-3"
-                    data-id={department.id}
-                    onClick={() => {
-                      this.removeDepartment(department.id);
-                    }}
-                  >
-                    <FaMinus />
-                  </Button>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#editdept"
-                    style={{ color: "white" }}
-                  >
+          <div
+            onClick={() => {
+              this.props.departmentSelected(department.id);
+            }}
+          >
+            <ListItem height="90px">
+              {{
+                left: (
+                  <Form className="md-6">
+                    <Form.Group controlId="formBasicCheckbox">
+                      <Row>
+                        <Col>
+                          <Form.Label className="text-dark">{key}</Form.Label>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <Form.Label className="text-dark">
+                            Head of the department:
+                          </Form.Label>
+                        </Col>
+                        <Col>
+                          <Form.Control
+                            as="select"
+                            defaultValue="Department"
+                            placeholder="Department"
+                            style={{ width: "200px" }}
+                            onChange={(e) => {
+                              this.changeHod(e, department.id);
+                            }}
+                          >
+                            {getHodOptions(department)}
+                          </Form.Control>
+                        </Col>
+                      </Row>
+                    </Form.Group>
+                  </Form>
+                ),
+                right: (
+                  <div>
                     <Button
-                      className="btn btn-secondary"
+                      className="btn btn-danger mr-3"
                       data-id={department.id}
                       onClick={() => {
-                        this.setEditingDepartment(department.id);
+                        this.removeDepartment(department.id);
                       }}
                     >
-                      <FaPencilAlt />
+                      <FaMinus />
                     </Button>
-                  </a>
-                </div>
-              ),
-            }}
-          </ListItem>
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#editdept"
+                      style={{ color: "white" }}
+                    >
+                      <Button
+                        className="btn btn-secondary"
+                        data-id={department.id}
+                        onClick={() => {
+                          this.setEditingDepartment(department.id);
+                        }}
+                      >
+                        <FaPencilAlt />
+                      </Button>
+                    </a>
+                  </div>
+                ),
+              }}
+            </ListItem>
+          </div>
         );
       });
       this.setState({ departmentList });
