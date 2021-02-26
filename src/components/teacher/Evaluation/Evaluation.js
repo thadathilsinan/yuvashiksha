@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import NavBar from "../../ui-elements/navBar/NavBar";
 import ListItem from "../../ui-elements/ListItem/ListItem";
 import { Button } from "react-bootstrap";
+import Pagination from "react-bootstrap/Pagination";
 export class Evaluation extends Component {
   render() {
     return (
@@ -41,6 +42,11 @@ export class Evaluation extends Component {
             ),
           }}
         </ListItem>
+        <Pagination className="mt-4 ml-3">
+          <Pagination.Prev className="ml-3 mr-4 align-items-left"></Pagination.Prev>
+
+          <Pagination.Next className="ml-3 mr-4 align-items-right"></Pagination.Next>
+        </Pagination>
       </div>
     );
   }
