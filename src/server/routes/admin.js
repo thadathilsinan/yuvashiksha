@@ -6,8 +6,11 @@ const Admin = require("../schema/Admin");
 const Department = require("../schema/department");
 const Users = require("../schema/Users");
 const Classes = require("../schema/classes");
+const BugReports = require("../schema/BugReport");
 
 const mongoose = require("mongoose");
+
+const sendMail = require("../functions/sendMail");
 
 var router = express.Router();
 
@@ -313,6 +316,39 @@ router.post(
     }
   }
 );
+
+//Get messages from db
+router.get("/messages/", async (req, res, next) => {
+  let messages = await BugReports.find({});
+
+  res.statusCode = 200;
+  res.json(messages);
+});
+
+//replay a message
+router.post("/messages/replay", async (req, res, next) => {
+  let message = await BugReports.findOne({ _id: req.body.messageId });
+
+  if (message) {
+    message.reply = req.body.message;
+
+    //Sending email to user
+    sendMail(
+      message.userEmail,
+      "Replay from Admin: YUVASHIKSHA",
+      `We reviewed your issue with Yuvashiksha. \n ${req.body.message}`
+    );
+
+    //Saving replay to db
+    await message.save();
+
+    res.statusCode = 200;
+    res.end("Replay send successfully");
+  } else {
+    res.statusCode = 203;
+    res.end("Message not exist in db");
+  }
+});
 
 // router.get("/verifyaccount", async function (req, res, next) {
 //   Signin.find({ accountStatus: "not-activated", accountType: "teacher" })

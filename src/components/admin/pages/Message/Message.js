@@ -25,11 +25,11 @@ class Message extends React.Component {
           {{
             left: (
               <span>
-                <p class="text-left"> FROM : {this.props.message.from}</p>
+                <p class="text-left"> FROM : {this.props.message.userEmail}</p>
                 <p class="text-left">DATE : {this.props.message.date}</p>
-                <p class="text-left">TIME : {this.props.message.time}</p>
               </span>
             ),
+            right: <>{this.props.replayed ? <p>REPLAYED</p> : null}</>,
           }}
         </ListItem>
       </div>

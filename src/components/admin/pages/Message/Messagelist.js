@@ -1,41 +1,59 @@
 import React from "react";
 import Message from "./Message";
-import Messagecontent from "./Messagecontent";
-import { Link, Route } from "react-router-dom";
+
+import http from "../../../../shared/http";
+
 class Messagelist extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [
-        {
-          messageId: "1",
-          from: "abc@mail.com",
-          date: "123",
-          time: "9:30",
-          message: "hi",
-        },
-        {
-          messageId: "2",
-          from: "ajsjc@mail.com",
-          date: "12992",
-          time: "9:20",
-          message: "hello",
-        },
-        {
-          messageId: "3",
-          from: "ksdlc@mail.com",
-          date: "102923",
-          time: "7:30",
-          message: "heyyy",
-        },
-      ],
+      messages: [],
+      replayedMessages: [],
     };
   }
-  render() {
-    let messages = this.state.messages.map((k) => {
-      return <Message message={k} />;
+
+  //Get messages form server
+  getMessages = () => {
+    http("GET", "/admin/messages", {}, (res) => {
+      if (res.status == 200) {
+        let replayedMessages = [];
+        let messages = [];
+
+        //Setting replayed messages
+        for (let message of res.data) {
+          console.log(message);
+          if (message.reply && message.reply != "") {
+            //Replayed message
+            replayedMessages.push(message);
+          } else {
+            //message not replayed
+            messages.push(message);
+          }
+        }
+        this.setState({ messages, replayedMessages });
+      } else alert(res.data);
     });
-    return <div>{messages}</div>;
+  };
+
+  componentDidMount() {
+    this.getMessages();
+  }
+
+  render() {
+    let messages = this.state.messages.map((message) => {
+      return <Message message={message} />;
+    });
+
+    let replayed = this.state.replayedMessages.map((message) => {
+      return <Message message={message} replayed />;
+    });
+
+    return (
+      <>
+        <div>{messages}</div>
+        <div>{replayed}</div>
+      </>
+    );
   }
 }
 
