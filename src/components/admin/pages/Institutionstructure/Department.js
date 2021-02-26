@@ -34,7 +34,7 @@ class Departments extends React.Component {
         let teacherOptions = [];
         if (department.teachers) {
           teacherOptions = department.teachers.map((teacher, index, array) => {
-            return <option id={teacher._id}>{teacher.name}</option>;
+            return <option value={teacher._id}>{teacher.name}</option>;
           });
         }
 
@@ -42,7 +42,7 @@ class Departments extends React.Component {
           <>
             {/* //Setting HOD option */}
             {department.assignedHod ? (
-              <option id={department.assignedHod._id} selected>
+              <option value={department.assignedHod._id} selected>
                 {department.assignedHod.name}
               </option>
             ) : (
@@ -79,6 +79,9 @@ class Departments extends React.Component {
                           defaultValue="Department"
                           placeholder="Department"
                           style={{ width: "200px" }}
+                          onChange={(e) => {
+                            this.changeHod(e, department.id);
+                          }}
                         >
                           {getHodOptions(department)}
                         </Form.Control>
@@ -174,6 +177,21 @@ class Departments extends React.Component {
       "POST",
       "/admin/institutionstructure/department/remove",
       { departmentId },
+      (res) => {
+        alert(res.data);
+      }
+    );
+  };
+
+  //Change HOD of a department
+  changeHod = (event, departmentId) => {
+    http(
+      "POST",
+      "/admin/institutionstructure/department/changehod",
+      {
+        departmentId,
+        hod: event.target.value,
+      },
       (res) => {
         alert(res.data);
       }

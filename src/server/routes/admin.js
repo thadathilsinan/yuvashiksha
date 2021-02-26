@@ -30,29 +30,44 @@ router.get("/institutionstructure/department", async (req, res, next) => {
   let responseObject = {};
 
   for (let department of departments) {
+    let headOfDept = null;
+
     responseObject[department.name] = {};
 
     //Setting id of department
     responseObject[department.name].id = department._id;
 
-    //Getting list of teachers in that department
-    await Users.find({
-      accountType: "teacher",
-      department: department._id,
-    }).then(async (response) => {
-      responseObject[department.name].teachers = [...response];
-    });
-
+    //Setting HOD
     if (department.hod) {
       //HOD already assigned
 
       //Getting hod data
-      let hod = await Users.findOne({
+      headOfDept = await Users.findOne({
         _id: department.hod,
       });
 
-      if (hod) responseObject[department.name].assignedHod = hod;
+      if (headOfDept) responseObject[department.name].assignedHod = headOfDept;
     }
+
+    //Getting list of teachers in that department
+    await Users.find({
+      accountType: "teacher",
+      department: department._id,
+    }).then((response) => {
+      responseObject[department.name].teachers = [];
+
+      for (let index in response) {
+        if (headOfDept) {
+          //Removing HOD entry in teachers list to avoid duplication
+          if (response[index]._id.toString() != headOfDept._id) {
+            console.log(response[index]._id, headOfDept._id);
+            responseObject[department.name].teachers.push(response[index]);
+          }
+        } else {
+          responseObject[department.name].teachers.push(response[index]);
+        }
+      }
+    });
   }
 
   res.statusCode = 200;
@@ -118,6 +133,20 @@ router.post(
       res.statusCode = 203;
       res.end("Department doest not exists");
     }
+  }
+);
+
+//Change hod
+router.post(
+  "/institutionstructure/department/changehod",
+  async (req, res, next) => {
+    let department = await Department.findOne({ _id: req.body.departmentId });
+
+    department.hod = req.body.hod;
+    await department.save();
+
+    res.statusCode = 200;
+    res.end("HOD changed successfully");
   }
 );
 
