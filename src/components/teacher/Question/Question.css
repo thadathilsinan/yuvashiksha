@@ -1,0 +1,14 @@
+#questionsList .question {
+  margin: 10px;
+  border: 1px solid black;
+  border-top-width: 1px;
+  width: calc(100vw - 20px);
+}
+
+#questionsList .question.list-group-item.active {
+  background-color: white;
+  color: black;
+
+  border: 3px solid darkblue;
+  border-top-width: 3px;
+}
