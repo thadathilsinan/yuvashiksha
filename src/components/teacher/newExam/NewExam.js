@@ -157,6 +157,45 @@ class NewExam extends Component {
     $("#questionsList .active").removeClass("active");
   };
 
+  //Change order -1
+  questionDown = () => {
+    let questions = [...this.state.questions];
+    const max = questions.length - 1;
+
+    for (let i in questions) {
+      if (questions[i].id == this.state.selectedQuestion) {
+        if (i >= max) {
+          alert("This is the last question, Cannot move down");
+        } else {
+          //Swapping down
+          questions.splice(parseInt(i) + 1, 0, questions.splice(i, 1)[0]);
+
+          break;
+        }
+      }
+    }
+    this.setState({ questions });
+  };
+
+  //Change order +1
+  questionUp = () => {
+    let questions = [...this.state.questions];
+
+    for (let i in questions) {
+      if (questions[i].id == this.state.selectedQuestion) {
+        if (i <= 0) {
+          alert("This is the first question, Cannot move up");
+        } else {
+          //Swapping up
+          questions.splice(parseInt(i) - 1, 0, questions.splice(i, 1)[0]);
+
+          break;
+        }
+      }
+    }
+    this.setState({ questions });
+  };
+
   componentDidMount() {}
 
   render() {
@@ -438,6 +477,7 @@ class NewExam extends Component {
                       className="btn btn-light "
                       id="navBarDown"
                       disabled={this.state.selectedQuestion ? undefined : true}
+                      onClick={this.questionDown}
                     >
                       <BsFillCaretDownFill />
                     </button>
@@ -447,6 +487,7 @@ class NewExam extends Component {
                       className="btn btn-light ml-3 "
                       id="navBarUp"
                       disabled={this.state.selectedQuestion ? undefined : true}
+                      onClick={this.questionUp}
                     >
                       <BsFillCaretUpFill />
                     </button>
