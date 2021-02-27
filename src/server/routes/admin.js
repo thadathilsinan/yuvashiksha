@@ -400,43 +400,125 @@ router.post("/verifyaccount/reject", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-// router.get("/usermanagement/teacher", (req, res, next) => {
-//   Teachers.find({})
-//     .then((response) => {
-//       res.statusCode = 200;
-//       res.json({ data: response });
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// });
+//Return teacher account details
+router.get("/usermanagement/teacher", (req, res, next) => {
+  let responseObject = [];
 
-// router.post("/usermanagement/teacher/delete", (req, res, next) => {
-//   Teachers.findOneAndDelete({ _id: req.body.teacher._id })
-//     .then((response) => {
-//       res.statusCode = 200;
-//       res.end("Successfully deleted teacher");
-//     })
-//     .catch((err) => next(err));
-// });
+  Users.find({ accountType: "teacher" })
+    .then(async (response) => {
+      //Filtering data required
+      for (let teacher of response) {
+        newTeacher = {
+          id: teacher._id,
+          name: teacher.name,
+          email: teacher.email,
+          registerNumber: teacher.registerNumber,
+          accountStatus: teacher.accountStatus,
+        };
 
-// router.post("/usermanagement/teacher/disable", (req, res, next) => {
-//   Teachers.findOne({ _id: req.body.teacher._id })
-//     .then((response) => {
-//       if (response) {
-//         Signin.findOneAndUpdate(
-//           { username: req.body.teacher.username },
-//           { accountStatus: "disabled" }
-//         )
-//           .then((resp) => {
-//             res.statusCode = 200;
-//             res.end("Teacher account disabled successfully");
-//           })
-//           .catch((err) => next(err));
-//       }
-//     })
-//     .catch((err) => next(err));
-// });
+        //Parsing departmnet name
+        let department = await Department.findOne({ _id: teacher.department });
+        if (department) {
+          newTeacher.department = department.name;
+        }
+
+        responseObject.push(newTeacher);
+      }
+      res.statusCode = 200;
+      res.json(responseObject);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+//Disable a user account
+router.post("/usermanagement/disable", (req, res, next) => {
+  Users.findOne({ _id: req.body.userId })
+    .then(async (user) => {
+      if (user) {
+        user.accountStatus = "disabled";
+
+        await user.save();
+
+        res.statusCode = 200;
+        res.end("Account disabled successfully");
+      } else {
+        res.statusCode = 203;
+        res.end("User account not found");
+      }
+    })
+    .catch((err) => next(err));
+});
+
+//Return student account details
+router.get("/usermanagement/student", (req, res, next) => {
+  let responseObject = [];
+
+  Users.find({ accountType: "student" })
+    .then(async (response) => {
+      //Filtering data required
+      for (let student of response) {
+        newStudent = {
+          id: student._id,
+          name: student.name,
+          email: student.email,
+          parentEmail: student.parentEmail,
+          registerNumber: student.registerNumber,
+          accountStatus: student.accountStatus,
+        };
+
+        //Parsing class,batch name
+        let Class = await Classes.findOne({ _id: student.class });
+        if (Class) {
+          newStudent.class = Class.name;
+          newStudent.batch = Class.batch;
+        }
+
+        responseObject.push(newStudent);
+      }
+      res.statusCode = 200;
+      res.json(responseObject);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+//Enable a user account
+router.post("/usermanagement/enable", (req, res, next) => {
+  Users.findOne({ _id: req.body.userId })
+    .then(async (user) => {
+      if (user) {
+        user.accountStatus = "ok";
+
+        await user.save();
+
+        res.statusCode = 200;
+        res.end("Account enabled successfully");
+      } else {
+        res.statusCode = 203;
+        res.end("User account not found");
+      }
+    })
+    .catch((err) => next(err));
+});
+
+//Delete a user account
+router.post("/usermanagement/delete", async (req, res, next) => {
+  let user = await Users.findOne({ _id: req.body.userId });
+
+  if (user) {
+    await user.remove();
+
+    res.statusCode = 200;
+    res.end("Account removed successfully");
+  } else {
+    res.statusCode = 203;
+    res.end("User account not found");
+  }
+});
+
 // router.get("/usermanagement/student", (req, res, next) => {
 //   Students.find({})
 //     .then((response) => {
