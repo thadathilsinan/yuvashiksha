@@ -96,6 +96,7 @@ class NewExam extends Component {
         },
       ],
       selectedQuestion: null,
+      editSelected: false,
     };
   }
 
@@ -194,6 +195,21 @@ class NewExam extends Component {
       }
     }
     this.setState({ questions });
+  };
+
+  //Edit currently selected Question
+  editSelectedQuestion = () => {
+    this.setState({ editSelected: true });
+
+    //Getting the type of the question that is selected
+    let questionType = "";
+    for (let question of this.state.questions) {
+      if (question.id == this.state.selectedQuestion) {
+        questionType = question.type;
+      }
+    }
+
+    window.$("#" + questionType + "Modal").modal("toggle");
   };
 
   componentDidMount() {}
@@ -304,7 +320,7 @@ class NewExam extends Component {
         {/* Configuring The add text */}
         {configureDialogBox(
           "textModal",
-          "ADD TEXT",
+          this.state.editSelected ? "EDIT TEXT" : "ADD TEXT",
           <>
             <form>
               <label className="black" for="text">
@@ -335,7 +351,9 @@ class NewExam extends Component {
         {/* Configuring The add mcq */}
         {configureDialogBox(
           "mcqModal",
-          "ADD MULTIPLE CHOICE QUESTION",
+          this.state.editSelected
+            ? "EDIT MULTIPLE CHOICE QUESTION"
+            : "ADD MULTIPLE CHOICE QUESTION",
           <>
             <form>
               <label className="black" for="mcq">
@@ -384,7 +402,9 @@ class NewExam extends Component {
         {/* Configuring The add SHORT */}
         {configureDialogBox(
           "shortModal",
-          "ADD SHORT ANSWER QUESTION",
+          this.state.editSelected
+            ? "EDIT SHORT ANSWER QUESTION"
+            : "ADD SHORT ANSWER QUESTION",
           <>
             <form>
               <label className="black mr-3" for="mcq">
@@ -419,7 +439,9 @@ class NewExam extends Component {
         {/* Configuring The add SHORT */}
         {configureDialogBox(
           "essayModal",
-          "ADD ESSAY QUESTION",
+          this.state.editSelected
+            ? "EDIT ESSAY QUESTION"
+            : "ADD ESSAY QUESTION",
           <>
             <form>
               <label className="black mr-3" for="mcq">
@@ -497,6 +519,7 @@ class NewExam extends Component {
                       className="btn btn-light ml-3 "
                       id="navBarEdit"
                       disabled={this.state.selectedQuestion ? undefined : true}
+                      onClick={this.editSelectedQuestion}
                     >
                       <BsPencil />
                     </button>
