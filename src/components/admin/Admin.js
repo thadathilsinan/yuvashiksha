@@ -168,7 +168,7 @@ class Admin extends Component {
                 <Report />
               </Route>
 
-              <Route path="/admin/usermangamenet" exact>
+              <Route path="/admin/usermanagement" exact>
                 <UserMangamenet />
               </Route>
 

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
 import { Button } from "react-bootstrap";
 import http from "../../../../shared/http";
+import $ from "jquery";
+
 export default class Teachers extends Component {
   constructor(props) {
     super(props);
@@ -10,27 +12,29 @@ export default class Teachers extends Component {
     };
   }
 
+  //Delete a user account
   deleteClickListener = (item) => {
     let confirmation = window.confirm("Are you sure to want to delete?");
 
     if (confirmation) {
       http(
         "POST",
-        "/admin/usermanagement/teacher/delete",
-        { teacher: item },
+        "/admin/usermanagement/delete",
+        { userId: item.id },
         (res) => {
           if (res.status == 200) {
             alert("Teacher account deleted successfully");
 
-            document.getElementById(item._id).style.display = "none";
+            document.getElementById(item.id).style.display = "none";
           } else {
-            alert("Error deleting teacher account");
+            alert(res.data);
           }
         }
       );
     }
   };
 
+  //Disable / Enable account
   disableClickListener = (event, item) => {
     if (event.target.value == "Disable") {
       let confirmation = window.confirm("Are sure to Disable account?");
@@ -38,14 +42,14 @@ export default class Teachers extends Component {
       if (confirmation) {
         http(
           "POST",
-          "/admin/usermanagement/teacher/disable",
-          { teacher: item },
+          "/admin/usermanagement/disable",
+          { userId: item.id },
           (res) => {
             if (res.status == 200) {
               alert("Teacher Account disabled Successfully");
-              this.changeToEnable(event);
+              this.changeToEnable(item);
             } else {
-              alert("Error disabling teacher account");
+              alert(res.data);
             }
           }
         );
@@ -54,37 +58,52 @@ export default class Teachers extends Component {
       let confirmation = window.confirm("Are you sure to Enable account?");
 
       if (confirmation) {
-        this.changeToDisable(event);
+        http(
+          "POST",
+          "/admin/usermanagement/enable",
+          { userId: item.id },
+          (res) => {
+            if (res.status == 200) {
+              alert("Teacher Account enabled Successfully");
+              this.changeToDisable(item);
+            } else {
+              alert(res.data);
+            }
+          }
+        );
       }
     }
   };
 
-  changeToDisable = (event) => {
-    event.target.setAttribute("value", "Disable");
-    event.target.classList.remove("btn-success");
-    event.target.classList.add("btn-warning");
+  //Change style of button
+  changeToDisable = (teacher) => {
+    let button = $("#" + teacher.id + " input[name='changestatus']");
+    button.attr("value", "Disable");
+    button.removeClass("btn-success");
+    button.addClass("btn-warning");
   };
 
-  changeToEnable = (event) => {
-    event.target.setAttribute("value", "Enable");
-    event.target.classList.remove("btn-warning");
-    event.target.classList.add("btn-success");
+  changeToEnable = (teacher) => {
+    let button = $("#" + teacher.id + " input[name='changestatus']");
+    button.attr("value", "Enable");
+    button.removeClass("btn-warning");
+    button.addClass("btn-success");
   };
 
+  //Return jsx to render the list of teachers
   getTeacherList = () => {
     let teachers = this.state.userData.map((item) => {
-      console.log(item);
       return (
-        <div className="container  col-md-10 mt-1 " id={item._id}>
+        <div className=" mt-1 " id={item.id}>
           <ListItem height="180px">
             {{
               left: (
                 <div>
                   <span>
-                    <p class="text-left">{item.name}d</p>
+                    <p class="text-left">Name: {item.name}</p>
 
-                    <p class="text-left">{item.email}</p>
-                    <p class="text-left">{item.department}</p>
+                    <p class="text-left">Email: {item.email}</p>
+                    <p class="text-left">Department: {item.department}</p>
                   </span>{" "}
                   <Button
                     type="submit"
@@ -96,16 +115,25 @@ export default class Teachers extends Component {
                 </div>
               ),
               right: (
-                <div>
-                  <p class="text-right">{item.idNumber}</p>
+                <div class="text-right">
+                  <p class="text-right">
+                    Register Number: {item.registerNumber}
+                  </p>
                   <br />
                   <br />
                   <br />
                   <input
                     type="button"
-                    className=" mr-3 btn btn-warning"
+                    name="changestatus"
+                    className={
+                      item.accountStatus == "disabled"
+                        ? "mr-3 btn btn-success"
+                        : "mr-3 btn btn-warning"
+                    }
                     onClick={(event) => this.disableClickListener(event, item)}
-                    value="Disable"
+                    value={
+                      item.accountStatus == "disabled" ? "Enable" : "Disable"
+                    }
                   ></input>
                 </div>
               ),
@@ -118,10 +146,11 @@ export default class Teachers extends Component {
     return teachers;
   };
 
+  //Get teacher user info from server
   getUserData = () => {
     http("GET", "/admin/usermanagement/teacher", null, (res) => {
       if (res.status == 200) {
-        this.setState({ userData: res.data.data });
+        this.setState({ userData: res.data });
       } else {
         alert("Error during fetching teacher data from server");
       }
