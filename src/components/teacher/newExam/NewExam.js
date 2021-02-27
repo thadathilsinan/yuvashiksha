@@ -12,6 +12,7 @@ import {
 import { Button, Modal, Form, Row, Col, Dropdown } from "react-bootstrap";
 import configureDialogBox from "../../../shared/dailogBox";
 import $ from "jquery";
+import Question from "../Question/Question";
 
 class NewExam extends Component {
   constructor(props) {
@@ -30,27 +31,26 @@ class NewExam extends Component {
     let text = this.newTextRef.current.value;
 
     if (text) {
-      this.questions.push({ type: "text", id: Date.now(), text });
-      this.forceUpdate();
+      this.setState({
+        questions: [
+          ...this.state.questions,
+          { type: "text", id: Date.now(), text },
+        ],
+      });
     } else {
       alert("Please enter some text");
     }
   };
 
   parseQuestions = () => {
-    this.component = this.questions.map((question, index) => {
-      return <h1>{question.type}</h1>;
+    return this.state.questions.map((question, index) => {
+      return <Question question={question} />;
     });
   };
 
   componentDidMount() {}
 
   render() {
-    //Check if any element selected or not
-    // if (this.state.selectedQuestion == null) {
-    //   alert("triggered");
-    // }
-
     return (
       <div>
         {/* Configuring The scheduleexam */}
@@ -417,7 +417,9 @@ class NewExam extends Component {
             >
               <p>NO QUESTIONS INSERTED</p>
             </div>
-          ) : null}
+          ) : (
+            this.parseQuestions()
+          )}
         </div>
       </div>
     );
