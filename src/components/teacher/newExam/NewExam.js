@@ -119,6 +119,35 @@ class NewExam extends Component {
     }
   };
 
+  //Edit an existing Text
+  editText = () => {
+    let text = this.newTextRef.current.value;
+    let questions = [...this.state.questions];
+
+    if (text) {
+      //Getting the the question that is selected
+      let i = 0;
+      for (i in questions) {
+        if (questions[i].id == this.state.selectedQuestion) {
+          questions.splice(i, 1);
+
+          break;
+        }
+      }
+
+      questions.splice(i, 0, { type: "text", text, id: Date.now() });
+
+      this.setState({
+        questions: [...questions],
+        editSelected: false,
+        selectedQuestion: null,
+      });
+      window.$("#textModal").modal("toggle");
+    } else {
+      alert("Please enter some text");
+    }
+  };
+
   //Parse the questions to display it
   parseQuestions = () => {
     return this.state.questions.map((question, index) => {
@@ -199,17 +228,23 @@ class NewExam extends Component {
 
   //Edit currently selected Question
   editSelectedQuestion = () => {
+    let selectedQuestion = null;
     this.setState({ editSelected: true });
 
     //Getting the type of the question that is selected
     let questionType = "";
     for (let question of this.state.questions) {
       if (question.id == this.state.selectedQuestion) {
+        selectedQuestion = question;
         questionType = question.type;
       }
     }
 
     window.$("#" + questionType + "Modal").modal("toggle");
+
+    if (questionType == "text") {
+      this.newTextRef.current.value = selectedQuestion.text;
+    }
   };
 
   componentDidMount() {}
@@ -338,13 +373,11 @@ class NewExam extends Component {
           <>
             <button
               className="btn btn-primary"
-              data-toggle="modal"
-              data-target="#textModal"
+              onClick={
+                this.state.editSelected ? this.editText : this.addNewText
+              }
             >
-              Cancel
-            </button>
-            <button className="btn btn-primary" onClick={this.addNewText}>
-              Add
+              OK
             </button>
           </>
         )}
@@ -395,8 +428,7 @@ class NewExam extends Component {
             <button className="btn btn-primary">Add option</button>
             <button className="btn btn-primary">Canvas </button>
             <button className="btn btn-primary">Upload</button>
-            <button className="btn btn-primary">Cancel</button>
-            <button className="btn btn-primary">Add</button>
+            <button className="btn btn-primary">OK</button>
           </>
         )}
         {/* Configuring The add SHORT */}
@@ -433,7 +465,7 @@ class NewExam extends Component {
             <button className="btn btn-primary">Canvas </button>
             <button className="btn btn-primary">Upload</button>
             <button className="btn btn-primary">Cancel</button>
-            <button className="btn btn-primary">Add</button>
+            <button className="btn btn-primary">OK</button>
           </>
         )}
         {/* Configuring The add SHORT */}
@@ -470,7 +502,7 @@ class NewExam extends Component {
             <button className="btn btn-primary">Canvas </button>
             <button className="btn btn-primary">Upload</button>
             <button className="btn btn-primary">Cancel</button>
-            <button className="btn btn-primary">Add</button>
+            <button className="btn btn-primary">OK</button>
           </>
         )}
         <NavBar>
