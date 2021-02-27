@@ -3,6 +3,7 @@ import ListItem from "../../../ui-elements/ListItem/ListItem";
 import { Button } from "react-bootstrap";
 import http from "../../../../shared/http";
 import $ from "jquery";
+import Search from "../../../ui-elements/Search/Search";
 
 export default class Teachers extends Component {
   constructor(props) {
@@ -157,11 +158,33 @@ export default class Teachers extends Component {
     });
   };
 
+  //Search
+  search = (searchText) => {
+    if (searchText) {
+      http(
+        "POST",
+        "/admin/usermanagement/teacher/search",
+        { searchString: searchText },
+        (res) => {
+          this.setState({ userData: res.data });
+        }
+      );
+    } else {
+      //Return all users without filtering
+      this.getUserData();
+    }
+  };
+
   componentDidMount() {
     this.getUserData();
   }
 
   render() {
-    return <>{this.getTeacherList()}</>;
+    return (
+      <>
+        <Search click={this.search} />
+        {this.getTeacherList()}
+      </>
+    );
   }
 }

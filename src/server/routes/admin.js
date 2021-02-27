@@ -519,41 +519,104 @@ router.post("/usermanagement/delete", async (req, res, next) => {
   }
 });
 
-// router.get("/usermanagement/student", (req, res, next) => {
-//   Students.find({})
-//     .then((response) => {
-//       res.statusCode = 200;
-//       res.json({ data: response });
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// });
+//Search in teacher account
+router.post("/usermanagement/teacher/search", async (req, res, next) => {
+  let responseObject = [];
+  let searchString = req.body.searchString;
 
-// router.post("/usermanagement/student/delete", (req, res, next) => {
-//   Students.findOneAndDelete({ _id: req.body.student._id })
-//     .then((response) => {
-//       res.statusCode = 200;
-//       res.end("Successfully deleted student");
-//     })
-//     .catch((err) => next(err));
-// });
+  let isMatched = (string, searchString) => {
+    if (!string || !searchString) {
+      return false;
+    }
 
-// router.post("/usermanagement/student/disable", (req, res, next) => {
-//   Students.findOne({ _id: req.body.student._id })
-//     .then((response) => {
-//       if (response) {
-//         Signin.findOneAndUpdate(
-//           { username: req.body.student.username },
-//           { accountStatus: "disabled" }
-//         )
-//           .then((resp) => {
-//             res.statusCode = 200;
-//             res.end("Student account disabled successfully");
-//           })
-//           .catch((err) => next(err));
-//       }
-//     })
-//     .catch((err) => next(err));
-// });
+    if (string.toLowerCase().indexOf(searchString.toLowerCase()) != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  let users = await Users.find({ accountType: "teacher" });
+
+  for (user of users) {
+    newUser = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      registerNumber: user.registerNumber,
+      accountStatus: user.accountStatus,
+    };
+
+    //Parsing departmnet name
+    let department = await Department.findOne({ _id: user.department });
+    if (department) {
+      newUser.department = department.name;
+    }
+
+    if (
+      isMatched(user.name, searchString) ||
+      isMatched(user.email, searchString) ||
+      isMatched(user.registerNumber, searchString) ||
+      isMatched(newUser.department, searchString)
+    ) {
+      responseObject.push(newUser);
+    }
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
+//Search in student account
+router.post("/usermanagement/student/search", async (req, res, next) => {
+  let responseObject = [];
+  let searchString = req.body.searchString;
+
+  let isMatched = (string, searchString) => {
+    if (!string || !searchString) {
+      return false;
+    }
+
+    if (string.toLowerCase().indexOf(searchString.toLowerCase()) != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  let users = await Users.find({ accountType: "student" });
+
+  for (user of users) {
+    newUser = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      parentEmail: user.parentEmail,
+      registerNumber: user.registerNumber,
+      accountStatus: user.accountStatus,
+    };
+
+    //Parsing class,batch name
+    let Class = await Classes.findOne({ _id: user.class });
+    if (Class) {
+      newUser.class = Class.name;
+      newUser.batch = Class.batch;
+    }
+
+    if (
+      isMatched(user.name, searchString) ||
+      isMatched(user.email, searchString) ||
+      isMatched(user.registerNumber, searchString) ||
+      isMatched(user.parentEmail, searchString) ||
+      isMatched(newUser.class, searchString) ||
+      isMatched(newUser.batch, searchString)
+    ) {
+      responseObject.push(newUser);
+    }
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
 module.exports = router;
