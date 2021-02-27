@@ -18,15 +18,30 @@ export class TeacherProfile extends Component {
             ),
             right: (
               <h5>
-                <Button variant="light" ClassName="btn bg-light">
-                  logout
-                </Button>
+                <Row className="mt-2">
+                  <Col>
+                    <Button
+                      variant="primary"
+                      ClassName="btn bg-light"
+                      size="sm"
+                    >
+                      Verify Accounts
+                    </Button>
+                  </Col>
+                  <Col>
+                    {" "}
+                    <Button variant="light" ClassName="btn bg-light" size="lg">
+                      logout
+                    </Button>
+                  </Col>
+                </Row>
               </h5>
             ),
           }}
         </NavBar>
         <div className="text-center  align-items-center mt-5 col-md-8 ">
           <img src="..." alt="..." class="rounded-circle mt-5"></img>
+
           <Form className="col-md-6">
             <Form.Group as={Row} controlId="formPlaintextEmail">
               <Form.Label column sm="2">
