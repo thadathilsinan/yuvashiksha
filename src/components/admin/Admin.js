@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./Admin.css";
 
 import NavBar from "../ui-elements/navBar/NavBar";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 
 import Home from "./pages/Home/Home";
 import Institutionstructure from "./pages/Institutionstructure/Institutionstructure";
@@ -174,6 +174,9 @@ class Admin extends Component {
 
               <Route path="/admin/verifyaccount" exact>
                 <VerifyAccount />
+              </Route>
+              <Route path="/admin">
+                <Redirect to="/admin/home" />
               </Route>
             </Switch>
           </div>
