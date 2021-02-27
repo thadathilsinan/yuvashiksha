@@ -121,7 +121,13 @@ class NewExam extends Component {
   //Parse the questions to display it
   parseQuestions = () => {
     return this.state.questions.map((question, index) => {
-      return <Question question={question} click={this.selectQuestion} />;
+      return (
+        <Question
+          question={question}
+          click={this.selectQuestion}
+          key={question.id}
+        />
+      );
     });
   };
 
@@ -135,6 +141,20 @@ class NewExam extends Component {
     }
 
     this.setState({ selectedQuestion: questionElement.id });
+  };
+
+  //Remove question from array
+  removeQuestion = () => {
+    let questions = [...this.state.questions];
+    for (let i in questions) {
+      if (questions[i].id == this.state.selectedQuestion) {
+        questions.splice(i, 1);
+        this.setState({ questions });
+      }
+    }
+    this.forceUpdate();
+    this.state.selectedQuestion = null;
+    $("#questionsList .active").removeClass("active");
   };
 
   componentDidMount() {}
@@ -445,6 +465,7 @@ class NewExam extends Component {
                       className="btn btn-light ml-3 "
                       id="navBarDelete"
                       disabled={this.state.selectedQuestion ? undefined : true}
+                      onClick={this.removeQuestion}
                     >
                       <BsDash />
                     </button>
