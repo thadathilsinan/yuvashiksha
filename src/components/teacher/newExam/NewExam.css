@@ -13,3 +13,12 @@ h5 {
 
   padding: 15px;
 }
+
+#newExamBody {
+  height: calc(100vh - 80px);
+  overflow: auto;
+}
+
+#emptyQuestion {
+  height: calc(100vh - 80px);
+}

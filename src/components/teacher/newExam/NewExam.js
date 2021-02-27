@@ -11,13 +11,48 @@ import {
 } from "react-icons/bs";
 import { Button, Modal, Form, Row, Col, Dropdown } from "react-bootstrap";
 import configureDialogBox from "../../../shared/dailogBox";
+import $ from "jquery";
+
 class NewExam extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedQuestion: null,
+      questions: [],
+      component: null,
+    };
+  }
+
+  //Set the component to show
+  setComponentView = () => {
+    if (this.state.questions.length == 0) {
+      //Setting empty questions view
+      this.setState({
+        component: (
+          <div
+            id="emptyQuestion"
+            className="d-flex align-items-center justify-content-center"
+          >
+            <p>NO QUESTIONS INSERTED</p>
+          </div>
+        ),
+      });
+    }
+  };
+
+  componentDidMount() {
+    this.setComponentView();
   }
 
   render() {
+    //Check if any element selected or not
+    if (!this.state.selectedQuestion) {
+      $("#navBarDown, #navBarUp, #navBarEdit, #navBarDelete").attr(
+        "disabled",
+        "true"
+      );
+    }
+
     return (
       <div>
         {/* Configuring The scheduleexam */}
@@ -283,22 +318,22 @@ class NewExam extends Component {
                 <Row>
                   <Col>
                     {" "}
-                    <Button className="btn btn-light ">
+                    <Button className="btn btn-light " id="navBarDown">
                       <BsFillCaretDownFill />
                     </Button>
                   </Col>
                   <Col>
-                    <Button className="btn btn-light ml-3 ">
+                    <Button className="btn btn-light ml-3 " id="navBarUp">
                       <BsFillCaretUpFill />
                     </Button>
                   </Col>
                   <Col>
-                    <Button className="btn btn-light ml-3 ">
+                    <Button className="btn btn-light ml-3 " id="navBarEdit">
                       <BsPencil />
                     </Button>
                   </Col>
                   <Col>
-                    <Button className="btn btn-light ml-3 ">
+                    <Button className="btn btn-light ml-3 " id="navBarDelete">
                       <BsDash />
                     </Button>
                   </Col>
@@ -351,6 +386,7 @@ class NewExam extends Component {
             ),
           }}
         </NavBar>
+        <div id="newExamBody">{this.state.component}</div>
       </div>
     );
   }
