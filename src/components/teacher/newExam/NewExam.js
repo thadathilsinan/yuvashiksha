@@ -1,3 +1,42 @@
+// [
+// 	{
+// 		id: 123,
+// 		type: “text”,
+// 		text: “Content here”
+// 	},
+// 	{
+// 		id: 345,
+// 		type: “mcq”,
+// 		question: “question text here”,
+// 		marks: 1,
+// 		allowMultipleSelection: true,
+// 		image: ObjectId(ASSETS),
+// 		canvas: ObjectId(ASSETS),
+// 		options: [
+// 			{
+// 				name: “option 1”,
+// 				correct: true
+// 			}
+// 		]
+// 	},
+// 	{
+// 		id: 211,
+// 		type: “short”,
+// 		marks: 2,
+// 		question: “Question here”,
+// 		image: ObjectId(ASSETS),
+// 		canvas: ObjectId(ASSETS)
+// 	},
+// 	{
+// 		id: 1212,
+// 		type: “essay”,
+// 		question: “Question Here”,
+// 		marks: 10,
+// 		canvas: ObjectId(ASSETS),
+// 		image: ObjectId(ASSETS)
+// 	}
+// ]
+
 import React, { Component } from "react";
 import NavBar from "../../ui-elements/navBar/NavBar";
 import "./NewExam.css";
@@ -18,7 +57,44 @@ class NewExam extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questions: [],
+      questions: [
+        {
+          id: 123,
+          type: "text",
+          text: "Content here",
+        },
+        {
+          id: 345,
+          type: "mcq",
+          question: "question text here",
+          marks: 1,
+          allowMultipleSelection: true,
+          image: null, //ObjectId(ASSETS),
+          canvas: null, //ObjectId(ASSETS),
+          options: [
+            {
+              name: "option 1",
+              correct: true,
+            },
+          ],
+        },
+        {
+          id: 211,
+          type: "short",
+          marks: 2,
+          question: "Question here",
+          image: null, //ObjectId(ASSETS),
+          canvas: null, //ObjectId(ASSETS)
+        },
+        {
+          id: 1212,
+          type: "essay",
+          question: "Question Here",
+          marks: 10,
+          canvas: null, //ObjectId(ASSETS),
+          image: null, //ObjectId(ASSETS)
+        },
+      ],
       selectedQuestion: null,
     };
   }
@@ -42,10 +118,23 @@ class NewExam extends Component {
     }
   };
 
+  //Parse the questions to display it
   parseQuestions = () => {
     return this.state.questions.map((question, index) => {
-      return <Question question={question} />;
+      return <Question question={question} click={this.selectQuestion} />;
     });
+  };
+
+  //select a particular question (Called inside <Question/>)
+  selectQuestion = (event) => {
+    let questionElement = null;
+
+    //SELECTING PARENT QUESTION ELEMENT
+    for (let element of event.nativeEvent.path) {
+      if ($(element).hasClass("question")) questionElement = element;
+    }
+
+    this.setState({ selectedQuestion: questionElement.id });
   };
 
   componentDidMount() {}
@@ -418,7 +507,9 @@ class NewExam extends Component {
               <p>NO QUESTIONS INSERTED</p>
             </div>
           ) : (
-            this.parseQuestions()
+            <div className="list-group" id="questionsList">
+              {this.parseQuestions()}
+            </div>
           )}
         </div>
       </div>
