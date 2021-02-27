@@ -105,48 +105,46 @@ class Login extends Component {
     };
 
     return (
-      <BrowserRouter>
-        <div className="container">
-          <div
-            className="d-flex align-items-center justify-content-center"
-            style={{ height: "100vh" }}
-          >
-            <div className="card" id="login-card" style={{ width: "25rem" }}>
-              <div className="card-body">
-                <nav class="nav nav-pills nav-fill">
-                  <a
-                    className="nav-item nav-link active"
-                    href="#"
-                    id="signin-tab"
-                    onClick={this.changeTabToSignin}
-                    style={this.state.signin ? style : null}
-                  >
-                    SIGN IN
-                  </a>
-                  <a
-                    className="nav-item nav-link"
-                    href="#"
-                    id="signup-tab"
-                    onClick={this.changeTabToSignup}
-                    style={this.state.signin ? null : style}
-                  >
-                    SIGN UP
-                  </a>
-                </nav>
-                {this.state.signin ? <Signin /> : null}
-                {this.state.signup ? (
-                  <Signup otpSent={this.showVerifyOtp} />
-                ) : null}
-                {this.state.showVerifyOtp ? (
-                  <VerifyOtp otpVerified={this.otpVerified} />
-                ) : null}
-                {this.state.showSetPassword ? <SetPassword /> : null}
-                {this.state.googleSignup ? <GoogleSignup /> : null}
-              </div>
+      <div id="loginBody">
+        <div
+          className="d-flex align-items-center justify-content-center"
+          style={{ height: "100vh" }}
+        >
+          <div className="card" id="login-card" style={{ width: "25rem" }}>
+            <div className="card-body">
+              <nav class="nav nav-pills nav-fill">
+                <a
+                  className="nav-item nav-link active"
+                  href="#"
+                  id="signin-tab"
+                  onClick={this.changeTabToSignin}
+                  style={this.state.signin ? style : null}
+                >
+                  SIGN IN
+                </a>
+                <a
+                  className="nav-item nav-link"
+                  href="#"
+                  id="signup-tab"
+                  onClick={this.changeTabToSignup}
+                  style={this.state.signin ? null : style}
+                >
+                  SIGN UP
+                </a>
+              </nav>
+              {this.state.signin ? <Signin /> : null}
+              {this.state.signup ? (
+                <Signup otpSent={this.showVerifyOtp} />
+              ) : null}
+              {this.state.showVerifyOtp ? (
+                <VerifyOtp otpVerified={this.otpVerified} />
+              ) : null}
+              {this.state.showSetPassword ? <SetPassword /> : null}
+              {this.state.googleSignup ? <GoogleSignup /> : null}
             </div>
           </div>
         </div>
-      </BrowserRouter>
+      </div>
     );
   }
 }

@@ -4,7 +4,7 @@ import "./App.css";
 
 import LoginRoute from "./components/login/LoginRoute";
 import Student from "./components/student/Student";
-import Teacher from "./components/teacher/Teacher";
+import TeacherMain from "./components/teacher/TeacherMain";
 import AdminMain from "./components/admin/AdminMain";
 
 import { store } from "./store/store";
@@ -34,11 +34,11 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <Provider store={store}>
-          <div id="root">
+          <div>
             {/* Routes of the app */}
             <Route path="/" component={LoginRoute} />
             <Route path="/student" component={Student} />
-            <Route path="/teacher" component={Teacher} />
+            <Route path="/teacher" component={TeacherMain} />
             <Route path="/admin" component={AdminMain} />
 
             {/* //Test route for development purposes */}

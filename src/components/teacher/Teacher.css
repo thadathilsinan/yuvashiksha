@@ -11,11 +11,13 @@
   height: calc(100vh - 80px - 50px);
 
   overflow: auto;
+  background-color: rgb(196, 196, 196);
 }
 
 #rightTabBody {
   height: calc(100vh - 80px - 50px);
 
+  background-color: rgb(196, 196, 196);
   overflow: auto;
 }
 

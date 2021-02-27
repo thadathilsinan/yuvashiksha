@@ -127,4 +127,15 @@ router.get("/getclasses", async (req, res, next) => {
   res.json(responseObject);
 });
 
+//Check Teacher logged in or not
+router.post("/checkTeacher", (req, res, next) => {
+  if (req.user && req.user.accountType == "teacher") {
+    res.statusCode = 200;
+    res.json(req.user);
+  } else {
+    res.statusCode = 203;
+    res.end("User NOT logged in");
+  }
+});
+
 module.exports = router;

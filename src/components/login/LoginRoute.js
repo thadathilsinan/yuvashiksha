@@ -19,22 +19,20 @@ class LoginRoute extends Component {
       /**
        * DISPLAYING CORRESPONDING COMPONENTS IN DIFFERENT ROUTES
        */
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" exact>
-            <Redirect to="/signin" />
-          </Route>
-          <Route path="/signin" exact>
-            <Login signin />
-          </Route>
-          <Route path="/signup" exact>
-            <Login signup />
-          </Route>
-          <Route path="/signup/google" exact>
-            <Login googleSignup />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <Route path="/" exact>
+          <Redirect to="/signin" />
+        </Route>
+        <Route path="/signin" exact>
+          <Login signin />
+        </Route>
+        <Route path="/signup" exact>
+          <Login signup />
+        </Route>
+        <Route path="/signup/google" exact>
+          <Login googleSignup />
+        </Route>
+      </Switch>
     );
   }
 }
