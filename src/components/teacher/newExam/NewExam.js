@@ -17,41 +17,39 @@ class NewExam extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedQuestion: null,
       questions: [],
-      component: null,
+      selectedQuestion: null,
     };
   }
 
-  //Set the component to show
-  setComponentView = () => {
-    if (this.state.questions.length == 0) {
-      //Setting empty questions view
-      this.setState({
-        component: (
-          <div
-            id="emptyQuestion"
-            className="d-flex align-items-center justify-content-center"
-          >
-            <p>NO QUESTIONS INSERTED</p>
-          </div>
-        ),
-      });
+  //Creating required refs
+  newTextRef = React.createRef();
+
+  //Add a new Text into questions
+  addNewText = () => {
+    let text = this.newTextRef.current.value;
+
+    if (text) {
+      this.questions.push({ type: "text", id: Date.now(), text });
+      this.forceUpdate();
+    } else {
+      alert("Please enter some text");
     }
   };
 
-  componentDidMount() {
-    this.setComponentView();
-  }
+  parseQuestions = () => {
+    this.component = this.questions.map((question, index) => {
+      return <h1>{question.type}</h1>;
+    });
+  };
+
+  componentDidMount() {}
 
   render() {
     //Check if any element selected or not
-    if (!this.state.selectedQuestion) {
-      $("#navBarDown, #navBarUp, #navBarEdit, #navBarDelete").attr(
-        "disabled",
-        "true"
-      );
-    }
+    // if (this.state.selectedQuestion == null) {
+    //   alert("triggered");
+    // }
 
     return (
       <div>
@@ -169,12 +167,21 @@ class NewExam extends Component {
                 name="text"
                 id="text"
                 className="m-3"
+                ref={this.newTextRef}
               ></textarea>
             </form>
           </>,
           <>
-            <button className="btn btn-primary">Cancel</button>
-            <button className="btn btn-primary">Add</button>
+            <button
+              className="btn btn-primary"
+              data-toggle="modal"
+              data-target="#textModal"
+            >
+              Cancel
+            </button>
+            <button className="btn btn-primary" onClick={this.addNewText}>
+              Add
+            </button>
           </>
         )}
         {/* Configuring The add mcq */}
@@ -318,24 +325,40 @@ class NewExam extends Component {
                 <Row>
                   <Col>
                     {" "}
-                    <Button className="btn btn-light " id="navBarDown">
+                    <button
+                      className="btn btn-light "
+                      id="navBarDown"
+                      disabled={this.state.selectedQuestion ? undefined : true}
+                    >
                       <BsFillCaretDownFill />
-                    </Button>
+                    </button>
                   </Col>
                   <Col>
-                    <Button className="btn btn-light ml-3 " id="navBarUp">
+                    <button
+                      className="btn btn-light ml-3 "
+                      id="navBarUp"
+                      disabled={this.state.selectedQuestion ? undefined : true}
+                    >
                       <BsFillCaretUpFill />
-                    </Button>
+                    </button>
                   </Col>
                   <Col>
-                    <Button className="btn btn-light ml-3 " id="navBarEdit">
+                    <button
+                      className="btn btn-light ml-3 "
+                      id="navBarEdit"
+                      disabled={this.state.selectedQuestion ? undefined : true}
+                    >
                       <BsPencil />
-                    </Button>
+                    </button>
                   </Col>
                   <Col>
-                    <Button className="btn btn-light ml-3 " id="navBarDelete">
+                    <button
+                      className="btn btn-light ml-3 "
+                      id="navBarDelete"
+                      disabled={this.state.selectedQuestion ? undefined : true}
+                    >
                       <BsDash />
-                    </Button>
+                    </button>
                   </Col>
                   <Col>
                     <Dropdown>
@@ -386,7 +409,16 @@ class NewExam extends Component {
             ),
           }}
         </NavBar>
-        <div id="newExamBody">{this.state.component}</div>
+        <div id="newExamBody">
+          {this.state.questions.length == 0 ? (
+            <div
+              id="emptyQuestion"
+              className="d-flex align-items-center justify-content-center"
+            >
+              <p>NO QUESTIONS INSERTED</p>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
