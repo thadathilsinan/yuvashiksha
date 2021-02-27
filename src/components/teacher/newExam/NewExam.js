@@ -544,24 +544,36 @@ class NewExam extends Component {
                         <Dropdown.Item
                           data-toggle="modal"
                           data-target="#textModal"
+                          onClick={() => {
+                            this.setState({ editSelected: false });
+                          }}
                         >
                           Text
                         </Dropdown.Item>
                         <Dropdown.Item
                           data-toggle="modal"
                           data-target="#mcqModal"
+                          onClick={() => {
+                            this.setState({ editSelected: false });
+                          }}
                         >
                           Multiple Choice question
                         </Dropdown.Item>
                         <Dropdown.Item
                           data-toggle="modal"
                           data-target="#shortModal"
+                          onClick={() => {
+                            this.setState({ editSelected: false });
+                          }}
                         >
                           Short answer
                         </Dropdown.Item>
                         <Dropdown.Item
                           data-toggle="modal"
                           data-target="#essayModal"
+                          onClick={() => {
+                            this.setState({ editSelected: false });
+                          }}
                         >
                           Essay Question
                         </Dropdown.Item>
