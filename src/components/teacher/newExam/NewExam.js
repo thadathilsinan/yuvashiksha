@@ -122,7 +122,7 @@ class NewExam extends Component {
         )}
         {/* Configuring The add text */}
         {configureDialogBox(
-          "text",
+          "textModal",
           "ADD TEXT",
           <>
             <form>
@@ -144,7 +144,7 @@ class NewExam extends Component {
         )}
         {/* Configuring The add mcq */}
         {configureDialogBox(
-          "mcq",
+          "mcqModal",
           "ADD MULTIPLE CHOICE QUESTION",
           <>
             <form>
@@ -193,7 +193,7 @@ class NewExam extends Component {
         )}
         {/* Configuring The add SHORT */}
         {configureDialogBox(
-          "short",
+          "shortModal",
           "ADD SHORT ANSWER QUESTION",
           <>
             <form>
@@ -228,7 +228,7 @@ class NewExam extends Component {
         )}
         {/* Configuring The add SHORT */}
         {configureDialogBox(
-          "essay",
+          "essayModal",
           "ADD ESSAY QUESTION",
           <>
             <form>
@@ -265,8 +265,17 @@ class NewExam extends Component {
           {{
             left: (
               <div>
-                <span id="navBarBackButton">{"<"}</span>
-                <h3>CREATE QUESTION PAPER</h3>
+                <Button
+                  variant="primary"
+                  className="btn btn-primary mr-3"
+                  size="sm"
+                  onClick={() => {
+                    window.history.back();
+                  }}
+                >
+                  {"<"}
+                </Button>
+                <h5>CREATE QUESTION PAPER</h5>
               </div>
             ),
             right: (
@@ -300,49 +309,29 @@ class NewExam extends Component {
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
-                        <Dropdown.Item href="#/action-1">
-                          <a
-                            className="text-decoration-none"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#text"
-                            style={{ color: "black" }}
-                          >
-                            Text
-                          </a>
+                        <Dropdown.Item
+                          data-toggle="modal"
+                          data-target="#textModal"
+                        >
+                          Text
                         </Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">
-                          <a
-                            className="text-decoration-none"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#mcq"
-                            style={{ color: "black" }}
-                          >
-                            Multiple Choice question{" "}
-                          </a>
+                        <Dropdown.Item
+                          data-toggle="modal"
+                          data-target="#mcqModal"
+                        >
+                          Multiple Choice question
                         </Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">
-                          <a
-                            className="text-decoration-none"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#short"
-                            style={{ color: "black" }}
-                          >
-                            Short answer{" "}
-                          </a>
+                        <Dropdown.Item
+                          data-toggle="modal"
+                          data-target="#shortModal"
+                        >
+                          Short answer
                         </Dropdown.Item>
-                        <Dropdown.Item href="#/action-4 ">
-                          <a
-                            className="text-decoration-none"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#essay"
-                            style={{ color: "black" }}
-                          >
-                            Essay Question
-                          </a>
+                        <Dropdown.Item
+                          data-toggle="modal"
+                          data-target="#essayModal"
+                        >
+                          Essay Question
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
