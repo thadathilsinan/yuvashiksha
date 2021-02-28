@@ -5,30 +5,19 @@ export default class Mcq extends Component {
   render() {
     let optionsList = this.props.question.options.map((option, index) => {
       return (
-        <>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="options"
-              id={this.props.question.id + option.name}
-              key={this.props.question.id + option.name}
-              value={option.correct}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            />
-            <label
-              class="form-check-label"
-              for="options"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              {option.name}
-            </label>
-          </div>
-        </>
+        <div class="form-check" key={this.props.question.id + option.name}>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="options"
+            value={option.name}
+            checked={option.correct ? true : undefined}
+            disabled
+          />
+          <label class="form-check-label" for="options">
+            {option.name}
+          </label>
+        </div>
       );
     });
 

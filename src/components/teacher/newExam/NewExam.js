@@ -68,7 +68,6 @@ class NewExam extends Component {
           type: "mcq",
           question: "question text here",
           marks: 1,
-          allowMultipleSelection: true,
           image: null, //ObjectId(ASSETS),
           canvas: null, //ObjectId(ASSETS),
           options: [
@@ -114,7 +113,6 @@ class NewExam extends Component {
 
   mcqQuestionRef = React.createRef();
   mcqMarksRef = React.createRef();
-  mcqOptionRef = React.createRef();
   mcqNewOption = React.createRef();
 
   //Add a new Text into questions
@@ -258,6 +256,10 @@ class NewExam extends Component {
 
     if (questionType == "text") {
       this.newTextRef.current.value = selectedQuestion.text;
+    } else if (questionType == "mcq") {
+      this.mcqMarksRef.current.value = selectedQuestion.marks;
+      this.mcqQuestionRef.current.value = selectedQuestion.question;
+      this.setState({ mcqModalOptions: selectedQuestion.options });
     }
   };
 
@@ -271,10 +273,10 @@ class NewExam extends Component {
               className="ml-3"
               type="radio"
               name="mcqModalOptions"
-              value={option.correct}
+              value={option.name}
               checked={option.correct ? true : undefined}
-              onClick={(e) => {
-                e.stopPropagation();
+              onChange={(e) => {
+                this.mcqSelectCorrectOption();
               }}
             />
           </td>
@@ -334,6 +336,106 @@ class NewExam extends Component {
       }
 
       this.setState({ mcqModalOptions: [...options] });
+    }
+  };
+
+  //Add MCQ Question
+  addMcqQuestion = () => {
+    let question = this.mcqQuestionRef.current.value;
+    let marks = this.mcqMarksRef.current.value;
+    let options = [...this.state.mcqModalOptions];
+    let id = Date.now();
+    let type = "mcq";
+
+    if (question) {
+      if (marks) {
+        if (options.length > 0) {
+          //Validation success
+
+          //Adding new Question
+          this.setState({
+            questions: [
+              ...this.state.questions,
+              { question, marks, options, id, type },
+            ],
+            mcqModalOptions: [],
+          });
+
+          this.mcqMarksRef.current.value = "";
+          this.mcqQuestionRef.current.value = "";
+        } else {
+          alert("No options inserted for the question");
+        }
+      } else {
+        alert("Please enter marks");
+      }
+    } else {
+      alert("Please enter question");
+    }
+  };
+
+  //When selecting MCQ correct option
+  mcqSelectCorrectOption = () => {
+    let correctOption = window.$('input[name="mcqModalOptions"]:checked').val();
+
+    let options = [...this.state.mcqModalOptions];
+
+    for (let i in options) {
+      if (options[i].name == correctOption) {
+        options[i].correct = true;
+      } else {
+        options[i].correct = false;
+      }
+    }
+
+    this.setState({ mcqModalOptions: [...options] });
+  };
+
+  //Edit an existing MCQ
+  editMcq = () => {
+    let question = this.mcqQuestionRef.current.value;
+    let marks = this.mcqMarksRef.current.value;
+    let options = [...this.state.mcqModalOptions];
+    let id = Date.now();
+    let type = "mcq";
+
+    let questions = [...this.state.questions];
+
+    if (question) {
+      if (marks) {
+        if (options.length > 0) {
+          //Validation success
+
+          //Editing Question
+          let i = 0;
+          for (i in questions) {
+            if (questions[i].id == this.state.selectedQuestion) {
+              questions.splice(i, 1);
+
+              break;
+            }
+          }
+
+          questions.splice(i, 0, { question, marks, options, id, type });
+
+          this.setState({
+            questions: [...questions],
+            mcqModalOptions: [],
+            editSelected: false,
+            selectedQuestion: null,
+          });
+          window.$("#mcqModal").modal("toggle");
+
+          this.mcqMarksRef.current.value = "";
+          this.mcqQuestionRef.current.value = "";
+        } else {
+          alert("No options inserted for the question");
+        }
+      } else {
+        alert("Please enter marks");
+      }
+    } else {
+      alert("Please enter question");
     }
   };
 
@@ -484,7 +586,7 @@ class NewExam extends Component {
               </label>
               <textarea
                 name="mcq"
-                ref={this.mcqOptionRef}
+                ref={this.mcqQuestionRef}
                 id="mcq"
                 className="  mr-3 form-control from-control-lg"
               ></textarea>
@@ -528,7 +630,14 @@ class NewExam extends Component {
             </button>
             <button className="btn btn-primary">Canvas </button>
             <button className="btn btn-primary">Upload</button>
-            <button className="btn btn-primary">OK</button>
+            <button
+              className="btn btn-primary"
+              onClick={
+                this.state.editSelected ? this.editMcq : this.addMcqQuestion
+              }
+            >
+              OK
+            </button>
           </>
         )}
         {/* Configuring The add SHORT */}
