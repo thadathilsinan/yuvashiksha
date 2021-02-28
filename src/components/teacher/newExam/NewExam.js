@@ -76,6 +76,14 @@ class NewExam extends Component {
               name: "option 1",
               correct: true,
             },
+            {
+              name: "option 2",
+              correct: false,
+            },
+            {
+              name: "option 3",
+              correct: false,
+            },
           ],
         },
         {
