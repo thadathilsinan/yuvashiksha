@@ -22,3 +22,43 @@ h5 {
 #emptyQuestion {
   height: calc(100vh - 80px);
 }
+
+.mcqOptionsContainer {
+  margin-top: 10px;
+  height: 300px;
+  overflow: auto;
+  border: 1px solid grey;
+}
+
+.mcqOptionsContainer table {
+  width: 100%;
+}
+
+.mcqOptionsContainer td {
+  border-bottom: 1px solid grey;
+  border-right: 1px solid grey;
+}
+
+.mcqOptionsContainer table td:first-of-type {
+  width: 80px;
+}
+
+.mcqOptionsContainer table td:last-of-type:hover {
+  background-color: lightcoral;
+}
+
+.mcqOptionsContainer table tr:first-of-type {
+  background-color: rgb(197, 197, 197);
+}
+
+.mcqOptionsContainer table tr:first-of-type td:hover {
+  background-color: rgb(197, 197, 197);
+}
+
+.mcqOptionsContainer table tr:last-of-type {
+  background-color: rgb(197, 197, 197);
+}
+
+.mcqOptionsContainer table tr:last-of-type td:hover {
+  background-color: rgb(197, 197, 197);
+}

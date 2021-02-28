@@ -105,11 +105,17 @@ class NewExam extends Component {
       ],
       selectedQuestion: null,
       editSelected: false,
+      mcqModalOptions: [],
     };
   }
 
   //Creating required refs
   newTextRef = React.createRef();
+
+  mcqQuestionRef = React.createRef();
+  mcqMarksRef = React.createRef();
+  mcqOptionRef = React.createRef();
+  mcqNewOption = React.createRef();
 
   //Add a new Text into questions
   addNewText = () => {
@@ -252,6 +258,82 @@ class NewExam extends Component {
 
     if (questionType == "text") {
       this.newTextRef.current.value = selectedQuestion.text;
+    }
+  };
+
+  //Render options list in mcqModal
+  renderMcqModalOptions = () => {
+    return this.state.mcqModalOptions.map((option, index) => {
+      return (
+        <tr key={option.name}>
+          <td>
+            <input
+              className="ml-3"
+              type="radio"
+              name="mcqModalOptions"
+              value={option.correct}
+              checked={option.correct ? true : undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            />
+          </td>
+
+          <td
+            onClick={(e) => {
+              this.removeMcqOption(e.target.getAttribute("name"));
+            }}
+            name={option.name}
+          >
+            <label
+              name={option.name}
+              class="form-check-label"
+              for="mcqModalOptions"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {option.name}
+            </label>
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  //Add new option to mcq
+  addMcqOption = () => {
+    let newOption = this.mcqNewOption.current.value;
+
+    if (newOption) {
+      this.setState({
+        mcqModalOptions: [
+          ...this.state.mcqModalOptions,
+          { name: newOption, correct: false },
+        ],
+      });
+
+      //Reset form value
+      this.mcqNewOption.current.value = "";
+    } else {
+      alert("Enter option to add");
+    }
+  };
+
+  //Remove option in mcq
+  removeMcqOption = (name) => {
+    let confirmation = window.confirm("Are you sure to remove option?");
+
+    if (confirmation) {
+      let options = [...this.state.mcqModalOptions];
+
+      for (let i in options) {
+        if (options[i].name == name) {
+          options.splice(i, 1);
+        }
+      }
+
+      this.setState({ mcqModalOptions: [...options] });
     }
   };
 
@@ -400,12 +482,12 @@ class NewExam extends Component {
               <label className="black" for="mcq">
                 Enter Question:{" "}
               </label>
-              <input
-                type="text"
+              <textarea
                 name="mcq"
+                ref={this.mcqOptionRef}
                 id="mcq"
                 className="  mr-3 form-control from-control-lg"
-              ></input>
+              ></textarea>
               <br />
               <label className="black" for="mcq">
                 Mark:{" "}
@@ -414,26 +496,36 @@ class NewExam extends Component {
                 type="number"
                 name="mark"
                 id="mark"
+                ref={this.mcqMarksRef}
                 className="ml-3 "
               ></input>
               <br />
-              <input
-                className="form-check-input ml-3"
-                type="checkbox"
-                value=""
-                id="defaultCheck1"
-              ></input>
-              <label
-                className="black form-check-label ml-5"
-                for="defaultCheck1"
-              >
-                Allow Multiple Selctions
-              </label>
-              <br />
+              <div className="mcqOptionsContainer">
+                <table>
+                  <tr>
+                    <td>Correct</td>
+                    <td>Choice</td>
+                  </tr>
+                  {this.renderMcqModalOptions()}
+                  <tr>
+                    <td></td>
+                    <td>
+                      <input
+                        type="text"
+                        name="mcqNewOption"
+                        placeholder="New Option"
+                        ref={this.mcqNewOption}
+                      ></input>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </form>
           </>,
           <>
-            <button className="btn btn-primary">Add option</button>
+            <button className="btn btn-primary" onClick={this.addMcqOption}>
+              Add option
+            </button>
             <button className="btn btn-primary">Canvas </button>
             <button className="btn btn-primary">Upload</button>
             <button className="btn btn-primary">OK</button>
