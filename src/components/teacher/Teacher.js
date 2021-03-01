@@ -9,90 +9,86 @@ import TeacherProfile from "./TeacherProfile/TeacherProfile";
 
 import { Route, withRouter } from "react-router-dom";
 
-let examData = [
-  {
-    name: "Name of Exam",
-    subject: "Subject",
-    from: "9:00:00",
-    to: "12:00:00",
-    marks: 80,
-    date: "12-01-2021", //mm-dd-yyyy
-  },
-  {
-    name: "Name of Exam",
-    subject: "Subject",
-    from: "9:00:00",
-    to: "12:00:00",
-    marks: 80,
-    date: "08-01-2021", //mm-dd-yyyy
-  },
-  {
-    name: "Name of Exam",
-    subject: "Subject",
-    from: "9:00:00",
-    to: "12:00:00",
-    marks: 80,
-    date: "01-01-2021", //mm-dd-yyyy
-  },
-];
-
 class Teacher extends Component {
-  examList = [];
-  previousExamList = [];
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      examData: [
+        {
+          name: "Name of Exam",
+          subject: "Subject",
+          from: "9:00:00",
+          to: "12:00:00",
+          marks: 80,
+          date: "12-01-2021", //mm-dd-yyyy
+        },
+        {
+          name: "Name of Exam",
+          subject: "Subject",
+          from: "9:00:00",
+          to: "12:00:00",
+          marks: 80,
+          date: "08-01-2021", //mm-dd-yyyy
+        },
+        {
+          name: "Name of Exam",
+          subject: "Subject",
+          from: "9:00:00",
+          to: "12:00:00",
+          marks: 80,
+          date: "01-01-2021", //mm-dd-yyyy
+        },
+      ],
+      examList: [],
+      previousExamList: [],
+    };
+  }
 
   setExamData = () => {
     let currentTime = new Date();
+    let previousExamList = [...this.state.previousExamList];
+    let examList = [...this.state.examList];
 
-    examData.map((item) => {
+    for (let item of this.state.examData) {
+      console.log("triggered");
       let examDate = new Date(`${item.date},${item.to}`);
 
+      let newItem = (
+        <ListItem height="100px">
+          {{
+            left: (
+              <div id="leftListItem">
+                <p>{item.name}</p>
+                <p>{item.subject}</p>
+                <p>{item.date}</p>
+              </div>
+            ),
+            right: (
+              <div id="rightListItem">
+                <p>
+                  {item.from} - {item.to}
+                </p>
+                <p>{item.marks} Marks</p>
+              </div>
+            ),
+          }}
+        </ListItem>
+      );
+
       if (currentTime.getTime() > examDate.getTime()) {
-        this.previousExamList.push(
-          <ListItem height="100px">
-            {{
-              left: (
-                <div id="leftListItem">
-                  <p>{item.name}</p>
-                  <p>{item.subject}</p>
-                  <p>{item.date}</p>
-                </div>
-              ),
-              right: (
-                <div id="rightListItem">
-                  <p>
-                    {item.from} - {item.to}
-                  </p>
-                  <p>{item.marks} Marks</p>
-                </div>
-              ),
-            }}
-          </ListItem>
-        );
-        console.log("pushed to prev");
+        previousExamList.push(newItem);
+
+        console.log("prev", previousExamList);
       } else {
-        this.examList.push(
-          <ListItem height="100px">
-            {{
-              left: (
-                <div id="leftListItem">
-                  <p>{item.name}</p>
-                  <p>{item.subject}</p>
-                  <p>{item.date}</p>
-                </div>
-              ),
-              right: (
-                <div id="rightListItem">
-                  <p>
-                    {item.from} - {item.to}
-                  </p>
-                  <p>{item.marks} Marks</p>
-                </div>
-              ),
-            }}
-          </ListItem>
-        );
-        console.log("Pushed to scheduled");
+        examList.push(newItem);
+
+        console.log("sch", examList);
       }
+    }
+    this.setState({
+      previousExamList,
+      examList,
     });
   };
 
@@ -107,7 +103,6 @@ class Teacher extends Component {
 
   componentDidMount() {
     this.setExamData();
-    this.forceUpdate();
   }
 
   render() {
@@ -157,9 +152,9 @@ class Teacher extends Component {
             {{
               leftTab: <span>SCHEDULED EXAMS</span>,
               rightTab: <span>PREVIOUS EXAMS</span>,
-              leftTabBody: <div id="leftTabBody">{this.examList}</div>,
+              leftTabBody: <div id="leftTabBody">{this.state.examList}</div>,
               rightTabBody: (
-                <div id="rightTabBody">{this.previousExamList}</div>
+                <div id="rightTabBody">{this.state.previousExamList}</div>
               ),
             }}
           </TabView>
