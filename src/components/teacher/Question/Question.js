@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Mcq from "./Mcq/Mcq";
 import "./Question.css";
 import Text from "./Text/Text";
+import Short from "./Short/Short";
 
 export default class Question extends Component {
   constructor(props) {
@@ -20,6 +21,12 @@ export default class Question extends Component {
       this.setState({
         component: (
           <Mcq question={this.props.question} index={this.props.index} />
+        ),
+      });
+    } else if (this.props.question.type == "short") {
+      this.setState({
+        component: (
+          <Short question={this.props.question} index={this.props.index} />
         ),
       });
     }
