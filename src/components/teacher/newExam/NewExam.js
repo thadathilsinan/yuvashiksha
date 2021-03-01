@@ -106,6 +106,8 @@ class NewExam extends Component {
       selectedQuestion: null,
       editSelected: false,
       mcqModalOptions: [],
+      image: "",
+      canvas: "",
     };
   }
 
@@ -260,7 +262,10 @@ class NewExam extends Component {
     } else if (questionType == "mcq") {
       this.mcqMarksRef.current.value = selectedQuestion.marks;
       this.mcqQuestionRef.current.value = selectedQuestion.question;
-      this.setState({ mcqModalOptions: selectedQuestion.options });
+      this.setState({
+        mcqModalOptions: selectedQuestion.options,
+        image: selectedQuestion.image,
+      });
     }
   };
 
@@ -357,13 +362,14 @@ class NewExam extends Component {
           this.setState({
             questions: [
               ...this.state.questions,
-              { question, marks, options, id, type },
+              { question, marks, options, id, type, image: this.state.image },
             ],
             mcqModalOptions: [],
           });
 
           this.mcqMarksRef.current.value = "";
           this.mcqQuestionRef.current.value = "";
+          this.setState({ image: "" });
         } else {
           alert("No options inserted for the question");
         }
@@ -417,13 +423,21 @@ class NewExam extends Component {
             }
           }
 
-          questions.splice(i, 0, { question, marks, options, id, type });
+          questions.splice(i, 0, {
+            question,
+            marks,
+            options,
+            id,
+            type,
+            image: this.state.image,
+          });
 
           this.setState({
             questions: [...questions],
             mcqModalOptions: [],
             editSelected: false,
             selectedQuestion: null,
+            image: "",
           });
           window.$("#mcqModal").modal("toggle");
 
@@ -445,6 +459,10 @@ class NewExam extends Component {
     let imageFile = document.getElementById("imageUpload").files[0];
     let formData = new FormData();
 
+    if (!imageFile) {
+      return alert("Please select an image");
+    }
+
     formData.append("image", imageFile);
 
     $.ajax({
@@ -454,11 +472,12 @@ class NewExam extends Component {
       processData: false,
       data: formData,
       type: "POST",
-      success: function (response) {
-        console.log(response);
+      success: (response) => {
+        this.setState({ image: response });
+        window.$("#uploadImage").modal("hide");
       },
       error: function (error) {
-        console.log(error);
+        alert("File upload error. Check file type and size");
       },
     });
   };
@@ -843,7 +862,7 @@ class NewExam extends Component {
                           data-toggle="modal"
                           data-target="#textModal"
                           onClick={() => {
-                            this.setState({ editSelected: false });
+                            this.setState({ editSelected: false, image: "" });
                           }}
                         >
                           Text
@@ -852,7 +871,7 @@ class NewExam extends Component {
                           data-toggle="modal"
                           data-target="#mcqModal"
                           onClick={() => {
-                            this.setState({ editSelected: false });
+                            this.setState({ editSelected: false, image: "" });
                           }}
                         >
                           Multiple Choice question
@@ -861,7 +880,7 @@ class NewExam extends Component {
                           data-toggle="modal"
                           data-target="#shortModal"
                           onClick={() => {
-                            this.setState({ editSelected: false });
+                            this.setState({ editSelected: false, image: "" });
                           }}
                         >
                           Short answer
@@ -870,7 +889,7 @@ class NewExam extends Component {
                           data-toggle="modal"
                           data-target="#essayModal"
                           onClick={() => {
-                            this.setState({ editSelected: false });
+                            this.setState({ editSelected: false, image: "" });
                           }}
                         >
                           Essay Question

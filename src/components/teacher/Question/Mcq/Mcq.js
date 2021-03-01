@@ -27,8 +27,15 @@ export default class Mcq extends Component {
         {this.props.index ? this.props.index + ". " : null}
         {this.props.question.question}
 
-        <div className="questionCanvas">CANVAS HERE</div>
-        <div className="questionImage">IMAGE HERE</div>
+        {this.props.question.canvas ? (
+          <div className="questionCanvas">"CANVAS HERE"</div>
+        ) : null}
+
+        {this.props.question.image ? (
+          <div className="questionImage">
+            <img src={this.props.question.image}></img>
+          </div>
+        ) : null}
 
         <div>{optionsList}</div>
       </div>
