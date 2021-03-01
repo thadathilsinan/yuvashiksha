@@ -28,7 +28,9 @@ export default class Mcq extends Component {
         {this.props.question.question}
 
         {this.props.question.canvas ? (
-          <div className="questionCanvas">"CANVAS HERE"</div>
+          <div className="questionCanvas">
+            <img src={this.props.question.canvas}></img>
+          </div>
         ) : null}
 
         {this.props.question.image ? (

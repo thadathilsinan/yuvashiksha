@@ -53,6 +53,7 @@ import configureDialogBox from "../../../shared/dailogBox";
 import $ from "jquery";
 import http from "../../../shared/http";
 import Question from "../Question/Question";
+import Canvas from "../../ui-elements/Canvas/Canvas";
 
 class NewExam extends Component {
   constructor(props) {
@@ -108,6 +109,8 @@ class NewExam extends Component {
       mcqModalOptions: [],
       image: "",
       canvas: "",
+      showCanvas: false,
+      lastOpenModal: null,
     };
   }
 
@@ -129,6 +132,7 @@ class NewExam extends Component {
           { type: "text", id: Date.now(), text },
         ],
       });
+      window.$("#textModal").modal("toggle");
     } else {
       alert("Please enter some text");
     }
@@ -265,6 +269,7 @@ class NewExam extends Component {
       this.setState({
         mcqModalOptions: selectedQuestion.options,
         image: selectedQuestion.image,
+        canvas: selectedQuestion.canvas,
       });
     }
   };
@@ -362,14 +367,24 @@ class NewExam extends Component {
           this.setState({
             questions: [
               ...this.state.questions,
-              { question, marks, options, id, type, image: this.state.image },
+              {
+                question,
+                marks,
+                options,
+                id,
+                type,
+                image: this.state.image,
+                canvas: this.state.canvas,
+              },
             ],
             mcqModalOptions: [],
           });
 
           this.mcqMarksRef.current.value = "";
           this.mcqQuestionRef.current.value = "";
-          this.setState({ image: "" });
+          this.setState({ image: "", canvas: "", editCanvas: "" });
+
+          window.$("#mcqModal").modal("hide");
         } else {
           alert("No options inserted for the question");
         }
@@ -430,6 +445,7 @@ class NewExam extends Component {
             id,
             type,
             image: this.state.image,
+            canvas: this.state.canvas,
           });
 
           this.setState({
@@ -438,6 +454,8 @@ class NewExam extends Component {
             editSelected: false,
             selectedQuestion: null,
             image: "",
+            canvas: "",
+            editCanvas: "",
           });
           window.$("#mcqModal").modal("toggle");
 
@@ -482,11 +500,49 @@ class NewExam extends Component {
     });
   };
 
+  //Clear uploaded image
+  clearUpload = () => {
+    this.setState({ image: "" });
+    window.$("#uploadImage").modal("hide");
+  };
+
+  //Open canvas
+  openCanvas = () => {
+    this.setState({
+      showCanvas: true,
+      lastOpenModal: window.$(".modal.show"),
+    });
+
+    window.$(".modal").modal("hide");
+  };
+
+  //Close canvas
+  closeCanvas = () => {
+    this.state.lastOpenModal.modal("show");
+
+    this.setState({ showCanvas: false, lastOpenModal: null });
+  };
+
+  //Save Canvas
+  saveCanvas = (image) => {
+    this.state.lastOpenModal.modal("show");
+
+    this.setState({ showCanvas: false, canvas: image, lastOpenModal: null });
+  };
+
   componentDidMount() {}
 
   render() {
     return (
       <div>
+        {/**SHOW CANVAS */}
+        {this.state.showCanvas ? (
+          <Canvas
+            close={this.closeCanvas}
+            save={this.saveCanvas}
+            image={this.state.editSelected ? this.state.canvas : undefined}
+          />
+        ) : null}
         {/* Configuring The scheduleexam */}
         {configureDialogBox(
           "scheduleexam",
@@ -671,7 +727,9 @@ class NewExam extends Component {
             <button className="btn btn-primary" onClick={this.addMcqOption}>
               Add option
             </button>
-            <button className="btn btn-primary">Canvas </button>
+            <button className="btn btn-primary" onClick={this.openCanvas}>
+              Canvas{" "}
+            </button>
             <button
               className="btn btn-primary"
               onClick={() => {
@@ -784,6 +842,15 @@ class NewExam extends Component {
                   onClick={(e) => {
                     e.preventDefault();
                     this.uploadFile();
+                  }}
+                />
+                <input
+                  type="button"
+                  value="CLEAR"
+                  className="btn btn-danger ml-1"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.clearUpload();
                   }}
                 />
               </form>

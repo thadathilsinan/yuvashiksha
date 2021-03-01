@@ -100,20 +100,30 @@ export default class Canvas extends Component {
   };
 
   erase = () => {
-    var m = window.confirm("Want to clear");
+    var m = window.confirm("Are you sure to clear?");
     if (m) {
       this.ctx.clearRect(0, 0, this.w, this.h);
-      document.getElementById("canvasimg").style.display = "none";
     }
   };
 
+  //Check if acanvas is empty
+  isCanvasBlank = (canvas) => {
+    const context = canvas.getContext("2d");
+
+    const pixelBuffer = new Uint32Array(
+      context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+    );
+
+    return !pixelBuffer.some((color) => color !== 0);
+  };
+
   save = () => {
-    document.getElementById("canvasimg").style.border = "2px solid";
     var dataURL = this.canvas.toDataURL();
-    window.location = dataURL;
-    console.log(dataURL);
-    document.getElementById("canvasimg").src = dataURL;
-    document.getElementById("canvasimg").style.display = "inline";
+    if (this.props.save) {
+      if (this.isCanvasBlank(this.canvas)) {
+        this.props.save("");
+      } else this.props.save(dataURL);
+    }
   };
 
   findxy = (res, e) => {
@@ -149,12 +159,23 @@ export default class Canvas extends Component {
 
   componentDidMount() {
     this.init();
+
+    //Load previous image if exist
+    if (this.props.image) {
+      let ctx = this.canvas.getContext("2d");
+
+      var image = new Image();
+      image.onload = function () {
+        ctx.drawImage(image, 0, 0);
+      };
+      image.src = this.props.image;
+    }
   }
 
   render() {
     return (
       <>
-        <div>
+        <div style={{ zIndex: 1000000 }}>
           <NavBar>
             {{
               left: <h4>CANVAS</h4>,
@@ -232,7 +253,12 @@ export default class Canvas extends Component {
               ),
               right: (
                 <>
-                  <button className="btn btn-danger mr-3">CLOSE</button>
+                  <button
+                    className="btn btn-danger mr-3"
+                    onClick={this.props.close}
+                  >
+                    CLOSE
+                  </button>
 
                   <button
                     type="button"
@@ -251,8 +277,6 @@ export default class Canvas extends Component {
           </NavBar>
           <div id="canvasDiv">
             <canvas id="can"></canvas>
-
-            <img id="canvasimg" style={{ display: "none" }} />
           </div>
         </div>
       </>
