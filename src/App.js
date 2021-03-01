@@ -11,6 +11,7 @@ import { store } from "./store/store";
 import React from "react";
 
 import $ from "jquery";
+import Canvas from "./components/ui-elements/Canvas/Canvas";
 
 class App extends React.Component {
   componentDidMount() {
@@ -43,7 +44,9 @@ class App extends React.Component {
 
             {/* //Test route for development purposes */}
             <Route path="/test">
-              <></>
+              <>
+                <Canvas />
+              </>
             </Route>
           </div>
         </Provider>

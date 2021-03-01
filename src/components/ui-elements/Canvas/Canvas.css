@@ -1,0 +1,19 @@
+#canvasDiv {
+  width: 100vw;
+  height: calc(100vh - 80px);
+
+  background-color: white;
+}
+
+.colorBox {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+  border: 2px solid white;
+}
+
+#can {
+  width: 100%;
+  height: 400;
+  border: 2px solid black;
+}
