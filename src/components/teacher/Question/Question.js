@@ -3,6 +3,7 @@ import Mcq from "./Mcq/Mcq";
 import "./Question.css";
 import Text from "./Text/Text";
 import Short from "./Short/Short";
+import Essay from "./Essay/Essay";
 
 export default class Question extends Component {
   constructor(props) {
@@ -27,6 +28,12 @@ export default class Question extends Component {
       this.setState({
         component: (
           <Short question={this.props.question} index={this.props.index} />
+        ),
+      });
+    } else if (this.props.question.type == "essay") {
+      this.setState({
+        component: (
+          <Essay question={this.props.question} index={this.props.index} />
         ),
       });
     }

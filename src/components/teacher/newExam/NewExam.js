@@ -124,6 +124,9 @@ class NewExam extends Component {
   shortMarksRef = React.createRef();
   shortQuestionRef = React.createRef();
 
+  essayMarksRef = React.createRef();
+  essayQuestionRef = React.createRef();
+
   //Add a new Text into questions
   addNewText = () => {
     let text = this.newTextRef.current.value;
@@ -277,6 +280,13 @@ class NewExam extends Component {
     } else if (questionType == "short") {
       this.shortMarksRef.current.value = selectedQuestion.marks;
       this.shortQuestionRef.current.value = selectedQuestion.question;
+      this.setState({
+        image: selectedQuestion.image,
+        canvas: selectedQuestion.canvas,
+      });
+    } else if (questionType == "essay") {
+      this.essayMarksRef.current.value = selectedQuestion.marks;
+      this.essayQuestionRef.current.value = selectedQuestion.question;
       this.setState({
         image: selectedQuestion.image,
         canvas: selectedQuestion.canvas,
@@ -630,6 +640,96 @@ class NewExam extends Component {
     }
   };
 
+  //Add a new Essay question
+  addEssay = () => {
+    let question = this.essayQuestionRef.current.value;
+    let marks = this.essayMarksRef.current.value;
+    let id = Date.now();
+    let type = "essay";
+
+    if (question) {
+      if (marks) {
+        //Validation success
+
+        //Adding new Question
+        this.setState({
+          questions: [
+            ...this.state.questions,
+            {
+              question,
+              marks,
+              id,
+              type,
+              image: this.state.image,
+              canvas: this.state.canvas,
+            },
+          ],
+        });
+
+        this.essayMarksRef.current.value = "";
+        this.essayQuestionRef.current.value = "";
+        this.setState({ image: "", canvas: "" });
+
+        window.$("#essayModal").modal("hide");
+      } else {
+        alert("Please enter marks");
+      }
+    } else {
+      alert("Please enter question");
+    }
+  };
+
+  //Edit existing essay question
+  editEssay = () => {
+    let question = this.essayQuestionRef.current.value;
+    let marks = this.essayMarksRef.current.value;
+    let id = Date.now();
+    let type = "essay";
+
+    let questions = [...this.state.questions];
+
+    if (question) {
+      if (marks) {
+        //Validation success
+
+        //Editing Question
+        let i = 0;
+        for (i in questions) {
+          if (questions[i].id == this.state.selectedQuestion) {
+            questions.splice(i, 1);
+
+            break;
+          }
+        }
+
+        questions.splice(i, 0, {
+          question,
+          marks,
+          id,
+          type,
+          image: this.state.image,
+          canvas: this.state.canvas,
+        });
+
+        this.setState({
+          questions: [...questions],
+          editSelected: false,
+          selectedQuestion: null,
+          image: "",
+          canvas: "",
+        });
+        window.$("#essayModal").modal("toggle");
+
+        this.essayMarksRef.current.value = "";
+        this.essayQuestionRef.current.value = "";
+      } else {
+        alert("Please enter marks");
+      }
+    } else {
+      alert("Please enter question");
+    }
+  };
+
   componentDidMount() {}
 
   render() {
@@ -909,19 +1009,21 @@ class NewExam extends Component {
           <>
             <form>
               <label className="black mr-3" for="mcq">
-                Enter Question:{" "}
+                Enter Question:
               </label>
               <input
                 type="text"
                 name="short"
                 id="short"
+                ref={this.essayQuestionRef}
                 className="mr-3 form-control from-control-lg"
               ></input>
               <br />
               <label className="black" for="mcq">
-                Mark:{" "}
+                Mark:
               </label>
               <input
+                ref={this.essayMarksRef}
                 type="number"
                 name="mark"
                 id="mark"
@@ -931,10 +1033,23 @@ class NewExam extends Component {
             </form>
           </>,
           <>
-            <button className="btn btn-primary">Canvas </button>
-            <button className="btn btn-primary">Upload</button>
-            <button className="btn btn-primary">Cancel</button>
-            <button className="btn btn-primary">OK</button>
+            <button className="btn btn-primary" onClick={this.openCanvas}>
+              Canvas
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                window.$("#uploadImage").modal("show");
+              }}
+            >
+              Upload
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={this.state.editSelected ? this.editEssay : this.addEssay}
+            >
+              OK
+            </button>
           </>
         )}
         <div>
