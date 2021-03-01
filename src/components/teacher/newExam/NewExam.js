@@ -1,42 +1,3 @@
-// [
-// 	{
-// 		id: 123,
-// 		type: “text”,
-// 		text: “Content here”
-// 	},
-// 	{
-// 		id: 345,
-// 		type: “mcq”,
-// 		question: “question text here”,
-// 		marks: 1,
-// 		allowMultipleSelection: true,
-// 		image: ObjectId(ASSETS),
-// 		canvas: ObjectId(ASSETS),
-// 		options: [
-// 			{
-// 				name: “option 1”,
-// 				correct: true
-// 			}
-// 		]
-// 	},
-// 	{
-// 		id: 211,
-// 		type: “short”,
-// 		marks: 2,
-// 		question: “Question here”,
-// 		image: ObjectId(ASSETS),
-// 		canvas: ObjectId(ASSETS)
-// 	},
-// 	{
-// 		id: 1212,
-// 		type: “essay”,
-// 		question: “Question Here”,
-// 		marks: 10,
-// 		canvas: ObjectId(ASSETS),
-// 		image: ObjectId(ASSETS)
-// 	}
-// ]
-
 import React, { Component } from "react";
 import NavBar from "../../ui-elements/navBar/NavBar";
 import "./NewExam.css";
@@ -61,47 +22,47 @@ class NewExam extends Component {
     this.state = {
       questions: [
         {
-          id: 123,
+          id: 1,
           type: "text",
-          text: "Content here",
+          text: "YOU CAN INSERT SOME INFORMATION TEXT LIKE THIS",
         },
         {
-          id: 345,
+          id: 2,
           type: "mcq",
-          question: "question text here",
+          question: "YOUR MULTIPLE CHOICE QUESTION HERE",
           marks: 1,
-          image: null, //ObjectId(ASSETS),
-          canvas: null, //ObjectId(ASSETS),
+          image: null,
+          canvas: null,
           options: [
             {
-              name: "option 1",
+              name: "OPTION 1",
               correct: true,
             },
             {
-              name: "option 2",
+              name: "OPTION 2",
               correct: false,
             },
             {
-              name: "option 3",
+              name: "OPTION 3",
               correct: false,
             },
           ],
         },
         {
-          id: 211,
+          id: 3,
           type: "short",
           marks: 2,
-          question: "Question here",
-          image: null, //ObjectId(ASSETS),
-          canvas: null, //ObjectId(ASSETS)
+          question: "YOUR SHORT ANSWER TYPE QUESTION HERE",
+          image: null,
+          canvas: null,
         },
         {
-          id: 1212,
+          id: 4,
           type: "essay",
-          question: "Question Here",
+          question: "YOUR ESSAY TYPE QUESTION HERE",
           marks: 10,
-          canvas: null, //ObjectId(ASSETS),
-          image: null, //ObjectId(ASSETS)
+          canvas: null,
+          image: null,
         },
       ],
       selectedQuestion: null,
@@ -126,6 +87,16 @@ class NewExam extends Component {
 
   essayMarksRef = React.createRef();
   essayQuestionRef = React.createRef();
+
+  //When scheduling exam
+  examNameRef = React.createRef();
+  subjectRef = React.createRef();
+  timeFromRef = React.createRef();
+  timeToRef = React.createRef();
+  dateRef = React.createRef();
+  marksRef = React.createRef();
+  classRef = React.createRef();
+  batchRef = React.createRef();
 
   //Add a new Text into questions
   addNewText = () => {
@@ -730,6 +701,15 @@ class NewExam extends Component {
     }
   };
 
+  //Open the schedule exam modal
+  openScheduleExam = () => {
+    if (this.state.questions.length > 0) {
+      window.$("#scheduleexam").modal("toggle");
+    } else {
+      alert("Please insert atleast one question");
+    }
+  };
+
   componentDidMount() {}
 
   render() {
@@ -750,60 +730,86 @@ class NewExam extends Component {
           <>
             <Row>
               <Col>
-                <Form.Label className="text-dark">Exam name</Form.Label>
-              </Col>
-              <Col>
-                <Form.Control size="lg" type="text" placeholder="Exam name" />
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <Form.Label className="text-dark">Subject</Form.Label>
-              </Col>
-              <Col>
-                <Form.Control size="lg" type="text" placeholder="Subject" />
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <Form.Label className="text-dark">Time</Form.Label>
-              </Col>
-
-              <Col>
-                <Form.Label className="text-dark">FROM</Form.Label>
-              </Col>
-              <Col>
-                <Form.Control size="lg" type="text" placeholder="FROM" />
-              </Col>
-              <Col>
-                <Form.Label className="text-dark">TO</Form.Label>
-              </Col>
-              <Col>
-                <Form.Control size="lg" type="text" placeholder="TO" />
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <Form.Label className="text-dark">Date</Form.Label>
-              </Col>
-              <Col>
-                <Form.Control size="lg" type="text" placeholder="Date" />
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <Form.Label className="text-dark">Mark</Form.Label>
-              </Col>
-              <Col>
-                <Form.Control size="lg" type="text" placeholder="Mark" />
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <Form.Label className="text-dark">Class</Form.Label>
+                <Form.Label className="text-dark">EXAM NAME</Form.Label>
               </Col>
               <Col>
                 <Form.Control
+                  ref={this.examNameRef}
+                  type="text"
+                  placeholder="Exam name"
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <Form.Label className="text-dark">SUBJECT</Form.Label>
+              </Col>
+              <Col>
+                <Form.Control
+                  ref={this.subjectRef}
+                  type="text"
+                  placeholder="Subject"
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <Form.Label className="text-dark">TIME</Form.Label>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Label className="text-dark">From</Form.Label>
+              </Col>
+              <Col>
+                <Form.Control
+                  ref={this.timeFromRef}
+                  type="time"
+                  placeholder="FROM"
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Label ref={this.timeToRef} className="text-dark">
+                  To
+                </Form.Label>
+              </Col>
+              <Col>
+                <Form.Control type="time" placeholder="TO" />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <Form.Label className="text-dark">DATE</Form.Label>
+              </Col>
+              <Col>
+                <Form.Control
+                  ref={this.dateRef}
+                  type="date"
+                  placeholder="Date"
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <Form.Label className="text-dark">TOTAL MARKS</Form.Label>
+              </Col>
+              <Col>
+                <Form.Control
+                  ref={this.marksRef}
+                  type="number"
+                  placeholder="Mark"
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <Form.Label className="text-dark">CLASS</Form.Label>
+              </Col>
+              <Col>
+                <Form.Control
+                  ref={this.classRef}
                   as="select"
                   className="my-1 mr-sm-2"
                   id="inlineFormCustomSelectPref"
@@ -816,10 +822,11 @@ class NewExam extends Component {
                 </Form.Control>
               </Col>
               <Col>
-                <Form.Label className="text-dark">Batch</Form.Label>
+                <Form.Label className="text-dark">BATCH</Form.Label>
               </Col>
               <Col>
                 <Form.Control
+                  ref={this.batchRef}
                   as="select"
                   className="my-1 mr-sm-2"
                   id="inlineFormCustomSelectPref"
@@ -834,7 +841,6 @@ class NewExam extends Component {
             </Row>
           </>,
           <>
-            {" "}
             <button variant="light" className="btn btn-primary">
               Cancel
             </button>
@@ -1194,16 +1200,12 @@ class NewExam extends Component {
                       </Dropdown.Menu>
                     </Dropdown>
                   </Col>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#scheduleexam"
-                    style={{ color: "white" }}
+                  <Button
+                    className="btn btn-success ml-3"
+                    onClick={this.openScheduleExam}
                   >
-                    <Button className="btn btn-success ml-3">
-                      <BsCheck />
-                    </Button>
-                  </a>
+                    <BsCheck />
+                  </Button>
                 </Row>
               </div>
             ),

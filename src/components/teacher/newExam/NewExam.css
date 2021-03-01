@@ -17,6 +17,8 @@ h5 {
 #newExamBody {
   height: calc(100vh - 80px);
   overflow: auto;
+
+  background-color: rgb(217, 237, 255);
 }
 
 #emptyQuestion {
