@@ -51,6 +51,7 @@ import {
 import { Button, Modal, Form, Row, Col, Dropdown } from "react-bootstrap";
 import configureDialogBox from "../../../shared/dailogBox";
 import $ from "jquery";
+import http from "../../../shared/http";
 import Question from "../Question/Question";
 
 class NewExam extends Component {
@@ -439,6 +440,29 @@ class NewExam extends Component {
     }
   };
 
+  //File upload
+  uploadFile = () => {
+    let imageFile = document.getElementById("imageUpload").files[0];
+    let formData = new FormData();
+
+    formData.append("image", imageFile);
+
+    $.ajax({
+      url: "http://localhost:4000/upload",
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: formData,
+      type: "POST",
+      success: function (response) {
+        console.log(response);
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  };
+
   componentDidMount() {}
 
   render() {
@@ -629,7 +653,14 @@ class NewExam extends Component {
               Add option
             </button>
             <button className="btn btn-primary">Canvas </button>
-            <button className="btn btn-primary">Upload</button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                window.$("#uploadImage").modal("show");
+              }}
+            >
+              Upload
+            </button>
             <button
               className="btn btn-primary"
               onClick={
@@ -714,6 +745,32 @@ class NewExam extends Component {
             <button className="btn btn-primary">OK</button>
           </>
         )}
+        <div>
+          {configureDialogBox(
+            "uploadImage",
+            "Upload Image",
+            <>
+              <form
+                // action="http://localhost:4000/upload"
+                enctype="multipart/form-data"
+                // method="post"
+              >
+                <p>MAX FILE SIZE (5MB)</p>
+                <p>Only .jpg, .jpeg, .png files supported</p>
+                <input type="file" id="imageUpload" name="image" />
+                <input
+                  type="button"
+                  value="UPLOAD"
+                  className="btn btn-primary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.uploadFile();
+                  }}
+                />
+              </form>
+            </>
+          )}
+        </div>
         <NavBar>
           {{
             left: (
