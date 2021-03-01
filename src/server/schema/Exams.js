@@ -7,22 +7,22 @@ const ExamSchema = new Schema({
     required: true,
   },
   subject: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
   },
   from: {
-    type: Date,
+    type: String,
     required: true,
   },
   to: {
-    type: Date,
+    type: String,
     required: true,
   },
-  class: {
+  Class: {
     type: Schema.Types.ObjectId,
     ref: "Class",
   },
@@ -30,7 +30,7 @@ const ExamSchema = new Schema({
     type: Number,
     required: true,
   },
-  questionpaper: {
+  questionPaper: {
     type: Array,
     required: true,
   },
@@ -40,5 +40,5 @@ const ExamSchema = new Schema({
     required: true,
   },
 });
-let Exam = mongoose.model("Exam", ExamsSchema);
+let Exam = mongoose.model("Exam", ExamSchema);
 module.exports = Exam;

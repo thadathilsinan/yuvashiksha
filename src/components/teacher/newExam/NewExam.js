@@ -15,6 +15,7 @@ import $ from "jquery";
 import http from "../../../shared/http";
 import Question from "../Question/Question";
 import Canvas from "../../ui-elements/Canvas/Canvas";
+import { withRouter } from "react-router-dom";
 
 class NewExam extends Component {
   constructor(props) {
@@ -72,6 +73,9 @@ class NewExam extends Component {
       canvas: "",
       showCanvas: false,
       lastOpenModal: null,
+      classList: {},
+      classOptions: null,
+      batchOptions: null,
     };
   }
 
@@ -704,13 +708,156 @@ class NewExam extends Component {
   //Open the schedule exam modal
   openScheduleExam = () => {
     if (this.state.questions.length > 0) {
+      let marks = 0;
+
+      //Setting total marks automatically
+      for (let question of this.state.questions) {
+        if (question.marks) {
+          marks += question.marks;
+        }
+      }
+
+      this.marksRef.current.value = marks;
       window.$("#scheduleexam").modal("toggle");
     } else {
       alert("Please insert atleast one question");
     }
   };
 
-  componentDidMount() {}
+  //Get Class data from the database (SCHEDULE EXAM)
+  getClasses = () => {
+    http("GET", "/login/getclasses", {}, (res) => {
+      if (res.status == 200) {
+        this.setState({ classList: res.data });
+        this.setupClassOptions();
+      }
+    });
+  };
+
+  //Setup the options for the <select> for classes (SCHEDULE EXAM)
+  setupClassOptions = () => {
+    //Options JSX
+    let options = [];
+
+    options = Object.keys(this.state.classList).map((key, array) => {
+      return (
+        <>
+          <option value={key}>{key}</option>
+        </>
+      );
+    });
+
+    //Setting class list options to display
+    this.setState({ classOptions: options });
+  };
+
+  //Setup the options for the <select> for batches based on the selected Class (SCHEDULE EXAM)
+  setupBatchOptions = () => {
+    //Currently selected class
+    let Class = this.classRef.current.value;
+
+    //Getting batches of the selected class
+    let batches = this.state.classList[Class].batches;
+
+    let options = batches.map((batch, index, array) => {
+      return (
+        <>
+          <option value={batch}>{batch}</option>
+        </>
+      );
+    });
+
+    //Setting options as state to diaplay it in screen
+    this.setState({ batchOptions: options });
+  };
+
+  //Schedule a new Exam
+  scheduleExam = () => {
+    let examName = this.examNameRef.current.value;
+    let subject = this.subjectRef.current.value;
+    let timeFrom = this.timeFromRef.current.value;
+    let timeTo = this.timeToRef.current.value;
+    let date = this.dateRef.current.value;
+    let marks = this.marksRef.current.value;
+    let Class = this.classRef.current.value;
+    let batch = this.batchRef.current.value;
+
+    console.log(timeFrom, timeTo, date, marks, Class, batch);
+
+    if (!examName) {
+      return alert("Please Enter exam name");
+    }
+
+    if (!subject) {
+      return alert("Please Enter subject name");
+    }
+
+    if (!timeFrom) {
+      return alert("Please Enter exam start time");
+    }
+
+    if (!timeTo) {
+      return alert("Please Enter exam end time");
+    }
+
+    if (!date) {
+      return alert("Please Enter date of exam");
+    }
+
+    if (!marks || marks == 0) {
+      return alert("Invalid total marks");
+    }
+
+    if (!Class || !batch) {
+      return alert("Class or batch data incorrect");
+    }
+
+    //Validate time
+    let timeFromObject = new Date("1970-01-01 " + timeFrom);
+    let timeToObject = new Date("1970-01-01 " + timeTo);
+
+    if (timeFromObject.getTime() >= timeToObject.getTime()) {
+      return alert("Invalid time!");
+    }
+
+    //Validate date
+    let dateObject = new Date(date + " " + timeFrom);
+    let now = new Date();
+
+    if (dateObject.getTime() <= now.getTime()) {
+      return alert("Invalid date");
+    }
+
+    //VALIDATION SUCCESS
+    //Send data to server
+    http(
+      "POST",
+      "/teacher/newexam",
+      {
+        examName,
+        subject,
+        timeFrom,
+        timeTo,
+        date,
+        marks,
+        Class,
+        batch,
+        questions: this.state.questions,
+      },
+      (res) => {
+        alert(res.data);
+
+        if (res.status == 200) {
+          window.$(".modal.show").modal("hide");
+          this.props.history.push("/teacher");
+        }
+      }
+    );
+  };
+
+  componentDidMount() {
+    this.getClasses();
+  }
 
   render() {
     return (
@@ -771,12 +918,14 @@ class NewExam extends Component {
             </Row>
             <Row>
               <Col>
-                <Form.Label ref={this.timeToRef} className="text-dark">
-                  To
-                </Form.Label>
+                <Form.Label className="text-dark">To</Form.Label>
               </Col>
               <Col>
-                <Form.Control type="time" placeholder="TO" />
+                <Form.Control
+                  ref={this.timeToRef}
+                  type="time"
+                  placeholder="TO"
+                />
               </Col>
             </Row>
             <Row className="mt-2">
@@ -799,7 +948,8 @@ class NewExam extends Component {
                 <Form.Control
                   ref={this.marksRef}
                   type="number"
-                  placeholder="Mark"
+                  placeholder="Marks"
+                  disabled
                 />
               </Col>
             </Row>
@@ -813,12 +963,16 @@ class NewExam extends Component {
                   as="select"
                   className="my-1 mr-sm-2"
                   id="inlineFormCustomSelectPref"
+                  onChange={() => {
+                    //Setup batch details based on the selected class
+                    this.setupBatchOptions();
+                  }}
                   custom
                 >
-                  <option value="0">Choose...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option value="" selected>
+                    --CLASS--
+                  </option>
+                  {this.state.classOptions}
                 </Form.Control>
               </Col>
               <Col>
@@ -832,20 +986,21 @@ class NewExam extends Component {
                   id="inlineFormCustomSelectPref"
                   custom
                 >
-                  <option value="0">Choose...</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option value="" selected>
+                    --BATCH--
+                  </option>
+                  {this.state.batchOptions}
                 </Form.Control>
               </Col>
             </Row>
           </>,
           <>
-            <button variant="light" className="btn btn-primary">
-              Cancel
-            </button>
-            <button variant="light" className="btn btn-primary">
-              Ok
+            <button
+              variant="light"
+              className="btn btn-primary"
+              onClick={this.scheduleExam}
+            >
+              CREATE EXAM
             </button>
           </>
         )}
@@ -1230,4 +1385,4 @@ class NewExam extends Component {
   }
 }
 
-export default NewExam;
+export default withRouter(NewExam);
