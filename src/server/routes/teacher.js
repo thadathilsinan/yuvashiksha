@@ -74,4 +74,53 @@ router.post("/newexam", async (req, res, next) => {
   }
 });
 
+//Return exam data
+router.post("/getexams", async (req, res, next) => {
+  let exams = await Exams.find({});
+
+  let responseObject = [];
+
+  for (let e of exams) {
+    let exam = { ...e };
+
+    let Class = await Classes.findOne({ _id: e.Class });
+
+    if (Class) {
+      exam.Class = Class.name;
+      exam.batch = Class.batch;
+    } else {
+      res.statusCode = 203;
+      res.end("Error: Class not found");
+      return;
+    }
+    responseObject.push(exam);
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
+//return class information for Teacher Home page
+router.get("/getclasses", async (req, res, next) => {
+  let classes = await Classes.find({});
+
+  //Object with name of class as key and other data inside that key as object
+  let responseObject = {};
+
+  for (Class of classes) {
+    responseObject[Class.name] = {};
+    responseObject[Class.name].batches = [];
+
+    //Getting other batches of the same class
+    for (sameClass of classes) {
+      if (sameClass.name == Class.name) {
+        responseObject[Class.name].batches.push(sameClass.batch);
+      }
+    }
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
 module.exports = router;
