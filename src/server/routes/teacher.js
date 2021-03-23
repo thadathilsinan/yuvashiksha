@@ -76,28 +76,17 @@ router.post("/newexam", async (req, res, next) => {
 
 //Return exam data
 router.post("/getexams", async (req, res, next) => {
-  let exams = await Exams.find({});
+  //Find the class to which the exam data need to be extracted
+  let Class = await Classes.findOne({
+    department: req.user.department,
+    name: req.body.Class,
+    batch: req.body.batch,
+  });
 
-  let responseObject = [];
-
-  for (let e of exams) {
-    let exam = { ...e };
-
-    let Class = await Classes.findOne({ _id: e.Class });
-
-    if (Class) {
-      exam.Class = Class.name;
-      exam.batch = Class.batch;
-    } else {
-      res.statusCode = 203;
-      res.end("Error: Class not found");
-      return;
-    }
-    responseObject.push(exam);
-  }
+  let exams = await Exams.find({ Class, teacher: req.user._id });
 
   res.statusCode = 200;
-  res.json(responseObject);
+  res.json(exams);
 });
 
 //return class information for Teacher Home page

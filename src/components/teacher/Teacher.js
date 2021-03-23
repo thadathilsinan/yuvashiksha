@@ -35,8 +35,8 @@ class Teacher extends Component {
     console.log("triggered");
 
     let currentTime = new Date();
-    let previousExamList = [...this.state.previousExamList];
-    let examList = [...this.state.examList];
+    let previousExamList = [];
+    let examList = [];
 
     for (let item of this.state.examData) {
       let examDate = new Date(`${item.date},${item.to}`);
@@ -46,7 +46,7 @@ class Teacher extends Component {
           {{
             left: (
               <div id="leftListItem">
-                <p>Exam Name: {item.name}</p>
+                <p>Exam Name: {item.examName}</p>
                 <p>Subject: {item.subject}</p>
                 <p>Date: {item.date}</p>
               </div>
@@ -56,7 +56,7 @@ class Teacher extends Component {
                 <p>
                   Time: {item.from} - {item.to}
                 </p>
-                <p>{item.marks} Marks</p>
+                <p>{item.totalMarks} Marks</p>
               </div>
             ),
           }}
@@ -86,11 +86,17 @@ class Teacher extends Component {
 
   //Get exam data from server
   getExamData = () => {
-    http("POST", "/teacher/getexams", {}, (res) => {
-      this.setState({ examData: res.data });
-
-      this.setExamData();
-    });
+    http(
+      "POST",
+      "/teacher/getexams",
+      {
+        Class: this.classRef.current.value,
+        batch: this.batchRef.current.value,
+      },
+      (res) => {
+        this.setState({ examData: res.data }, this.setExamData);
+      }
+    );
   };
 
   //Get class informations
@@ -114,7 +120,7 @@ class Teacher extends Component {
 
     options = Object.keys(this.state.classes).map((key, array) => {
       return (
-        <option key={key} value={key}>
+        <option key={Date.now() + key} value={key}>
           {key}
         </option>
       );
@@ -136,7 +142,7 @@ class Teacher extends Component {
 
     let options = batches.map((batch, index, array) => {
       return (
-        <option key={batch} value={batch}>
+        <option key={Date.now() + batch} value={batch}>
           {batch}
         </option>
       );
@@ -148,6 +154,8 @@ class Teacher extends Component {
 
   //onChange handler for class <select>
   classChanged = (event) => {
+    this.batchRef.current.value = "";
+
     this.setupBatchOptions();
 
     this.checkClassSelected();
@@ -162,14 +170,15 @@ class Teacher extends Component {
   checkClassSelected = () => {
     if (this.classRef.current.value && this.batchRef.current.value) {
       this.setState({ showEmpty: false });
+      this.getExamData();
     } else {
       this.setState({ showEmpty: true });
     }
   };
 
   componentDidMount() {
+    this.checkClassSelected();
     this.getClasses();
-    this.getExamData();
   }
 
   render() {
