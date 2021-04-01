@@ -1317,7 +1317,11 @@ class NewExam extends Component {
                 >
                   {"<"}
                 </Button>
-                <h5>CREATE QUESTION PAPER</h5>
+                <h5>
+                  {this.props.exam
+                    ? "EDIT QUESTION PAPER"
+                    : "CREATE QUESTION PAPER"}
+                </h5>
               </div>
             ),
             right: (
