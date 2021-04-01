@@ -102,6 +102,21 @@ class NewExam extends Component {
   classRef = React.createRef();
   batchRef = React.createRef();
 
+  //This is used when editiong an existing exam that is already scheduled
+  setUpProps = () => {
+    if (this.props.exam) {
+      this.classRef.current.value = this.props.Class;
+      this.setState({ questions: this.props.exam.questionPaper }, () => {
+        this.examNameRef.current.value = this.props.exam.examName;
+        this.subjectRef.current.value = this.props.exam.subject;
+        this.timeFromRef.current.value = this.props.exam.from;
+        this.timeToRef.current.value = this.props.exam.to;
+        this.dateRef.current.value = this.props.exam.date;
+        this.marksRef.current.value = this.props.exam.totalMarks;
+      });
+    }
+  };
+
   //Add a new Text into questions
   addNewText = () => {
     let text = this.newTextRef.current.value;
@@ -707,13 +722,19 @@ class NewExam extends Component {
 
   //Open the schedule exam modal
   openScheduleExam = () => {
+    //Checking if editExam mode or not
+    if (this.props.exam) {
+      this.classRef.current.value = this.props.Class;
+      this.batchRef.current.value = this.props.batch;
+    }
+
     if (this.state.questions.length > 0) {
       let marks = 0;
 
       //Setting total marks automatically
       for (let question of this.state.questions) {
         if (question.marks) {
-          marks += question.marks;
+          marks += parseInt(question.marks);
         }
       }
 
@@ -728,8 +749,10 @@ class NewExam extends Component {
   getClasses = () => {
     http("GET", "/login/getclasses", {}, (res) => {
       if (res.status == 200) {
-        this.setState({ classList: res.data });
-        this.setupClassOptions();
+        this.setState({ classList: res.data }, () => {
+          this.setupClassOptions();
+          this.setUpProps();
+        });
       }
     });
   };
@@ -748,7 +771,10 @@ class NewExam extends Component {
     });
 
     //Setting class list options to display
-    this.setState({ classOptions: options });
+    this.setState({ classOptions: options }, () => {
+      this.setUpProps();
+      this.setupBatchOptions();
+    });
   };
 
   //Setup the options for the <select> for batches based on the selected Class (SCHEDULE EXAM)
@@ -781,8 +807,6 @@ class NewExam extends Component {
     let marks = this.marksRef.current.value;
     let Class = this.classRef.current.value;
     let batch = this.batchRef.current.value;
-
-    console.log(timeFrom, timeTo, date, marks, Class, batch);
 
     if (!examName) {
       return alert("Please Enter exam name");
@@ -829,30 +853,61 @@ class NewExam extends Component {
     }
 
     //VALIDATION SUCCESS
-    //Send data to server
-    http(
-      "POST",
-      "/teacher/newexam",
-      {
-        examName,
-        subject,
-        timeFrom,
-        timeTo,
-        date,
-        marks,
-        Class,
-        batch,
-        questions: this.state.questions,
-      },
-      (res) => {
-        alert(res.data);
 
-        if (res.status == 200) {
-          window.$(".modal.show").modal("hide");
-          this.props.history.push("/teacher");
+    if (this.props.exam) {
+      //EDIT MODE==EDIT EXISTING EXAM
+      console.log(this.props.exam);
+      http(
+        "POST",
+        "/teacher/editexam",
+        {
+          examName,
+          subject,
+          timeFrom,
+          timeTo,
+          date,
+          marks,
+          Class,
+          batch,
+          questions: this.state.questions,
+          id: this.props.exam._id,
+        },
+        (res) => {
+          alert(res.data);
+
+          if (res.status == 200) {
+            window.$(".modal.show").modal("hide");
+            this.props.history.push("/teacher");
+          }
         }
-      }
-    );
+      );
+    } else {
+      //CREATE NEW EXAM
+      //Send data to server
+      http(
+        "POST",
+        "/teacher/newexam",
+        {
+          examName,
+          subject,
+          timeFrom,
+          timeTo,
+          date,
+          marks,
+          Class,
+          batch,
+          questions: this.state.questions,
+        },
+        (res) => {
+          alert(res.data);
+
+          if (res.status == 200) {
+            window.$(".modal.show").modal("hide");
+            this.props.history.push("/teacher");
+          }
+        }
+      );
+    }
   };
 
   componentDidMount() {
@@ -1000,7 +1055,7 @@ class NewExam extends Component {
               className="btn btn-primary"
               onClick={this.scheduleExam}
             >
-              CREATE EXAM
+              {this.props.exam ? "EDIT EXAM" : "CREATE EXAM"}
             </button>
           </>
         )}
@@ -1257,7 +1312,7 @@ class NewExam extends Component {
                   className="btn btn-primary mr-3"
                   size="sm"
                   onClick={() => {
-                    window.history.back();
+                    this.props.history.push("/teacher");
                   }}
                 >
                   {"<"}

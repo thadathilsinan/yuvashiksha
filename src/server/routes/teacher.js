@@ -74,6 +74,44 @@ router.post("/newexam", async (req, res, next) => {
   }
 });
 
+//Edit an existing exam data
+router.post("/editexam", async (req, res, next) => {
+  let exam = await Exams.findOne({ _id: req.body.id });
+
+  if (exam) {
+    exam.examName = req.body.examName;
+    exam.subject = req.body.subject;
+    exam.from = req.body.timeFrom;
+    exam.to = req.body.timeTo;
+    exam.date = req.body.date;
+    exam.totalMarks = req.body.marks;
+    exam.questionPaper = req.body.questions;
+    exam.teacher = req.user.id;
+
+    //Setting class data
+    let Class = await Classes.findOne({
+      name: req.body.Class,
+      batch: req.body.batch,
+    });
+
+    if (Class) {
+      exam.Class = Class._id;
+
+      //Saving new Exam
+      await exam.save();
+
+      res.statusCode = 200;
+      res.end("Exam successfully edited");
+    } else {
+      res.statusCode = 203;
+      res.end("Class data is not found");
+    }
+  } else {
+    res.statusCode = 203;
+    res.end("Old Exam data is not found");
+  }
+});
+
 //Return exam data
 router.post("/getexams", async (req, res, next) => {
   //Find the class to which the exam data need to be extracted

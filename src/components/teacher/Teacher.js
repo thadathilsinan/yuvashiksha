@@ -23,6 +23,7 @@ class Teacher extends Component {
       classOptions: null,
       batchOptions: null,
       showEmpty: true,
+      editExam: null,
     };
   }
 
@@ -32,8 +33,6 @@ class Teacher extends Component {
 
   //Set list view of the exams
   setExamData = () => {
-    console.log("triggered");
-
     let currentTime = new Date();
     let previousExamList = [];
     let examList = [];
@@ -42,7 +41,13 @@ class Teacher extends Component {
       let examDate = new Date(`${item.date},${item.to}`);
 
       let newItem = (
-        <ListItem height="100px" key={item._id}>
+        <ListItem
+          height="100px"
+          key={item._id}
+          onClick={() => {
+            this.examListClickListener(item._id);
+          }}
+        >
           {{
             left: (
               <div id="leftListItem">
@@ -168,12 +173,45 @@ class Teacher extends Component {
 
   //Check if both class and batch is selected or not
   checkClassSelected = () => {
-    if (this.classRef.current.value && this.batchRef.current.value) {
+    if (
+      this.classRef.current &&
+      this.classRef.current.value &&
+      this.batchRef.current.value
+    ) {
       this.setState({ showEmpty: false });
       this.getExamData();
     } else {
       this.setState({ showEmpty: true });
     }
+  };
+
+  //When an exam list item is clicked
+  examListClickListener = (examId) => {
+    let examItem;
+
+    //Get exam data of the selected list item
+    for (let exam of this.state.examData) {
+      if (exam._id === examId) {
+        examItem = exam;
+      }
+    }
+
+    //Checking previous or scheduled exam
+    let examDate = new Date(`${examItem.date},${examItem.to}`);
+    let currentTime = new Date();
+
+    if (currentTime.getTime() > examDate.getTime()) {
+      console.log("Previous Exam");
+    } else {
+      this.openEditExam(examItem);
+    }
+  };
+
+  //Open edit exam page
+  openEditExam = (examData) => {
+    this.setState({ editExam: examData }, () => {
+      this.props.history.push("/teacher/editExam");
+    });
   };
 
   componentDidMount() {
@@ -227,7 +265,9 @@ class Teacher extends Component {
             }}
           </NavBar>
           {/* Check if the BATCH and Class are selected or not */}
-          {this.state.showEmpty ? (
+          {this.state.showEmpty ||
+          this.batchRef.current == null ||
+          this.batchRef.current.value == null ? (
             <>
               <center style={{ color: "red" }}>
                 PLEASE SELECT A CLASS AND BATCH
@@ -255,6 +295,15 @@ class Teacher extends Component {
         </Route>
         <Route path="/teacher/newexam">
           <NewExam />
+        </Route>
+        <Route path="/teacher/editexam">
+          {this.state.editExam ? (
+            <NewExam
+              exam={this.state.editExam}
+              Class={this.classRef.current ? this.classRef.current.value : null}
+              batch={this.classRef.current ? this.batchRef.current.value : null}
+            />
+          ) : null}
         </Route>
         <Route path="/teacher/profile">
           <TeacherProfile user={this.props.user} />
