@@ -10,20 +10,55 @@ class QuestionPaperPreview extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.timeDuration = 0;
   }
 
   //Parse the questions to display it
   parseQuestions = () => {
+    let questionNumber = 0;
+
     return this.props.exam.questionPaper.map((question, index) => {
+      //Count the question Number
+      if (question.type != "header" && question.type != "text") {
+        questionNumber++;
+      }
+
       return (
         <Question
           question={question}
-          click={this.selectQuestion}
+          index={questionNumber}
           key={question.id}
         />
       );
     });
+  };
+
+  //Convert milliseconds to time format string
+  msToTime = (s) => {
+    // Pad to 2 or 3 digits, default is 2
+    function pad(n, z) {
+      z = z || 2;
+      return ("00" + n).slice(-z);
+    }
+
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = (s - mins) / 60;
+
+    return pad(hrs) + ":" + pad(mins) + ":" + pad(secs);
+  };
+
+  //Calculate time duration of the exam
+  calculateTimeDuration = () => {
+    let to = new Date(`${this.props.exam.date},${this.props.exam.to}`);
+    let from = new Date(`${this.props.exam.date},${this.props.exam.from}`);
+
+    let differenceInMilliSeconds = to.getTime() - from.getTime();
+
+    this.timeDuration = this.msToTime(differenceInMilliSeconds);
   };
 
   componentDidMount() {
@@ -31,6 +66,9 @@ class QuestionPaperPreview extends Component {
   }
 
   render() {
+    //Calculate time duration of the exam
+    this.calculateTimeDuration();
+
     return (
       <div>
         <NavBar>
@@ -70,7 +108,18 @@ class QuestionPaperPreview extends Component {
         </NavBar>
         {/* Body of the question paper */}
         <div id="previewExamBody">
-          <Question question={{ type: "header" }} />
+          <Question
+            question={{
+              type: "header",
+              examName: this.props.exam.examName,
+              subject: this.props.exam.subject,
+              date: this.props.exam.date,
+              Class: this.props.Class,
+              batch: this.props.batch,
+              marks: this.props.exam.totalMarks,
+              time: this.timeDuration,
+            }}
+          />
           {this.parseQuestions()}
         </div>
       </div>

@@ -6,8 +6,8 @@ class Header extends Component {
     return (
       <div>
         <center>
-          <h2>EXAM NAME</h2>
-          <h4>SUBJECT</h4>
+          <h2>{this.props.question.examName}</h2>
+          <h4>{this.props.question.subject}</h4>
         </center>
         <br />
         <div
@@ -15,13 +15,13 @@ class Header extends Component {
           id="navBarContainer"
         >
           <div id="left">
-            <p>DATE : </p>
-            <p>TIME : </p>
+            <p>DATE : {this.props.question.date}</p>
+            <p>TIME : {this.props.question.time}</p>
           </div>
           <div id="right">
-            <p>MARKS :</p>
-            <p>CLASS: </p>
-            <p>BATCH : </p>
+            <p>MARKS : {this.props.question.marks}</p>
+            <p>CLASS : {this.props.question.Class}</p>
+            <p>BATCH : {this.props.question.batch}</p>
           </div>
         </div>
       </div>

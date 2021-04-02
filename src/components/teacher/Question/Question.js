@@ -39,7 +39,7 @@ export default class Question extends Component {
       });
     } else if (this.props.question.type == "header") {
       this.setState({
-        component: <Header />,
+        component: <Header question={this.props.question} />,
       });
     }
   }
