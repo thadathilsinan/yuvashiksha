@@ -10,6 +10,7 @@ import TeacherProfile from "./TeacherProfile/TeacherProfile";
 import { Route, withRouter } from "react-router-dom";
 import http from "../../shared/http";
 import React from "react";
+import QuestionPaperPreview from "./questionpaperpreview/QuestionpaperPreview";
 
 class Teacher extends Component {
   constructor(props) {
@@ -210,7 +211,7 @@ class Teacher extends Component {
   //Open edit exam page
   openEditExam = (examData) => {
     this.setState({ editExam: examData }, () => {
-      this.props.history.push("/teacher/editExam");
+      this.props.history.push("/teacher/previewexam");
     });
   };
 
@@ -295,6 +296,15 @@ class Teacher extends Component {
         </Route>
         <Route path="/teacher/newexam">
           <NewExam />
+        </Route>
+        <Route path="/teacher/previewexam">
+          {this.state.editExam ? (
+            <QuestionPaperPreview
+              exam={this.state.editExam}
+              Class={this.classRef.current ? this.classRef.current.value : null}
+              batch={this.classRef.current ? this.batchRef.current.value : null}
+            />
+          ) : null}
         </Route>
         <Route path="/teacher/editexam">
           {this.state.editExam ? (

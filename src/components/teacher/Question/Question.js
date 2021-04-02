@@ -4,6 +4,7 @@ import "./Question.css";
 import Text from "./Text/Text";
 import Short from "./Short/Short";
 import Essay from "./Essay/Essay";
+import Header from "./Header/Header";
 
 export default class Question extends Component {
   constructor(props) {
@@ -35,6 +36,10 @@ export default class Question extends Component {
         component: (
           <Essay question={this.props.question} index={this.props.index} />
         ),
+      });
+    } else if (this.props.question.type == "header") {
+      this.setState({
+        component: <Header />,
       });
     }
   }

@@ -1,0 +1,17 @@
+#previewExamBody {
+  height: calc(100vh - 80px);
+  overflow: auto;
+
+  background-color: rgb(217, 237, 255);
+}
+
+.question.list-group-item.active,
+.question.list-group-item {
+  background-color: white;
+  color: black;
+  border-color: gray;
+}
+
+.question.list-group-item:hover {
+  background-color: rgb(248, 248, 248);
+}
