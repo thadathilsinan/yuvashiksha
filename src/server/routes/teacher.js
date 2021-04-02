@@ -150,4 +150,11 @@ router.get("/getclasses", async (req, res, next) => {
   res.json(responseObject);
 });
 
+//Remove an existing exam
+router.post("/removeexam", async (req, res, next) => {
+  let exam = await Exams.findOneAndRemove({ _id: req.body.id });
+  res.statusCode = 200;
+  res.end("Exam removed successfully");
+});
+
 module.exports = router;

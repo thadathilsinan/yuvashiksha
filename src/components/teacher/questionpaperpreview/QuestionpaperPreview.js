@@ -7,6 +7,7 @@ import { Row, Col, Button } from "react-bootstrap";
 import Question from "../Question/Question";
 import { Route, withRouter, Switch } from "react-router-dom";
 import NewExam from "../newExam/NewExam";
+import http from "../../../shared/http";
 
 class QuestionPaperPreview extends Component {
   constructor(props) {
@@ -74,6 +75,24 @@ class QuestionPaperPreview extends Component {
     this.props.history.push("/teacher/previewexam/editexam");
   };
 
+  //Remove exam from server
+  removeExam = () => {
+    if (window.confirm("Are you sure to remove exam?")) {
+      http(
+        "POST",
+        "/teacher/removeexam",
+        { id: this.props.exam._id },
+        (res) => {
+          alert(res.data);
+
+          if (res.status == 200) {
+            this.props.history.push("/teacher");
+          }
+        }
+      );
+    }
+  };
+
   render() {
     //Calculate time duration of the exam
     this.calculateTimeDuration();
@@ -119,7 +138,10 @@ class QuestionPaperPreview extends Component {
                           </Button>
                         </Col>
                         <Col>
-                          <Button className="btn btn-light ml-3 ">
+                          <Button
+                            className="btn btn-light ml-3 "
+                            onClick={this.removeExam}
+                          >
                             <BsDash />
                           </Button>
                         </Col>
