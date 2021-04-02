@@ -5,10 +5,14 @@ import NavBar from "../../ui-elements/navBar/NavBar";
 import { BsPencil, BsDash } from "react-icons/bs";
 import { Row, Col, Button } from "react-bootstrap";
 import Question from "../Question/Question";
+import { Route, withRouter, Switch } from "react-router-dom";
+import NewExam from "../newExam/NewExam";
 
 class QuestionPaperPreview extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {};
 
     this.timeDuration = 0;
   }
@@ -61,70 +65,91 @@ class QuestionPaperPreview extends Component {
     this.timeDuration = this.msToTime(differenceInMilliSeconds);
   };
 
-  componentDidMount() {
+  //Open edit exam page
+  openEditExam = () => {
     console.log(this.props);
-  }
+    this.Class = this.props.Class;
+    this.batch = this.props.batch;
+
+    this.props.history.push("/teacher/previewexam/editexam");
+  };
 
   render() {
     //Calculate time duration of the exam
     this.calculateTimeDuration();
 
     return (
-      <div>
-        <NavBar>
-          {{
-            left: (
-              <div>
-                <Button
-                  variant="primary"
-                  className="btn btn-primary mr-3"
-                  size="sm"
-                  onClick={() => {
-                    window.history.back();
+      <>
+        <Switch>
+          <Route path="/teacher/previewexam/editexam">
+            <NewExam
+              exam={this.props.exam}
+              Class={this.Class}
+              batch={this.batch}
+            />
+          </Route>
+          <Route path="/teacher/previewexam" exact>
+            <div>
+              <NavBar>
+                {{
+                  left: (
+                    <div>
+                      <Button
+                        variant="primary"
+                        className="btn btn-primary mr-3"
+                        size="sm"
+                        onClick={() => {
+                          window.history.back();
+                        }}
+                      >
+                        {"<"}
+                      </Button>
+                      <h5>PREVIEW QUESTION PAPER</h5>
+                    </div>
+                  ),
+                  right: (
+                    <h5>
+                      <Row>
+                        <Col>
+                          <Button
+                            className="btn btn-light ml-3 "
+                            onClick={this.openEditExam}
+                          >
+                            <BsPencil />
+                          </Button>
+                        </Col>
+                        <Col>
+                          <Button className="btn btn-light ml-3 ">
+                            <BsDash />
+                          </Button>
+                        </Col>
+                      </Row>
+                    </h5>
+                  ),
+                }}
+              </NavBar>
+              {/* Body of the question paper */}
+              <div id="previewExamBody">
+                <Question
+                  question={{
+                    type: "header",
+                    examName: this.props.exam.examName,
+                    subject: this.props.exam.subject,
+                    date: this.props.exam.date,
+                    Class: this.props.Class,
+                    batch: this.props.batch,
+                    marks: this.props.exam.totalMarks,
+                    time: this.timeDuration,
                   }}
-                >
-                  {"<"}
-                </Button>
-                <h5>PREVIEW QUESTION PAPER</h5>
+                />
+                {this.parseQuestions()}
               </div>
-            ),
-            right: (
-              <h5>
-                <Row>
-                  <Col>
-                    <Button className="btn btn-light ml-3 ">
-                      <BsPencil />
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button className="btn btn-light ml-3 ">
-                      <BsDash />
-                    </Button>
-                  </Col>
-                </Row>
-              </h5>
-            ),
-          }}
-        </NavBar>
-        {/* Body of the question paper */}
-        <div id="previewExamBody">
-          <Question
-            question={{
-              type: "header",
-              examName: this.props.exam.examName,
-              subject: this.props.exam.subject,
-              date: this.props.exam.date,
-              Class: this.props.Class,
-              batch: this.props.batch,
-              marks: this.props.exam.totalMarks,
-              time: this.timeDuration,
-            }}
-          />
-          {this.parseQuestions()}
-        </div>
-      </div>
+            </div>
+          </Route>
+        </Switch>
+      </>
     );
   }
 }
 
-export default QuestionPaperPreview;
+export default withRouter(QuestionPaperPreview);

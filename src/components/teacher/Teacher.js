@@ -306,7 +306,7 @@ class Teacher extends Component {
             />
           ) : null}
         </Route>
-        <Route path="/teacher/editexam">
+        {/* <Route path="/teacher/editexam">
           {this.state.editExam ? (
             <NewExam
               exam={this.state.editExam}
@@ -314,7 +314,7 @@ class Teacher extends Component {
               batch={this.classRef.current ? this.batchRef.current.value : null}
             />
           ) : null}
-        </Route>
+        </Route> */}
         <Route path="/teacher/profile">
           <TeacherProfile user={this.props.user} />
         </Route>
