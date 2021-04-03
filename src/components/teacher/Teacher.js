@@ -26,6 +26,8 @@ class Teacher extends Component {
       showEmpty: true,
       editExam: null,
     };
+
+    this.userRole = "teacher";
   }
 
   //Creating ref objects
@@ -109,9 +111,10 @@ class Teacher extends Component {
   getClasses = () => {
     http("GET", "/teacher/getclasses", {}, (res) => {
       if (res.status == 200) {
-        this.setState({ classes: res.data });
-
-        this.setupClassOptions();
+        this.setState({ classes: res.data }, () => {
+          this.getTeacherData();
+          this.setupClassOptions();
+        });
       } else {
         //Error found
         alert(res.data);
@@ -215,12 +218,48 @@ class Teacher extends Component {
     });
   };
 
+  //Get the data of other teachers in case of MENTOR or HOD user
+  getTeacherData = () => {
+    if (this.userRole == "hod") {
+      http("GET", "/teacher/hod", {}, (res) => {
+        console.log(res.data);
+      });
+    }
+  };
+
   componentDidMount() {
     this.checkClassSelected();
     this.getClasses();
+
+    console.log(this.props);
   }
 
   render() {
+    //Checking HOD or MENTOR priveillege of thee user
+    let hodOrMentor = null;
+
+    if (this.props.hod) {
+      this.userRole = "hod";
+
+      hodOrMentor = (
+        <div className="col-sm-2" id="teacher-select">
+          <select className="form-select mt-3" name="teacher" id="teacher">
+            <option value="">--TEACHER--</option>
+          </select>
+        </div>
+      );
+    } else if (this.props.mentor) {
+      this.userRole = "mentor";
+
+      hodOrMentor = (
+        <div className="col-sm-2" id="teacher-select">
+          <select className="form-select mt-3" name="teacher" id="teacher">
+            <option value="">--TEACHER--</option>
+          </select>
+        </div>
+      );
+    }
+
     return (
       <div>
         <Route path="/teacher" exact>
@@ -236,7 +275,7 @@ class Teacher extends Component {
                     >
                       <p>Select Class and Batch : </p>
                     </div>
-                    <div className="col-sm-4">
+                    <div className="col-sm-3">
                       <select
                         className="form-select mt-3"
                         name="class"
@@ -248,7 +287,7 @@ class Teacher extends Component {
                         {this.state.classOptions}
                       </select>
                     </div>
-                    <div className="col-sm-4">
+                    <div className="col-sm-3">
                       <select
                         className="form-select mt-3"
                         name="batch"
@@ -260,6 +299,8 @@ class Teacher extends Component {
                         {this.state.batchOptions}
                       </select>
                     </div>
+
+                    {hodOrMentor}
                   </div>
                 </div>
               ),

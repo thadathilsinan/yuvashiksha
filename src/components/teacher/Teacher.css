@@ -1,5 +1,5 @@
 #NavBarRight {
-  width: 630px;
+  width: 700px;
   color: white;
 }
 
@@ -50,4 +50,10 @@ p {
 #floatButtonText {
   margin-top: 2px;
   font-size: 50px;
+}
+
+#teacher {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
 }

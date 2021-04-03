@@ -55,6 +55,12 @@ class Signin extends Component {
         (res) => {
           if (res.status == 200) {
             alert("Login Successful");
+
+            if (res.data.accountType === "teacher") {
+              document.location.href = "http://localhost:3000/teacher";
+            } else if (res.data.accountType === "student") {
+              document.location.href = "http://localhost:3000/student";
+            }
           } else {
             this.setState({
               erroMessage: <p>{res.data}</p>,

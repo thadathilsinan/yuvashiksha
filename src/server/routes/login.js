@@ -13,6 +13,7 @@ var router = express.Router();
 const BugReport = require("../schema/BugReport");
 const Department = require("../schema/department");
 const Classes = require("../schema/classes");
+const { response } = require("express");
 
 router.use(bodyParser.json());
 
@@ -27,7 +28,7 @@ router.post("/", function (req, res, next) {
       req.logIn(user, (err) => {
         if (err) throw err;
         res.statusCode = 200;
-        res.end("Successfully Authenticated");
+        res.json(user);
       });
     }
   })(req, res, next);
@@ -128,10 +129,22 @@ router.get("/getclasses", async (req, res, next) => {
 });
 
 //Check Teacher logged in or not
-router.post("/checkTeacher", (req, res, next) => {
+router.post("/checkTeacher", async (req, res, next) => {
   if (req.user && req.user.accountType == "teacher") {
+    let responseObject = {};
+    let hod = await Department.findOne({ hod: req.user._id });
+    let mentor = await Classes.findOne({ mentor: req.user._id });
+
+    if (hod) {
+      responseObject.hod = hod;
+    }
+
+    if (mentor) {
+      responseObject.mentor = mentor;
+    }
+
     res.statusCode = 200;
-    res.json(req.user);
+    res.json({ user: req.user, ...responseObject });
   } else {
     res.statusCode = 203;
     res.end("User NOT logged in");

@@ -14,6 +14,7 @@ const bcrypt = require("bcryptjs");
 const Users = require("../schema/Users");
 const Exams = require("../schema/Exams");
 const Classes = require("../schema/classes");
+const Departments = require("../schema/department");
 
 router.use(bodyParser.json());
 
@@ -155,6 +156,19 @@ router.post("/removeexam", async (req, res, next) => {
   let exam = await Exams.findOneAndRemove({ _id: req.body.id });
   res.statusCode = 200;
   res.end("Exam removed successfully");
+});
+
+//Return teachers list who have exams in that department
+router.get("/hod", async (req, res, next) => {
+  let responseObject = {};
+  let allExams = await Exams.find({});
+
+  for (exam of allExams) {
+    let Class = await Classes.findOne({ _id: exam.Class });
+    let department = await Departments.findOne({ _id: Class.department });
+
+    console.log(department);
+  }
 });
 
 module.exports = router;

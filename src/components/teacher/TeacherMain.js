@@ -17,7 +17,15 @@ class TeacherMain extends Component {
       null,
       (res) => {
         if (res.status == 200) {
-          this.setState({ component: <Teacher user={res.data} /> });
+          this.setState({
+            component: (
+              <Teacher
+                user={res.data}
+                hod={res.data.hod}
+                mentor={res.data.mentor}
+              />
+            ),
+          });
         } else {
           alert(res.data);
           this.setState({ component: null });
