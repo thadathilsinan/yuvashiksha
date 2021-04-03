@@ -265,7 +265,9 @@ class Teacher extends Component {
         <Route path="/teacher" exact>
           <NavBar>
             {{
-              left: <h5 onClick={this.openProfile}>{this.props.user.name}</h5>,
+              left: (
+                <h5 onClick={this.openProfile}>{this.props.user.user.name}</h5>
+              ),
               right: (
                 <div className="container" id="NavBarRight">
                   <div className="row">
@@ -347,15 +349,6 @@ class Teacher extends Component {
             />
           ) : null}
         </Route>
-        {/* <Route path="/teacher/editexam">
-          {this.state.editExam ? (
-            <NewExam
-              exam={this.state.editExam}
-              Class={this.classRef.current ? this.classRef.current.value : null}
-              batch={this.classRef.current ? this.batchRef.current.value : null}
-            />
-          ) : null}
-        </Route> */}
         <Route path="/teacher/profile">
           <TeacherProfile user={this.props.user} />
         </Route>

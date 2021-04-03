@@ -14,7 +14,7 @@ export class TeacherProfile extends Component {
 
   //Set initial Value of the form
   setFormaData = () => {
-    $(this.emailRef.current).attr("value", this.props.user.email);
+    $(this.emailRef.current).attr("value", this.props.user.user.email);
   };
 
   componentDidMount() {
@@ -76,7 +76,7 @@ export class TeacherProfile extends Component {
                 >
                   {"<"}
                 </Button>
-                <span id="username">{this.props.user.name}</span>
+                <span id="username">{this.props.user.user.name}</span>
               </h5>
             ),
             right: (
