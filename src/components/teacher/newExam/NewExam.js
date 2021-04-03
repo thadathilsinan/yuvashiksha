@@ -782,6 +782,8 @@ class NewExam extends Component {
     //Currently selected class
     let Class = this.classRef.current.value;
 
+    if (!Class) return;
+
     //Getting batches of the selected class
     let batches = this.state.classList[Class].batches;
 
