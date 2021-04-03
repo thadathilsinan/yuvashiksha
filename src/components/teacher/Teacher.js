@@ -28,6 +28,7 @@ class Teacher extends Component {
       editExam: null,
       teacherData: {},
       restrictedExam: false,
+      teacherSelectDisabled: true,
     };
 
     this.userRole = "teacher";
@@ -168,6 +169,9 @@ class Teacher extends Component {
   //onChange handler for class <select>
   classChanged = (event) => {
     this.batchRef.current.value = "";
+    this.setState({ teacherSelectDisabled: true }, () =>
+      this.setUpTeacherSelect()
+    );
 
     this.setupBatchOptions();
 
@@ -176,6 +180,19 @@ class Teacher extends Component {
 
   //onChange Listener for Batch <select>
   batchChanged = (event) => {
+    if (
+      this.classRef.current.value == this.props.mentor.name &&
+      this.batchRef.current.value == this.props.mentor.batch
+    ) {
+      this.setState({ teacherSelectDisabled: false }, () =>
+        this.setUpTeacherSelect()
+      );
+    } else {
+      this.setState({ teacherSelectDisabled: true }, () =>
+        this.setUpTeacherSelect()
+      );
+    }
+
     this.checkClassSelected();
   };
 
@@ -251,6 +268,14 @@ class Teacher extends Component {
           });
         else alert("Teachers data not found");
       });
+    } else if (this.userRole == "mentor") {
+      http("GET", "/teacher/mentor", {}, (res) => {
+        if (res.status == 200)
+          this.setState({ teacherData: res.data }, () => {
+            this.setUpTeacherSelect();
+          });
+        else alert("Teachers data not found");
+      });
     }
   };
 
@@ -318,8 +343,16 @@ class Teacher extends Component {
     } else if (this.props.mentor) {
       hodOrMentor = (
         <div className="col-sm-2" id="teacher-select">
-          <select className="form-select mt-3" name="teacher" id="teacher">
+          <select
+            className="form-select mt-3"
+            name="teacher"
+            id="teacher"
+            ref={this.teacherRef}
+            onChange={this.checkClassSelected}
+            disabled={this.state.teacherSelectDisabled}
+          >
             <option value="">--TEACHER--</option>
+            {this.getTeacherOptions()}
           </select>
         </div>
       );

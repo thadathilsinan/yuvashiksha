@@ -199,4 +199,39 @@ router.get("/hod", async (req, res, next) => {
   res.json(responseObject);
 });
 
+//Return teachers list who have exams in that class of the mentor
+router.get("/mentor", async (req, res, next) => {
+  let responseObject = {};
+  let allExams = await Exams.find({});
+
+  if (allExams.length <= 0) {
+    res.statusCode = 200;
+    res.end("Exams list is empty");
+    return;
+  }
+
+  //Mentor's class
+  let mentorClass = await Classes.findOne({ mentor: req.user._id });
+
+  if (!mentorClass) {
+    res.statusCode = 203;
+    res.end("Requested user is not a mentor");
+    return;
+  }
+
+  for (exam of allExams) {
+    let Class = await Classes.findOne({ _id: exam.Class });
+
+    //Checking if the exam is conducted in the HOD's department
+    if (String(Class._id) == String(mentorClass._id)) {
+      let teacher = await Users.findOne({ _id: exam.teacher });
+
+      responseObject[teacher._id] = { name: teacher.name };
+    }
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
 module.exports = router;
