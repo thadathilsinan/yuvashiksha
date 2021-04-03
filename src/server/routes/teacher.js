@@ -15,6 +15,7 @@ const Users = require("../schema/Users");
 const Exams = require("../schema/Exams");
 const Classes = require("../schema/classes");
 const Departments = require("../schema/department");
+const { response } = require("express");
 
 router.use(bodyParser.json());
 
@@ -163,12 +164,26 @@ router.get("/hod", async (req, res, next) => {
   let responseObject = {};
   let allExams = await Exams.find({});
 
+  if (allExams.length <= 0) {
+    res.statusCode = 200;
+    res.end("Exams list is empty");
+    return;
+  }
+
   for (exam of allExams) {
     let Class = await Classes.findOne({ _id: exam.Class });
     let department = await Departments.findOne({ _id: Class.department });
 
-    console.log(department);
+    //Checking if the exam is conducted in the HOD's department
+    if (department._id == req.user.department) {
+      let teacher = await Users.findOne({ _id: exam.teacher });
+
+      responseObject[teacher._id] = { name: teacher.name };
+    }
   }
+
+  res.statusCode = 200;
+  res.json(responseObject);
 });
 
 module.exports = router;
