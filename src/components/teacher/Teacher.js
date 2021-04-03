@@ -312,11 +312,12 @@ class Teacher extends Component {
           {this.state.showEmpty ||
           this.batchRef.current == null ||
           this.batchRef.current.value == null ? (
-            <>
-              <center style={{ color: "red" }}>
-                PLEASE SELECT A CLASS AND BATCH
-              </center>
-            </>
+            <div
+              id="emptyScreen"
+              className="d-flex align-items-center justify-content-center"
+            >
+              <h4>PLEASE SELECT A CLASS AND BATCH</h4>
+            </div>
           ) : (
             <>
               <TabView>
@@ -331,11 +332,11 @@ class Teacher extends Component {
                   ),
                 }}
               </TabView>
-              <div id="new-exam" onClick={this.newExam}>
-                <div id="floatButtonText">+</div>
-              </div>
             </>
           )}
+          <div id="new-exam" onClick={this.newExam}>
+            <div id="floatButtonText">+</div>
+          </div>
         </Route>
         <Route path="/teacher/newexam">
           <NewExam />
