@@ -23,8 +23,11 @@ class Teacher extends Component {
       classes: [],
       classOptions: null,
       batchOptions: null,
+      teacherSelect: null,
       showEmpty: true,
       editExam: null,
+      teacherData: {},
+      restrictedExam: false,
     };
 
     this.userRole = "teacher";
@@ -33,6 +36,7 @@ class Teacher extends Component {
   //Creating ref objects
   batchRef = React.createRef();
   classRef = React.createRef();
+  teacherRef = React.createRef();
 
   //Set list view of the exams
   setExamData = () => {
@@ -112,7 +116,7 @@ class Teacher extends Component {
     http("GET", "/teacher/getclasses", {}, (res) => {
       if (res.status == 200) {
         this.setState({ classes: res.data }, () => {
-          this.getTeacherData();
+          // this.getTeacherData();
           this.setupClassOptions();
         });
       } else {
@@ -180,6 +184,15 @@ class Teacher extends Component {
     if (
       this.classRef.current &&
       this.classRef.current.value &&
+      this.batchRef.current.value &&
+      this.teacherRef.current &&
+      this.teacherRef.current.value
+    ) {
+      this.setState({ showEmpty: false });
+      this.getTeacherExams();
+    } else if (
+      this.classRef.current &&
+      this.classRef.current.value &&
       this.batchRef.current.value
     ) {
       this.setState({ showEmpty: false });
@@ -213,7 +226,17 @@ class Teacher extends Component {
 
   //Open edit exam page
   openEditExam = (examData) => {
-    this.setState({ editExam: examData }, () => {
+    let newState = { editExam: examData };
+
+    //If Exam editing is not permitted
+    if (this.teacherRef.current && this.teacherRef.current.value) {
+      //HOD or MENTOR data exam is currently selected
+      newState.restrictedExam = true;
+    } else {
+      newState.restrictedExam = false;
+    }
+
+    this.setState(newState, () => {
       this.props.history.push("/teacher/previewexam");
     });
   };
@@ -222,12 +245,91 @@ class Teacher extends Component {
   getTeacherData = () => {
     if (this.userRole == "hod") {
       http("GET", "/teacher/hod", {}, (res) => {
-        console.log(res.data);
+        if (res.status == 200)
+          this.setState({ teacherData: res.data }, () => {
+            this.setUpTeacherSelect();
+          });
+        else alert("Teachers data not found");
       });
     }
   };
 
+  //Return the JSX for <option> for teacher select in Case of HOD or MENTOR user
+  getTeacherOptions = () => {
+    return Object.keys(this.state.teacherData).map((key, array) => {
+      if (this.props.user.user._id != key)
+        return (
+          <option key={Date.now() + key} value={key}>
+            {this.state.teacherData[key].name}
+          </option>
+        );
+      else return null;
+    });
+  };
+
+  //Teacher select change listener
+  getTeacherExams = () => {
+    let teacher = this.teacherRef.current.value;
+    let Class = this.classRef.current.value;
+    let batch = this.batchRef.current.value;
+
+    if (teacher && Class && batch) {
+      http(
+        "POST",
+        "/teacher/getexams/hod",
+        { Class, batch, teacher },
+        (res) => {
+          if (res.status == 200) {
+            this.setState({ examData: res.data }, () => {
+              this.setExamData();
+            });
+          }
+        }
+      );
+    }
+  };
+
+  //Check HOD or MENTOR
+  checkUserRole = () => {
+    if (this.props.hod) this.userRole = "hod";
+    else if (this.props.mentor) this.userRole = "mentor";
+  };
+
+  //Setup HOD or MENTOR TEacher select
+  setUpTeacherSelect = () => {
+    //Checking HOD or MENTOR priveillege of thee user
+    let hodOrMentor = null;
+
+    if (this.props.hod) {
+      hodOrMentor = (
+        <div className="col-sm-2" id="teacher-select">
+          <select
+            className="form-select mt-3"
+            name="teacher"
+            id="teacher"
+            onChange={this.checkClassSelected}
+            ref={this.teacherRef}
+          >
+            <option value="">--TEACHER--</option>
+            {this.getTeacherOptions()}
+          </select>
+        </div>
+      );
+    } else if (this.props.mentor) {
+      hodOrMentor = (
+        <div className="col-sm-2" id="teacher-select">
+          <select className="form-select mt-3" name="teacher" id="teacher">
+            <option value="">--TEACHER--</option>
+          </select>
+        </div>
+      );
+    }
+
+    this.setState({ teacherSelect: hodOrMentor });
+  };
+
   componentDidMount() {
+    this.getTeacherData();
     this.checkClassSelected();
     this.getClasses();
 
@@ -235,31 +337,7 @@ class Teacher extends Component {
   }
 
   render() {
-    //Checking HOD or MENTOR priveillege of thee user
-    let hodOrMentor = null;
-
-    if (this.props.hod) {
-      this.userRole = "hod";
-
-      hodOrMentor = (
-        <div className="col-sm-2" id="teacher-select">
-          <select className="form-select mt-3" name="teacher" id="teacher">
-            <option value="">--TEACHER--</option>
-          </select>
-        </div>
-      );
-    } else if (this.props.mentor) {
-      this.userRole = "mentor";
-
-      hodOrMentor = (
-        <div className="col-sm-2" id="teacher-select">
-          <select className="form-select mt-3" name="teacher" id="teacher">
-            <option value="">--TEACHER--</option>
-          </select>
-        </div>
-      );
-    }
-
+    this.checkUserRole();
     return (
       <div>
         <Route path="/teacher" exact>
@@ -302,7 +380,7 @@ class Teacher extends Component {
                       </select>
                     </div>
 
-                    {hodOrMentor}
+                    {this.state.teacherSelect}
                   </div>
                 </div>
               ),
@@ -347,6 +425,7 @@ class Teacher extends Component {
               exam={this.state.editExam}
               Class={this.classRef.current ? this.classRef.current.value : null}
               batch={this.classRef.current ? this.batchRef.current.value : null}
+              restricted={this.state.restrictedExam}
             />
           ) : null}
         </Route>

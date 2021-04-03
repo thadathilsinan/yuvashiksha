@@ -129,6 +129,19 @@ router.post("/getexams", async (req, res, next) => {
   res.json(exams);
 });
 
+//Return exam data of particular teacher
+router.post("/getexams/hod", async (req, res, next) => {
+  //Find the class to which the exam data need to be extracted
+  let Class = await Classes.findOne({
+    name: req.body.Class,
+    batch: req.body.batch,
+  });
+
+  let exams = await Exams.find({ Class, teacher: req.body.teacher });
+  res.statusCode = 200;
+  res.json(exams);
+});
+
 //return class information for Teacher Home page
 router.get("/getclasses", async (req, res, next) => {
   let classes = await Classes.find({});
@@ -175,7 +188,7 @@ router.get("/hod", async (req, res, next) => {
     let department = await Departments.findOne({ _id: Class.department });
 
     //Checking if the exam is conducted in the HOD's department
-    if (department._id == req.user.department) {
+    if (String(department._id) == String(req.user.department)) {
       let teacher = await Users.findOne({ _id: exam.teacher });
 
       responseObject[teacher._id] = { name: teacher.name };

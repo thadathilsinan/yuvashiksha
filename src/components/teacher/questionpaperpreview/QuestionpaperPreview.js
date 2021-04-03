@@ -126,7 +126,7 @@ class QuestionPaperPreview extends Component {
                       <h5>PREVIEW QUESTION PAPER</h5>
                     </div>
                   ),
-                  right: (
+                  right: !this.props.restricted ? (
                     <h5>
                       <Row>
                         <Col>
@@ -147,7 +147,7 @@ class QuestionPaperPreview extends Component {
                         </Col>
                       </Row>
                     </h5>
-                  ),
+                  ) : null,
                 }}
               </NavBar>
               {/* Body of the question paper */}
