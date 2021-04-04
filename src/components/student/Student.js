@@ -6,6 +6,7 @@ import ListItem from "../ui-elements/ListItem/ListItem";
 import StartExam from "./components/startexam/StartExam";
 import { Link, BrowserRouter, Route, withRouter } from "react-router-dom";
 import StudentProfile from "./components/StudentProfile/StudentProfile";
+import { FaUserCircle } from "react-icons/fa";
 import "./Student.css";
 
 let examData = [
@@ -124,6 +125,7 @@ class Student extends Component {
                     {{
                       left: (
                         <h5 id="profileText" onClick={this.openProfile}>
+                          <FaUserCircle className="mr-3 ml-3" size={40} />
                           {this.props.user.user.name}
                         </h5>
                       ),
