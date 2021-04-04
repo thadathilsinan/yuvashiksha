@@ -38,4 +38,12 @@ router.post("/profile/save", async (req, res, next) => {
   }
 });
 
+//return the exams related to the particular student
+router.get("/exams", async (req, res, next) => {
+  let exams = await Exams.find({ Class: req.user.class });
+
+  res.statusCode = 200;
+  res.json(exams);
+});
+
 module.exports = router;

@@ -8,59 +8,55 @@ import { Link, BrowserRouter, Route, withRouter } from "react-router-dom";
 import StudentProfile from "./components/StudentProfile/StudentProfile";
 import { FaUserCircle } from "react-icons/fa";
 import "./Student.css";
-
-let examData = [
-  {
-    name: "Name of Exam",
-    subject: "Subject",
-    from: "9:00:00",
-    to: "12:00:00",
-    marks: 80,
-    date: "12-01-2021", //mm-dd-yyyy
-  },
-  {
-    name: "Name of Exam",
-    subject: "Subject",
-    from: "9:00:00",
-    to: "12:00:00",
-    marks: 80,
-    date: "08-01-2021", //mm-dd-yyyy
-  },
-  {
-    name: "Name of Exam",
-    subject: "Subject",
-    from: "9:00:00",
-    to: "12:00:00",
-    marks: 80,
-    date: "01-01-2021", //mm-dd-yyyy
-  },
-];
+import http from "../../shared/http";
 
 class Student extends Component {
-  examList = [];
-  previousExamList = [];
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      examData: [],
+      examList: [],
+      previousExamList: [],
+    };
+  }
+
+  //Get exam data from the server
+  getExamData = () => {
+    http("GET", "/student/exams", {}, (res) => {
+      if (res.status == 200) {
+        this.setState({ examData: res.data }, () => {
+          this.setExamData();
+        });
+      }
+    });
+  };
+
+  //Setup the list items for the exams
   setExamData = () => {
+    let examList = [];
+    let previousExamList = [];
+
     let currentTime = new Date();
 
-    examData.map((item) => {
+    this.state.examData.map((item) => {
       let examDate = new Date(`${item.date},${item.to}`);
 
       if (currentTime.getTime() > examDate.getTime()) {
-        this.previousExamList.push(
-          <ListItem height="100px">
+        previousExamList.push(
+          <ListItem height="100px" key={item._id}>
             {{
               left: (
                 <div id="leftListItem">
-                  <p>{item.name}</p>
-                  <p>{item.subject}</p>
-                  <p>{item.date}</p>
+                  <p>Exam Name: {item.examName}</p>
+                  <p>Subject: {item.subject}</p>
+                  <p>Date: {item.date}</p>
                 </div>
               ),
               right: (
                 <div id="rightListItem">
                   <p>
-                    {item.from} - {item.to}
+                    Time: {item.from} - {item.to}
                   </p>
                   <p>{item.marks} Marks</p>
                 </div>
@@ -69,20 +65,20 @@ class Student extends Component {
           </ListItem>
         );
       } else {
-        this.examList.push(
-          <ListItem height="100px">
+        examList.push(
+          <ListItem height="100px" key={item._id}>
             {{
               left: (
                 <div id="leftListItem">
-                  <p>{item.name}</p>
-                  <p>{item.subject}</p>
-                  <p>{item.date}</p>
+                  <p>Exam Name: {item.examName}</p>
+                  <p>Subject: {item.subject}</p>
+                  <p>Date: {item.date}</p>
                 </div>
               ),
               right: (
                 <div id="rightListItem">
                   <p>
-                    {item.from} - {item.to}
+                    Time: {item.from} - {item.to}
                   </p>
                   <p>{item.marks} Marks</p>
                 </div>
@@ -92,6 +88,9 @@ class Student extends Component {
         );
       }
     });
+
+    //Changing the state
+    this.setState({ examList, previousExamList });
   };
 
   //Open the profile of the student account
@@ -100,8 +99,7 @@ class Student extends Component {
   };
 
   componentDidMount() {
-    this.setExamData();
-    this.forceUpdate();
+    this.getExamData();
 
     console.log(this.props);
   }
@@ -116,35 +114,29 @@ class Student extends Component {
             department={this.props.user.department}
           />
         </Route>
-        <Route path="/student" exact>
-          <div className="root">
-            <div>
-              <BrowserRouter>
-                <Route path="/student" exact>
-                  <NavBar>
-                    {{
-                      left: (
-                        <h5 id="profileText" onClick={this.openProfile}>
-                          <FaUserCircle className="mr-3 ml-3" size={40} />
-                          {this.props.user.user.name}
-                        </h5>
-                      ),
-                    }}
-                  </NavBar>
-                  <TabView>
-                    {{
-                      leftTab: <span>SCHEDULED EXAMS</span>,
-                      rightTab: <span>PREVIOUS EXAMS</span>,
-                      leftTabBody: <div id="leftTabBody">{this.examList}</div>,
-                      rightTabBody: (
-                        <div id="rightTabBody">{this.previousExamList}</div>
-                      ),
-                    }}
-                  </TabView>
-                  {/* <ExamGuidlines/> */}
-                </Route>
-              </BrowserRouter>
-            </div>
+        <Route path="/student">
+          <div>
+            <NavBar>
+              {{
+                left: (
+                  <h5 id="profileText" onClick={this.openProfile}>
+                    <FaUserCircle className="mr-3 ml-3" size={40} />
+                    {this.props.user.user.name}
+                  </h5>
+                ),
+              }}
+            </NavBar>
+            <TabView>
+              {{
+                leftTab: <span>SCHEDULED EXAMS</span>,
+                rightTab: <span>PREVIOUS EXAMS</span>,
+                leftTabBody: <div id="leftTabBody">{this.state.examList}</div>,
+                rightTabBody: (
+                  <div id="rightTabBody">{this.state.previousExamList}</div>
+                ),
+              }}
+            </TabView>
+            {/* <ExamGuidlines/> */}
           </div>
         </Route>
       </>
