@@ -72,7 +72,11 @@ export class StudentProfile extends Component {
                 Email
               </Form.Label>
               <Col sm="8">
-                <Form.Control type="text" placeholder="Email" />
+                <Form.Control
+                  type="text"
+                  disabled
+                  value={this.props.user.email}
+                />
               </Col>
             </Form.Group>
             <div className="text-right">
@@ -87,7 +91,11 @@ export class StudentProfile extends Component {
                 Admission Number
               </Form.Label>
               <Col sm="8">
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={this.props.user.registerNumber}
+                  disabled
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
@@ -95,7 +103,7 @@ export class StudentProfile extends Component {
                 Class
               </Form.Label>
               <Col sm="8">
-                <Form.Control type="text" disabled />
+                <Form.Control type="text" value={this.props.Class} disabled />
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
@@ -103,7 +111,7 @@ export class StudentProfile extends Component {
                 Batch
               </Form.Label>
               <Col sm="8">
-                <Form.Control type="text" disabled />
+                <Form.Control type="text" value={this.props.batch} disabled />
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
@@ -111,7 +119,11 @@ export class StudentProfile extends Component {
                 Department
               </Form.Label>
               <Col sm="8">
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={this.props.department}
+                  disabled
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
@@ -119,7 +131,11 @@ export class StudentProfile extends Component {
                 Parent's Email
               </Form.Label>
               <Col sm="8">
-                <Form.Control type="text" disabled />
+                <Form.Control
+                  type="text"
+                  value={this.props.user.parentEmail}
+                  disabled
+                />
               </Col>
             </Form.Group>
             <center className="mb-3">

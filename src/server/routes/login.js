@@ -152,8 +152,23 @@ router.post("/checkTeacher", async (req, res, next) => {
 //Check Student logged in or not
 router.post("/checkStudent", async (req, res, next) => {
   if (req.user && req.user.accountType == "student") {
-    res.statusCode = 200;
-    res.json({ user: req.user });
+    //Parsing Department, Class , Batch of the student
+    let Class = await Classes.findOne({ _id: req.user.class });
+    let department = await Department.findOne({ _id: Class.department });
+
+    if (!Class || !department) {
+      res.statusCode = 203;
+      res.end("User Class , department not found!");
+      return;
+    } else {
+      res.statusCode = 200;
+      res.json({
+        user: req.user,
+        Class: Class.name,
+        batch: Class.batch,
+        department: department.name,
+      });
+    }
   } else {
     res.statusCode = 203;
     res.end("User NOT logged in");

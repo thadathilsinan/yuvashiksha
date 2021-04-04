@@ -108,7 +108,12 @@ class Student extends Component {
     return (
       <>
         <Route path="/student/profile">
-          <StudentProfile user={this.props.user.user} />
+          <StudentProfile
+            user={this.props.user.user}
+            Class={this.props.user.Class}
+            batch={this.props.user.batch}
+            department={this.props.user.department}
+          />
         </Route>
         <Route path="/student" exact>
           <div className="root">
