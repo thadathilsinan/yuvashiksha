@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
 import { Button, Row, Col, Form } from "react-bootstrap";
+import "./verifyAccounts.css";
 
 import http from "../../../../shared/http";
 export default class VerifyAccounts extends Component {
@@ -82,8 +83,9 @@ export default class VerifyAccounts extends Component {
                     </Row>
                     <p class="text-left">Email: {item.email}</p>
                     <p class="text-left">Department: {item.department}</p>
-                  </span>{" "}
-                  <Col className="text-left">
+                  </span>
+                  <Col>
+                    <br />
                     <Button
                       type="submit"
                       className=" mr-3 btn btn-danger"
@@ -102,13 +104,15 @@ export default class VerifyAccounts extends Component {
                   <br />
                   <br />
                   <br />
-                  <Button
-                    type="submit"
-                    className=" mr-3 btn btn-success"
-                    onClick={() => this.acceptUser(item)}
-                  >
-                    Accept
-                  </Button>
+                  <div className="text-right">
+                    <Button
+                      type="submit"
+                      className=" mr-3 btn btn-success"
+                      onClick={() => this.acceptUser(item)}
+                    >
+                      Accept
+                    </Button>
+                  </div>
                 </div>
               ),
             }}

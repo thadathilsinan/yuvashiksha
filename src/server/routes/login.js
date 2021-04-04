@@ -13,14 +13,17 @@ var router = express.Router();
 const BugReport = require("../schema/BugReport");
 const Department = require("../schema/department");
 const Classes = require("../schema/classes");
-const { response } = require("express");
 
 router.use(bodyParser.json());
 
 router.post("/", function (req, res, next) {
   //Using the passport local strategy login
   passport.authenticate("local", (err, user, info) => {
-    if (err) throw err;
+    if (err) {
+      res.statusCode = 203;
+      res.end(err.message);
+      return;
+    }
     if (!user) {
       res.statusCode = 203;
       res.end("Username or password wrong");

@@ -22,16 +22,27 @@ module.exports = function (passport) {
         } else {
           //Noraml user login
           Users.findOne({ registerNumber: username }, (err, user) => {
-            if (err) throw err;
-            if (!user) return done(null, false);
-            bcrypt.compare(password, user.password, (err, result) => {
+            //Checking if signup incomplete
+            if (user.accountStatus == "signup-incomplete") {
+              return done(new Error("Account signup is INCOMPLETE"), false);
+            } else if (user.accountStatus == "not-activated") {
+              return done(new Error("User account NOT ACTIVATED"), false);
+            } else if (user.accountStatus == "rejected") {
+              return done(new Error("User account is REJECTED"), false);
+            } else if (user.accountStatus == "ok") {
               if (err) throw err;
-              if (result === true) {
-                return done(null, user);
-              } else {
-                return done(null, false);
-              }
-            });
+              if (!user) return done(null, false);
+              bcrypt.compare(password, user.password, (err, result) => {
+                if (err) throw err;
+                if (result === true) {
+                  return done(null, user);
+                } else {
+                  return done(null, false);
+                }
+              });
+            } else {
+              return done(new Error("User account not valid", false));
+            }
           });
         }
       }
