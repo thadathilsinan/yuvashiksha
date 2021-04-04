@@ -296,17 +296,16 @@ router.post("/googlesignup", async (req, res, next) => {
 
   //Checking user type and add neccessary data to the new User object
   if (req.body.accountType === "student") {
-    newUser.class = req.body.class;
+    newUser.Class = req.body.class;
     newUser.parentEmail = req.body.parentEmail;
   } else if (req.body.accountType === "teacher") {
     newUser.department = req.body.department;
   }
 
   //Saving new user to the db
-  await newUser.save().catch((err) => next(err));
+  await newUser.save(); //.catch((err) => next(err));
 
   res.statusCode = 200;
-  res.clearCookie("user-session");
   res.end("User registration completed.");
 });
 
