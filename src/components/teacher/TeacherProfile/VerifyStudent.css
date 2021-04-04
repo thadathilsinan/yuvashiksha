@@ -1,0 +1,6 @@
+#verifyStudentBody {
+  height: calc(100vh - 80px);
+
+  background-color: rgb(196, 196, 196);
+  overflow: auto;
+}

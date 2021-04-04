@@ -296,7 +296,13 @@ router.post("/googlesignup", async (req, res, next) => {
 
   //Checking user type and add neccessary data to the new User object
   if (req.body.accountType === "student") {
-    newUser.Class = req.body.class;
+    //Getting the class
+    let Class = await Classes.findOne({
+      name: req.body.class,
+      batch: req.body.batch,
+    });
+
+    newUser.class = Class._id;
     newUser.parentEmail = req.body.parentEmail;
   } else if (req.body.accountType === "teacher") {
     newUser.department = req.body.department;

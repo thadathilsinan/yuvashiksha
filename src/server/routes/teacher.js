@@ -230,4 +230,36 @@ router.get("/mentor", async (req, res, next) => {
   res.json(responseObject);
 });
 
+//return the list of students for account verification by the mentor
+router.get("/profile/verifystudents", async (req, res, next) => {
+  let responseObject = [];
+
+  let students = await Users.find({
+    accountStatus: "not-activated",
+    accountType: "student",
+  });
+
+  //Parsing class and batch  name from class id
+  for (let student of students) {
+    let Class = await Classes.findOne({
+      _id: student.class,
+    });
+
+    if (!Class) break;
+
+    responseObject.push({
+      name: student.name,
+      id: student._id,
+      email: student.email,
+      parentEmail: student.parentEmail,
+      registerNumber: student.registerNumber,
+      accountStatus: student.accountStatus,
+      Class: Class.name,
+      batch: Class.batch,
+    });
+  }
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
 module.exports = router;

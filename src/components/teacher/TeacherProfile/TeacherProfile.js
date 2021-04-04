@@ -6,6 +6,8 @@ import configureDialogBox from "../../../shared/dailogBox";
 import $ from "jquery";
 
 import "./TeacherProfile.css";
+import { Route, withRouter } from "react-router-dom";
+import VerifyStudent from "./VerifyStudent";
 
 export class TeacherProfile extends Component {
   constructor(props) {
@@ -116,171 +118,186 @@ export class TeacherProfile extends Component {
     }
   };
 
+  //Verify Students button click listener
+  verifyStudents = () => {
+    this.props.history.push("/teacher/profile/verifystudents");
+  };
+
   componentDidMount() {
     this.setFormaData();
   }
 
   render() {
     return (
-      <div>
-        {/* Configure the change email modal */}
-        {configureDialogBox(
-          "change-email",
-          "Change Email",
-          <>
-            <div>
-              Email:
-              <br />
-              <input
-                type="text"
-                name="new-email"
-                placeholder="New Email"
-                id="new-email"
-                ref={this.newEmailRef}
-                disabled={!this.state.otpDisabled}
-              ></input>
-              <br />
-              <div className="text-right">
+      <>
+        <Route path="/teacher/profile/verifystudents">
+          <VerifyStudent />
+        </Route>
+        <Route path="/teacher/profile" exact>
+          <div>
+            {/* Configure the change email modal */}
+            {configureDialogBox(
+              "change-email",
+              "Change Email",
+              <>
+                <div>
+                  Email:
+                  <br />
+                  <input
+                    type="text"
+                    name="new-email"
+                    placeholder="New Email"
+                    id="new-email"
+                    ref={this.newEmailRef}
+                    disabled={!this.state.otpDisabled}
+                  ></input>
+                  <br />
+                  <div className="text-right">
+                    <input
+                      type="button"
+                      className="btn btn-primary mt-3"
+                      value="GET OTP"
+                      onClick={this.getOtpClickListener}
+                    />
+                  </div>
+                  OTP:
+                  <input
+                    type="text"
+                    placeholder="Enter OTP"
+                    name="otp"
+                    id="otp"
+                    disabled={this.state.otpDisabled}
+                    ref={this.otpRef}
+                  />
+                </div>
+              </>,
+              <>
                 <input
                   type="button"
-                  className="btn btn-primary mt-3"
-                  value="GET OTP"
-                  onClick={this.getOtpClickListener}
+                  className="btn btn-primary"
+                  value="VERIFY"
+                  disabled={this.state.otpDisabled}
+                  onClick={this.verifyOtp}
                 />
-              </div>
-              OTP:
-              <input
-                type="text"
-                placeholder="Enter OTP"
-                name="otp"
-                id="otp"
-                disabled={this.state.otpDisabled}
-                ref={this.otpRef}
-              />
-            </div>
-          </>,
-          <>
-            <input
-              type="button"
-              className="btn btn-primary"
-              value="VERIFY"
-              disabled={this.state.otpDisabled}
-              onClick={this.verifyOtp}
-            />
-          </>
-        )}
-        <NavBar>
-          {{
-            left: (
-              <h5>
-                <Button
-                  variant="primary"
-                  className="btn btn-primary mr-3"
-                  size="sm"
-                  onClick={() => {
-                    window.history.back();
-                  }}
-                >
-                  {"<"}
-                </Button>
-                <span id="username">{this.props.user.user.name}</span>
-              </h5>
-            ),
-            right: (
-              <h5>
-                <Row className="mt-2">
-                  <Col>
+              </>
+            )}
+            <NavBar>
+              {{
+                left: (
+                  <h5>
                     <Button
                       variant="primary"
-                      ClassName="btn bg-light"
+                      className="btn btn-primary mr-3"
                       size="sm"
+                      onClick={() => {
+                        window.history.back();
+                      }}
                     >
-                      Verify Accounts
+                      {"<"}
                     </Button>
-                  </Col>
-                  <Col>
-                    {" "}
-                    <Button
-                      variant="danger"
-                      lassName="btn bg-danger"
-                      size="md"
-                      onClick={this.logout}
-                    >
-                      Logout
-                    </Button>
-                  </Col>
-                </Row>
-              </h5>
-            ),
-          }}
-        </NavBar>
-        <div
-          className="d-flex align-items-center justify-content-center"
-          id="userProfileBody"
-        >
-          {/* <img src="..." alt="..." class="rounded-circle mt-5"></img> */}
+                    <span id="username">{this.props.user.user.name}</span>
+                  </h5>
+                ),
+                right: (
+                  <h5>
+                    <Row className="mt-2">
+                      {this.props.user.mentor ? (
+                        <Col>
+                          <Button
+                            variant="primary"
+                            ClassName="btn bg-light"
+                            size="sm"
+                            onClick={this.verifyStudents}
+                          >
+                            VERIFY STUDENTS
+                          </Button>
+                        </Col>
+                      ) : null}
+                      <Col>
+                        {" "}
+                        <Button
+                          variant="danger"
+                          lassName="btn bg-danger"
+                          size="md"
+                          onClick={this.logout}
+                        >
+                          LOGOUT
+                        </Button>
+                      </Col>
+                    </Row>
+                  </h5>
+                ),
+              }}
+            </NavBar>
+            <div
+              className="d-flex align-items-center justify-content-center"
+              id="userProfileBody"
+            >
+              {/* <img src="..." alt="..." class="rounded-circle mt-5"></img> */}
 
-          <Form className="col-sm-4" id="userProfileForm">
-            <Form.Group as={Row} controlId="formPlaintextEmail">
-              <Form.Label column sm="12">
-                Email
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control
-                  type="text"
-                  placeholder="Email"
-                  disabled
-                  ref={this.emailRef}
-                />
-                <input
-                  type="button"
-                  value="CHANGE"
-                  className="btn btn-primary mt-3"
-                  data-toggle="modal"
-                  data-target="#change-email"
-                  onClick={this.resetModal}
-                />
-              </Col>
-            </Form.Group>
+              <Form className="col-sm-4" id="userProfileForm">
+                <Form.Group as={Row} controlId="formPlaintextEmail">
+                  <Form.Label column sm="12">
+                    Email
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      type="text"
+                      placeholder="Email"
+                      disabled
+                      ref={this.emailRef}
+                    />
+                    <input
+                      type="button"
+                      value="CHANGE"
+                      className="btn btn-primary mt-3"
+                      data-toggle="modal"
+                      data-target="#change-email"
+                      onClick={this.resetModal}
+                    />
+                  </Col>
+                </Form.Group>
 
-            <Form.Group as={Row} controlId="formPlaintextPassword">
-              <Form.Label column sm="12">
-                New Password
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  ref={this.passwordRef}
-                />
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextPassword">
-              <Form.Label column sm="12">
-                Confirm Password
-              </Form.Label>
-              <Col sm="10">
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  ref={this.confirmRef}
-                />
-              </Col>
-            </Form.Group>
-            <p className="ml-2 text-right">
-              <Button
-                className="ml-7"
-                variant="primary"
-                onClick={this.saveUserAccount}
-              >
-                SAVE
-              </Button>
-            </p>
-          </Form>
-        </div>
-      </div>
+                <Form.Group as={Row} controlId="formPlaintextPassword">
+                  <Form.Label column sm="12">
+                    New Password
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      type="password"
+                      placeholder="Password"
+                      ref={this.passwordRef}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="formPlaintextPassword">
+                  <Form.Label column sm="12">
+                    Confirm Password
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      type="password"
+                      placeholder="Password"
+                      ref={this.confirmRef}
+                    />
+                  </Col>
+                </Form.Group>
+                <p className="ml-2 text-right">
+                  <Button
+                    className="ml-7"
+                    variant="primary"
+                    onClick={this.saveUserAccount}
+                  >
+                    SAVE
+                  </Button>
+                </p>
+              </Form>
+            </div>
+          </div>
+        </Route>
+      </>
     );
   }
 }
 
-export default TeacherProfile;
+export default withRouter(TeacherProfile);
