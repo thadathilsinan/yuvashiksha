@@ -13,6 +13,7 @@ let registerRouter = require("./routes/register");
 let adminRouter = require("./routes/admin");
 let teacherRoute = require("./routes/teacher");
 let uploadRouter = require("./routes/upload");
+const studentRouter = require("./routes/student");
 
 mongoose.connect(
   "mongodb+srv://yuvashiksha:yuvashiksha@yuvashilsha.y1gzh.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
@@ -74,6 +75,7 @@ app.use("/register", registerRouter);
 app.use("/admin", adminRouter);
 app.use("/teacher", teacherRoute);
 app.use("/upload", uploadRouter);
+app.use("/student", studentRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
