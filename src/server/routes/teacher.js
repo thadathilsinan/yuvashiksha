@@ -234,9 +234,13 @@ router.get("/mentor", async (req, res, next) => {
 router.get("/profile/verifystudents", async (req, res, next) => {
   let responseObject = [];
 
+  //getting the class of the mentor
+  let mentorClass = await Classes.findOne({ mentor: req.user._id });
+
   let students = await Users.find({
     accountStatus: "not-activated",
     accountType: "student",
+    class: mentorClass._id,
   });
 
   //Parsing class and batch  name from class id
@@ -260,6 +264,30 @@ router.get("/profile/verifystudents", async (req, res, next) => {
   }
   res.statusCode = 200;
   res.json(responseObject);
+});
+
+//Accept a student account
+router.post("/profile/verifystudents/accept", async (req, res, next) => {
+  let student = await Users.findOne({ _id: req.body.userId });
+
+  //Change the account status
+  student.accountStatus = "ok";
+  await student.save();
+
+  res.statusCode = 200;
+  res.end("Account verified successfully");
+});
+
+//reject a student account
+router.post("/profile/verifystudents/reject", async (req, res, next) => {
+  let student = await Users.findOne({ _id: req.body.userId });
+
+  //Change the account status
+  student.accountStatus = "rejected";
+  await student.save();
+
+  res.statusCode = 200;
+  res.end("Account rejected successfully");
 });
 
 module.exports = router;

@@ -32,44 +32,96 @@ class VerifyStudent extends Component {
   setUpStudentList = () => {
     return this.state.studentData.map((student, index, array) => {
       return (
-        <ListItem height="180px" key={student.id}>
-          {{
-            left: (
-              <div>
-                <span>
-                  <Row>
-                    <Col>
-                      <p class="text-left">Name : {student.name} </p>
-                    </Col>
-                  </Row>
-                  <p class="text-left">Email: {student.email}</p>
-                  <p class="text-left">Class: {student.Class}</p>
-                  <p class="text-left">Batch: {student.batch}</p>
-                </span>{" "}
-                <Col>
-                  <Button type="submit" className=" mr-3 btn btn-danger">
-                    Reject
-                  </Button>
-                </Col>
-              </div>
-            ),
-            right: (
-              <div>
-                <p>Admision Number: {student.registerNumber}</p>
-                <p>Parentemail: {student.parentEmail}</p>
-                <br />
-                <br />
-                <div className="text-right">
-                  <Button type="submit" className=" mr-3 btn btn-success">
-                    Accept
-                  </Button>
+        <div key={student.id} id={student.id}>
+          <ListItem height="180px">
+            {{
+              left: (
+                <div>
+                  <span>
+                    <Row>
+                      <Col>
+                        <p class="text-left">Name : {student.name} </p>
+                      </Col>
+                    </Row>
+                    <p class="text-left">Email: {student.email}</p>
+                    <p class="text-left">Class: {student.Class}</p>
+                    <p class="text-left">Batch: {student.batch}</p>
+                  </span>{" "}
+                  <Col>
+                    <Button
+                      type="submit"
+                      className=" mr-3 btn btn-danger"
+                      onClick={() => this.rejectStudent(student)}
+                    >
+                      Reject
+                    </Button>
+                  </Col>
                 </div>
-              </div>
-            ),
-          }}
-        </ListItem>
+              ),
+              right: (
+                <div>
+                  <p>Admision Number: {student.registerNumber}</p>
+                  <p>Parentemail: {student.parentEmail}</p>
+                  <br />
+                  <br />
+                  <div className="text-right">
+                    <Button
+                      type="submit"
+                      className=" mr-3 btn btn-success"
+                      onClick={() => this.acceptStudent(student)}
+                    >
+                      Accept
+                    </Button>
+                  </div>
+                </div>
+              ),
+            }}
+          </ListItem>
+        </div>
       );
     });
+  };
+
+  //Reject a student account
+  rejectStudent = (item) => {
+    let confirmation = window.confirm("Are you sure you want to reject?");
+
+    if (confirmation) {
+      http(
+        "POST",
+        "/teacher/profile/verifystudents/reject",
+        { userId: item.id },
+        (res) => {
+          if (res.status == 200) {
+            alert("Account Rejected Successfully");
+            document.getElementById(item.id).style.display = "none";
+          } else {
+            alert("Error during account rejection");
+          }
+        }
+      );
+    }
+  };
+
+  //Accept a student account
+  acceptStudent = (item) => {
+    let confirmation = window.confirm("Are you sure you want to Accept?");
+
+    if (confirmation) {
+      http(
+        "POST",
+        "/teacher/profile/verifystudents/accept",
+        { userId: item.id },
+        (res) => {
+          if (res.status == 200) {
+            alert("Account Accepted Successfully");
+            document.getElementById(item.id).style.display = "none";
+          } else {
+            alert("Error during account verification");
+          }
+        }
+      );
+    }
   };
 
   componentDidMount() {
