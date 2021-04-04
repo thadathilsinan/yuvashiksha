@@ -377,7 +377,9 @@ class Teacher extends Component {
           <NavBar>
             {{
               left: (
-                <h5 onClick={this.openProfile}>{this.props.user.user.name}</h5>
+                <h5 id="profileText" onClick={this.openProfile}>
+                  {this.props.user.user.name}
+                </h5>
               ),
               right: (
                 <div className="container" id="NavBarRight">

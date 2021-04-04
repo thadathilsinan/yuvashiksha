@@ -310,4 +310,50 @@ router.post("/googlesignup", async (req, res, next) => {
   res.end("User registration completed.");
 });
 
+//Send Email with new OTP for changing email address of the account
+router.post("/changeemail/sendotp", async (req, res, next) => {
+  let otp = generateOtp();
+
+  //Creating an expiry date for the new OTp
+  let expiryDate = new Date();
+  expiryDate.setMinutes(expiryDate.getMinutes() + 15);
+
+  //Upsert the otp to the Otp collection
+  await Otp.findOneAndUpdate(
+    { userId: req.user._id },
+    { userId: req.user._id, otp, expiry: expiryDate },
+    {
+      upsert: true,
+    }
+  ).catch((err) => next(err));
+
+  sendOtpMail(otp, req.body.email);
+
+  res.statusCode = 200;
+  res.end("Otp sent successfully");
+});
+
+//Verify otp of the user for changing email id of account
+router.post("/changeemail/verify", async (req, res, next) => {
+  let otp = await Otp.findOne({ userId: req.user._id });
+
+  if (otp.otp == req.body.otp) {
+    let user = await Users.findOne({ _id: req.user._id });
+
+    if (user) {
+      user.email = req.body.email;
+      await user.save();
+
+      res.statusCode = 200;
+      res.end("Email changed successfully");
+    } else {
+      res.statusCode = 200;
+      res.end("User account not found");
+    }
+  } else {
+    res.statusCode = 203;
+    res.end("OTP incorrect");
+  }
+});
+
 module.exports = router;

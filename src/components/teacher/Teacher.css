@@ -70,3 +70,7 @@ p {
   color: gray;
   overflow: auto;
 }
+
+#profileText {
+  cursor: pointer;
+}

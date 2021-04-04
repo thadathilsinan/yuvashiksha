@@ -28,15 +28,11 @@ router.post("/profile/save", async (req, res, next) => {
       user.password = await bcrypt.hash(req.body.password, 10);
     }
 
-    if (req.body.email != user.email) {
-      user.email = req.body.email;
-    }
-
     //Saving changes to the db
     await user.save();
 
     res.statusCode = 200;
-    res.end("Accound data saved successfully");
+    res.end("Password changed successfully");
   } else {
     res.statusCode = 203;
     res.end("User account not found");
