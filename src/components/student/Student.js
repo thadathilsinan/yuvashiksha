@@ -4,7 +4,8 @@ import TabView from "../ui-elements/TabView/TabView";
 import ExamGuidlines from "./components/examguidelines/ExamGuidlines";
 import ListItem from "../ui-elements/ListItem/ListItem";
 import StartExam from "./components/startexam/StartExam";
-import { Link, BrowserRouter, Route } from "react-router-dom";
+import { Link, BrowserRouter, Route, withRouter } from "react-router-dom";
+import StudentProfile from "./components/StudentProfile/StudentProfile";
 import "./Student.css";
 
 let examData = [
@@ -34,7 +35,7 @@ let examData = [
   },
 ];
 
-export default class Student extends Component {
+class Student extends Component {
   examList = [];
   previousExamList = [];
 
@@ -92,6 +93,11 @@ export default class Student extends Component {
     });
   };
 
+  //Open the profile of the student account
+  openProfile = () => {
+    this.props.history.push("/student/profile");
+  };
+
   componentDidMount() {
     this.setExamData();
     this.forceUpdate();
@@ -100,30 +106,43 @@ export default class Student extends Component {
   }
   render() {
     return (
-      <div className="root">
-        <div>
-          <BrowserRouter>
-            <Route path="/student" exact>
-              <NavBar>
-                {{
-                  left: <h5>HOME</h5>,
-                }}
-              </NavBar>
-              <TabView>
-                {{
-                  leftTab: <span>SCHEDULED EXAMS</span>,
-                  rightTab: <span>PREVIOUS EXAMS</span>,
-                  leftTabBody: <div id="leftTabBody">{this.examList}</div>,
-                  rightTabBody: (
-                    <div id="rightTabBody">{this.previousExamList}</div>
-                  ),
-                }}
-              </TabView>
-              {/* <ExamGuidlines/> */}
-            </Route>
-          </BrowserRouter>
-        </div>
-      </div>
+      <>
+        <Route path="/student/profile">
+          <StudentProfile user={this.props.user.user} />
+        </Route>
+        <Route path="/student" exact>
+          <div className="root">
+            <div>
+              <BrowserRouter>
+                <Route path="/student" exact>
+                  <NavBar>
+                    {{
+                      left: (
+                        <h5 id="profileText" onClick={this.openProfile}>
+                          {this.props.user.user.name}
+                        </h5>
+                      ),
+                    }}
+                  </NavBar>
+                  <TabView>
+                    {{
+                      leftTab: <span>SCHEDULED EXAMS</span>,
+                      rightTab: <span>PREVIOUS EXAMS</span>,
+                      leftTabBody: <div id="leftTabBody">{this.examList}</div>,
+                      rightTabBody: (
+                        <div id="rightTabBody">{this.previousExamList}</div>
+                      ),
+                    }}
+                  </TabView>
+                  {/* <ExamGuidlines/> */}
+                </Route>
+              </BrowserRouter>
+            </div>
+          </div>
+        </Route>
+      </>
     );
   }
 }
+
+export default withRouter(Student);

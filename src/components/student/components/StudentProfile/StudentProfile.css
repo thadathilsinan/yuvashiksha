@@ -1,7 +1,10 @@
-#userProfileBody {
+#studentProfileBody {
   height: calc(100vh - 80px);
-  overflow: scroll;
   background-color: rgb(196, 196, 196);
+  padding-top: 330px;
+  padding-bottom: 60px;
+
+  overflow: scroll;
 }
 
 body {

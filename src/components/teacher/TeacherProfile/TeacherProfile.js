@@ -217,7 +217,7 @@ export class TeacherProfile extends Component {
                         {" "}
                         <Button
                           variant="danger"
-                          lassName="btn bg-danger"
+                          className="btn bg-danger"
                           size="md"
                           onClick={this.logout}
                         >

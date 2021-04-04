@@ -1,3 +1,7 @@
 .root {
   background-color: white;
 }
+
+h5 {
+  cursor: default;
+}

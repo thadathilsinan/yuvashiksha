@@ -1,7 +1,28 @@
 import React, { Component } from "react";
-import NavBar from "../../../../ui-elements/navBar/NavBar";
+import NavBar from "../../../ui-elements/navBar/NavBar";
 import { Button, Form, Row, Col } from "react-bootstrap";
+import http from "../../../../shared/http";
+import "./StudentProfile.css";
+
 export class StudentProfile extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  //Logout user
+  logout = () => {
+    http("GET", "/login/logout", {}, (res) => {
+      alert(res.data);
+      if (res.status == 200) {
+        window.location.href = "http://localhost:3000/";
+      }
+    });
+  };
+
+  componentDidMount() {}
+
   render() {
     return (
       <div>
@@ -9,92 +30,120 @@ export class StudentProfile extends Component {
           {{
             left: (
               <h5>
-                {" "}
-                <span id="navBarBackButton" className="mr-3">
+                <Button
+                  variant="primary"
+                  className="btn btn-primary mr-3"
+                  size="sm"
+                  onClick={() => {
+                    window.history.back();
+                  }}
+                >
                   {"<"}
-                </span>
-                Username
+                </Button>
+                {this.props.user.name}
               </h5>
             ),
             right: (
               <h5>
-                <Button variant="light" ClassName="btn bg-light">
-                  logout
+                <Button
+                  variant="danger"
+                  className="btn bg-danger"
+                  size="md"
+                  onClick={this.logout}
+                >
+                  LOGOUT
                 </Button>
               </h5>
             ),
           }}
         </NavBar>
-        <div className="text-center  align-items-center mt-5 col-md-8 ">
-          <img src="..." alt="..." class="rounded-circle mt-5"></img>
-          <Form className="col-md-6">
-            <Form.Group as={Row} controlId="formPlaintextEmail">
-              <Form.Label column sm="2">
+        <div
+          id="studentProfileBody"
+          className="d-flex align-items-center justify-content-center"
+        >
+          {/* <img src="..." alt="..." class="rounded-circle mt-5"></img> */}
+
+          <Form className="col-sm-6">
+            <center className="mb-3">
+              <h5>ACCOUNT DETAILS</h5>
+            </center>
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 Email
               </Form.Label>
-              <Col sm="10">
+              <Col sm="8">
                 <Form.Control type="text" placeholder="Email" />
               </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextAdmissionNumber">
-              <Form.Label column sm="2">
+            <div className="text-right">
+              <input
+                type="button"
+                value="CHANGE EMAIL"
+                className="btn btn-primary mb-2"
+              />
+            </div>
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 Admission Number
               </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Admission  Number" />
+              <Col sm="8">
+                <Form.Control type="text" disabled />
               </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextClass">
-              <Form.Label column sm="2">
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 Class
               </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Class" />
+              <Col sm="8">
+                <Form.Control type="text" disabled />
               </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextBatch">
-              <Form.Label column sm="2">
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 Batch
               </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Batch" />
+              <Col sm="8">
+                <Form.Control type="text" disabled />
               </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextDepartment">
-              <Form.Label column sm="2">
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 Department
               </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Department" />
+              <Col sm="8">
+                <Form.Control type="text" disabled />
               </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextParentEmail">
-              <Form.Label column sm="2">
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 Parent's Email
               </Form.Label>
-              <Col sm="10">
-                <Form.Control type="text" placeholder="Parent's Email" />
+              <Col sm="8">
+                <Form.Control type="text" disabled />
               </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextPassword">
-              <Form.Label column sm="2">
+            <center className="mb-3">
+              <h5>CHANGE PASSWORD</h5>
+            </center>
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 New Password
               </Form.Label>
-              <Col sm="10">
+              <Col sm="8">
                 <Form.Control type="password" placeholder="Password" />
               </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="formPlaintextPassword">
-              <Form.Label column sm="2">
+            <Form.Group as={Row}>
+              <Form.Label column sm="4">
                 Confirm Password
               </Form.Label>
-              <Col sm="10">
-                <Form.Control type="password" placeholder="Password" />
+              <Col sm="8">
+                <Form.Control type="password" placeholder="Confirm" />
               </Col>
             </Form.Group>
             <p className="ml-2 text-right">
               <Button className="ml-7" variant="primary">
-                Save
+                SAVE PASSWORD
               </Button>
             </p>
           </Form>
