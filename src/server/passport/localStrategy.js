@@ -22,13 +22,19 @@ module.exports = function (passport) {
         } else {
           //Noraml user login
           Users.findOne({ registerNumber: username }, (err, user) => {
-            //Checking if signup incomplete
+            if (!user) {
+              return done(null, false);
+            }
+
+            //Checking user account status
             if (user.accountStatus == "signup-incomplete") {
               return done(new Error("Account signup is INCOMPLETE"), false);
             } else if (user.accountStatus == "not-activated") {
               return done(new Error("User account NOT ACTIVATED"), false);
             } else if (user.accountStatus == "rejected") {
               return done(new Error("User account is REJECTED"), false);
+            } else if (user.accountStatus == "disabled") {
+              return done(new Error("Account is temporarily DISABLED"));
             } else if (user.accountStatus == "ok") {
               if (err) throw err;
               if (!user) return done(null, false);
