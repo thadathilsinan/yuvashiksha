@@ -51,11 +51,6 @@ router.post("/report", async (req, res, next) => {
   res.end("Bug report successfully submitted");
 });
 
-router.get("/test", (req, res, next) => {
-  res.cookie("name", "sinan");
-  res.end("Success");
-});
-
 //Check admin logged in or not
 router.post("/checkAdmin", (req, res, next) => {
   if (req.user && req.user.accountType == "admin") {
@@ -145,6 +140,17 @@ router.post("/checkTeacher", async (req, res, next) => {
 
     res.statusCode = 200;
     res.json({ user: req.user, ...responseObject });
+  } else {
+    res.statusCode = 203;
+    res.end("User NOT logged in");
+  }
+});
+
+//Check Student logged in or not
+router.post("/checkStudent", async (req, res, next) => {
+  if (req.user && req.user.accountType == "student") {
+    res.statusCode = 200;
+    res.json({ user: req.user });
   } else {
     res.statusCode = 203;
     res.end("User NOT logged in");

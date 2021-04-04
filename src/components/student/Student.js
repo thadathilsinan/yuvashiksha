@@ -6,6 +6,7 @@ import ListItem from "../ui-elements/ListItem/ListItem";
 import StartExam from "./components/startexam/StartExam";
 import { Link, BrowserRouter, Route } from "react-router-dom";
 import "./Student.css";
+
 let examData = [
   {
     name: "Name of Exam",
@@ -38,7 +39,6 @@ export default class Student extends Component {
   previousExamList = [];
 
   setExamData = () => {
-    console.log("CAlled");
     let currentTime = new Date();
 
     examData.map((item) => {
@@ -66,7 +66,6 @@ export default class Student extends Component {
             }}
           </ListItem>
         );
-        console.log("pushed to prev");
       } else {
         this.examList.push(
           <ListItem height="100px">
@@ -96,6 +95,8 @@ export default class Student extends Component {
   componentDidMount() {
     this.setExamData();
     this.forceUpdate();
+
+    console.log(this.props);
   }
   render() {
     return (
