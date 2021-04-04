@@ -7,7 +7,10 @@ class ListItem extends Component {
       <div
         id="list-item-container"
         className="d-flex flex-row justify-content-between align-items-center"
-        style={{ height: this.props.height }}
+        style={{
+          height: this.props.height,
+          backgroundColor: this.props.green ? "lightgreen" : null,
+        }}
         onClick={this.props.onClick}
       >
         <div id="left-list-item-content">{this.props.children.left}</div>

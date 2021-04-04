@@ -9,6 +9,7 @@ import StudentProfile from "./components/StudentProfile/StudentProfile";
 import { FaUserCircle } from "react-icons/fa";
 import "./Student.css";
 import http from "../../shared/http";
+import configuireDialogBox from "../../shared/dailogBox";
 
 class Student extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class Student extends Component {
       examData: [],
       examList: [],
       previousExamList: [],
+      selectedExam: null,
     };
   }
 
@@ -41,6 +43,7 @@ class Student extends Component {
 
     this.state.examData.map((item) => {
       let examDate = new Date(`${item.date},${item.to}`);
+      let startTime = new Date(`${item.date},${item.from}`);
 
       if (currentTime.getTime() > examDate.getTime()) {
         previousExamList.push(
@@ -66,7 +69,12 @@ class Student extends Component {
         );
       } else {
         examList.push(
-          <ListItem height="100px" key={item._id}>
+          <ListItem
+            height="100px"
+            key={item._id}
+            green={currentTime.getTime() > startTime.getTime() ? true : null}
+            onClick={(item) => this.openScheduledExam(item)}
+          >
             {{
               left: (
                 <div id="leftListItem">
@@ -98,14 +106,76 @@ class Student extends Component {
     this.props.history.push("/student/profile");
   };
 
+  //Open the welcome dialog box
+  openWelcomDialog = () => {
+    window.$("#welcome").modal("show");
+  };
+
+  //Open the scheduled exam
+  openScheduledExam = (item) => {
+    this.setState({ selectedExam: item }, () => {
+      let startTime = new Date(`${item.date},${item.from}`);
+      let currentTime = new Date();
+
+      if (currentTime.getTime() > startTime.getTime()) {
+        //Exam start time reached
+        alert("CAN OPEN EXAM");
+      } else {
+        window.$("#warning").modal("show");
+      }
+    });
+  };
+
   componentDidMount() {
+    this.openWelcomDialog();
     this.getExamData();
+
+    //Refersh the exam list every minute
+    setInterval(() => {
+      this.getExamData();
+    }, 60 * 1000);
 
     console.log(this.props);
   }
   render() {
     return (
       <>
+        {/* Configure the welcome modal */}
+        {configuireDialogBox(
+          "welcome",
+          "Welcome " + this.props.user.user.name,
+          <>
+            You can start writing the exams which are displayed in{" "}
+            <span style={{ backgroundColor: "lightgreen" }}>LIGHT GREEN</span>{" "}
+            color.
+            <br />
+            You an use the PREVIOUS EXAMS tab to view your previous exam
+            informations.
+          </>,
+          <input
+            type="button"
+            className="btn btn-primary"
+            value="GOT IT"
+            data-toggle="modal"
+            data-target="#welcome"
+          />
+        )}
+        {/* Configure the dialog box to show warning about the exam start timne */}
+        {configuireDialogBox(
+          "warning",
+          "Information",
+          <>
+            Your exam is not yet started! Please check the examination time and
+            try again after some time
+          </>,
+          <input
+            type="button"
+            className="btn btn-primary"
+            value="OK"
+            data-toggle="modal"
+            data-target="#warning"
+          />
+        )}
         <Route path="/student/profile">
           <StudentProfile
             user={this.props.user.user}
