@@ -3,4 +3,10 @@
   background-color: rgb(196, 196, 196);
 
   overflow: auto;
+
+  padding: 50px 20px;
+}
+
+#examBody textarea {
+  width: 100%;
 }

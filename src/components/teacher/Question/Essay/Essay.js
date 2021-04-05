@@ -20,6 +20,31 @@ export default class Essay extends Component {
             <img src={this.props.question.image}></img>
           </div>
         ) : null}
+
+        {/* Display the exam wring system if the question is in examMode */}
+        {this.props.examMode ? (
+          <>
+            <br />
+            <hr />
+            <div className="container">
+              <div className="row">
+                <div className="col-sm-10">
+                  <textarea
+                    placeholder="Your answer here"
+                    name="essayQuestionAnswer"
+                  ></textarea>
+                </div>
+                <div className="col-sm-2">
+                  <input
+                    type="button"
+                    value="CANVAS"
+                    className="btn btn-primary"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        ) : null}
       </div>
     );
   }

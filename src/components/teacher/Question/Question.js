@@ -22,19 +22,31 @@ export default class Question extends Component {
     } else if (this.props.question.type == "mcq") {
       this.setState({
         component: (
-          <Mcq question={this.props.question} index={this.props.index} />
+          <Mcq
+            question={this.props.question}
+            index={this.props.index}
+            examMode={this.props.examMode}
+          />
         ),
       });
     } else if (this.props.question.type == "short") {
       this.setState({
         component: (
-          <Short question={this.props.question} index={this.props.index} />
+          <Short
+            question={this.props.question}
+            index={this.props.index}
+            examMode={this.props.examMode}
+          />
         ),
       });
     } else if (this.props.question.type == "essay") {
       this.setState({
         component: (
-          <Essay question={this.props.question} index={this.props.index} />
+          <Essay
+            question={this.props.question}
+            index={this.props.index}
+            examMode={this.props.examMode}
+          />
         ),
       });
     } else if (this.props.question.type == "header") {
