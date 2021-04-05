@@ -1,3 +1,5 @@
-.root {
-  background-color: #82b1ff;
+#examBody {
+  height: calc(100vh - 80px);
+  background-color: rgb(196, 196, 196);
+  margin-top: 0;
 }

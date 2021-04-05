@@ -20,9 +20,23 @@ class App extends React.Component {
     document.addEventListener("contextmenu", (event) => event.preventDefault());
   };
 
+  //Prevent COPY ,PASTE
+  preventCopyPaste = () => {
+    $(document).ready(() => {
+      // Disables ctrl+v, ctrl+x, ctrl+c.
+      $(document).on("cut copy paste", function (e) {
+        alert("Cut, Copy, Paste are NOT allowed.");
+        e.preventDefault();
+      });
+    });
+  };
+
   componentDidMount() {
     //Disabling right click menu
     this.preventRightClick();
+
+    //Prevent cut copy paste features
+    this.preventCopyPaste();
 
     //Replacing system default alert with custom alert
     window.alert = (text) => {
