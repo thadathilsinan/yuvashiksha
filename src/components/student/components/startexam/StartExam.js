@@ -41,22 +41,21 @@ class StartExam extends Component {
     });
   };
 
+  //disable right click
+  preventRightClick = () => {
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
+  };
+
   componentDidMount() {
     this.preventPageRefresh();
     this.preventCopyPaste();
+    this.preventRightClick();
     console.log(this.props);
   }
 
   render() {
     //Check the props availability
     this.checkProps();
-
-    // Above all three can be combined into one, above is
-    // executed separately for understanding purposes.
-    /* $('textarea').on("cut copy paste", function(e) { 
-        $("#d2").text('right-click is disabled!'); 
-        e.preventDefault(); 
-        }); */
 
     // Disables right-click.
     //   $("textarea").mousedown(function (e) {
