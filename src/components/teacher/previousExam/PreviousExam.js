@@ -3,7 +3,8 @@ import NavBar from "../../ui-elements/navBar/NavBar";
 import ListItem from "../../ui-elements/ListItem/ListItem";
 import { Button } from "react-bootstrap";
 import { BiPrinter } from "react-icons/bi";
-export class PreviousExam extends Component {
+
+class PreviousExam extends Component {
   render() {
     return (
       <div>

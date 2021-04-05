@@ -3,9 +3,10 @@ import NavBar from "../../../ui-elements/navBar/NavBar";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { AiOutlineCheck } from "react-icons/ai";
+import { FaRegCheckCircle } from "react-icons/fa";
 import "./startexam.css";
 import $ from "jquery";
+import Question from "../../../teacher/Question/Question";
 
 class StartExam extends Component {
   constructor(props) {
@@ -20,6 +21,9 @@ class StartExam extends Component {
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
+
+    //For the qestion Paper header
+    this.timeDuration = 0;
   }
 
   //Check if all props are correctly available
@@ -77,6 +81,55 @@ class StartExam extends Component {
     }
   }
 
+  //Parse the questions to display it
+  parseQuestions = () => {
+    let questionNumber = 0;
+
+    return this.props.exam.questionPaper.map((question, index) => {
+      //Count the question Number
+      if (question.type != "header" && question.type != "text") {
+        questionNumber++;
+      }
+
+      return (
+        <Question
+          question={question}
+          index={questionNumber}
+          key={question.id}
+          examMode //Indicate that the question is in the startExam component
+        />
+      );
+    });
+  };
+
+  //Convert milliseconds to time format string
+  msToTime = (s) => {
+    // Pad to 2 or 3 digits, default is 2
+    function pad(n, z) {
+      z = z || 2;
+      return ("00" + n).slice(-z);
+    }
+
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = (s - mins) / 60;
+
+    return pad(hrs) + ":" + pad(mins) + ":" + pad(secs);
+  };
+
+  //Calculate time duration of the exam
+  calculateTimeDuration = () => {
+    let to = new Date(`${this.props.exam.date},${this.props.exam.to}`);
+    let from = new Date(`${this.props.exam.date},${this.props.exam.from}`);
+
+    let differenceInMilliSeconds = to.getTime() - from.getTime();
+
+    this.timeDuration = this.msToTime(differenceInMilliSeconds);
+  };
+
   componentDidMount() {
     this.preventPageRefresh();
 
@@ -108,28 +161,45 @@ class StartExam extends Component {
     //Starting the couter of time left
     this.startTimer();
 
+    //Calculate time duration of the exam
+    this.calculateTimeDuration();
+
     return (
       <div>
         <NavBar>
           {{
             left: (
               <div>
+                Time left:{" "}
                 <h5>
-                  TIME LEFT: {this.state.time.h}h {this.state.time.m}m{" "}
-                  {this.state.time.s}s
+                  {this.state.time.h}h {this.state.time.m}m {this.state.time.s}s
                 </h5>
               </div>
             ),
             right: (
               <div>
                 <Button className="btn btn-success">
-                  <AiOutlineCheck />
+                  <FaRegCheckCircle size={28} />
                 </Button>
               </div>
             ),
           }}
         </NavBar>
-        <div id="examBody"></div>
+        <div id="examBody">
+          <Question
+            question={{
+              type: "header",
+              examName: this.props.exam.examName,
+              subject: this.props.exam.subject,
+              date: this.props.exam.date,
+              Class: this.props.Class,
+              batch: this.props.batch,
+              marks: this.props.exam.totalMarks,
+              time: this.timeDuration,
+            }}
+          />
+          {this.parseQuestions()}
+        </div>
       </div>
     );
   }

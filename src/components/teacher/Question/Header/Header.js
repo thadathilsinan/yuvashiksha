@@ -20,8 +20,12 @@ class Header extends Component {
           </div>
           <div id="right">
             <p>MARKS : {this.props.question.marks}</p>
-            <p>CLASS : {this.props.question.Class}</p>
-            <p>BATCH : {this.props.question.batch}</p>
+            {this.props.question.Class ? (
+              <p>CLASS : {this.props.question.Class}</p>
+            ) : null}
+            {this.props.question.batch ? (
+              <p>BATCH : {this.props.question.batch}</p>
+            ) : null}
           </div>
         </div>
       </div>
