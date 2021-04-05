@@ -30,8 +30,20 @@ class StartExam extends Component {
     };
   };
 
+  //Prevent COPY ,PASTE
+  preventCopyPaste = () => {
+    $(document).ready(() => {
+      // Disables ctrl+v, ctrl+x, ctrl+c.
+      $(document).on("cut copy paste", function (e) {
+        alert("Cut, Copy, Paste are NOT allowed.");
+        e.preventDefault();
+      });
+    });
+  };
+
   componentDidMount() {
     this.preventPageRefresh();
+    this.preventCopyPaste();
     console.log(this.props);
   }
 
@@ -39,36 +51,21 @@ class StartExam extends Component {
     //Check the props availability
     this.checkProps();
 
-    $(document).ready(function () {
-      // Disables ctrl+v, ctrl+x, ctrl+c.
-      $("textarea").on("cut", function (e) {
-        $("#d2").text("cut. not allowed!");
-        e.preventDefault();
-      });
-      $("textarea").on("copy", function (e) {
-        $("#d2").text("copy. not allowed!");
-        e.preventDefault();
-      });
-      $("textarea").on("paste", function (e) {
-        $("#d2").text("paste. not allowed!");
-        e.preventDefault();
-      });
-
-      // Above all three can be combined into one, above is
-      // executed separately for understanding purposes.
-      /* $('textarea').on("cut copy paste", function(e) { 
+    // Above all three can be combined into one, above is
+    // executed separately for understanding purposes.
+    /* $('textarea').on("cut copy paste", function(e) { 
         $("#d2").text('right-click is disabled!'); 
         e.preventDefault(); 
         }); */
 
-      // Disables right-click.
-      $("textarea").mousedown(function (e) {
-        if (e.button == 2) {
-          e.preventDefault();
-          alert("right-click is disabled!");
-        }
-      });
-    });
+    // Disables right-click.
+    //   $("textarea").mousedown(function (e) {
+    //     if (e.button == 2) {
+    //       e.preventDefault();
+    //       alert("right-click is disabled!");
+    //     }
+    //   });
+    // });
 
     return (
       <div className="root">
