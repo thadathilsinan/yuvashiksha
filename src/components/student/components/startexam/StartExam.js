@@ -108,6 +108,11 @@ class StartExam extends Component {
                 }
               : null
           }
+          optionChange={
+            question.type == "mcq"
+              ? (e, value) => this.mcqOptionChanged(question, value)
+              : null
+          }
           examMode //Indicate that the question is in the startExam component
         />
       );
@@ -168,7 +173,7 @@ class StartExam extends Component {
     if (answerKey != null) {
       //Answer object already exist in the array
       let answers = { ...this.state.answers };
-      answers[i].canvas = image;
+      answers[answerKey].canvas = image;
       this.setState({ answers });
     } else {
       let answers = { ...this.state.answers };
@@ -178,6 +183,29 @@ class StartExam extends Component {
     }
 
     this.setState({ showCanvas: false, canvasQuestion: null });
+  };
+
+  //When the options of the MCQ changes
+  mcqOptionChanged = (question, value) => {
+    let answerKey = null;
+
+    for (let i in this.state.answers) {
+      if (this.state.answers[i].id == question.id) {
+        answerKey = i;
+      }
+    }
+
+    if (answerKey != null) {
+      //Answer object already exist in the array
+      let answers = { ...this.state.answers };
+      answers[answerKey].answer = value;
+      this.setState({ answers });
+    } else {
+      let answers = { ...this.state.answers };
+      answers[question.id] = { answer: value };
+
+      this.setState({ answers });
+    }
   };
 
   componentDidMount() {
