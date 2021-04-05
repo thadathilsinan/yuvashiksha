@@ -41,11 +41,6 @@ class StartExam extends Component {
     });
   };
 
-  //disable right click
-  preventRightClick = () => {
-    document.addEventListener("contextmenu", (event) => event.preventDefault());
-  };
-
   componentDidMount() {
     this.preventPageRefresh();
     this.preventCopyPaste();

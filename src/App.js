@@ -15,7 +15,15 @@ import Canvas from "./components/ui-elements/Canvas/Canvas";
 import StudentMain from "./components/student/StudentMain";
 
 class App extends React.Component {
+  //disable right click
+  preventRightClick = () => {
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
+  };
+
   componentDidMount() {
+    //Disabling right click menu
+    this.preventRightClick();
+
     //Replacing system default alert with custom alert
     window.alert = (text) => {
       $("body").append(
