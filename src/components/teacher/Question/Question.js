@@ -26,6 +26,7 @@ export default class Question extends Component {
             question={this.props.question}
             index={this.props.index}
             examMode={this.props.examMode}
+            optionChange={this.props.optionChange}
           />
         ),
       });
@@ -37,6 +38,7 @@ export default class Question extends Component {
             index={this.props.index}
             examMode={this.props.examMode}
             canvasClick={this.props.canvasClick}
+            textChange={this.props.textChange}
           />
         ),
       });
@@ -48,6 +50,7 @@ export default class Question extends Component {
             index={this.props.index}
             examMode={this.props.examMode}
             canvasClick={this.props.canvasClick}
+            textChange={this.props.textChange}
           />
         ),
       });

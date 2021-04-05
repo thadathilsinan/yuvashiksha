@@ -30,6 +30,9 @@ export default class Short extends Component {
                     type="text"
                     placeholder="Your answer here"
                     name="shortQuestionAnswer"
+                    onChange={(e) => {
+                      this.props.textChange(e.target.value);
+                    }}
                   />
                 </div>
                 <div className="col-sm-2">

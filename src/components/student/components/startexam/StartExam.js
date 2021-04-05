@@ -110,7 +110,14 @@ class StartExam extends Component {
           }
           optionChange={
             question.type == "mcq"
-              ? (e, value) => this.mcqOptionChanged(question, value)
+              ? (value) => this.mcqOptionChanged(question, value)
+              : null
+          }
+          textChange={
+            question.type == "short" || question.type == "essay"
+              ? (value) => {
+                  this.textChange(question, value);
+                }
               : null
           }
           examMode //Indicate that the question is in the startExam component
@@ -162,50 +169,33 @@ class StartExam extends Component {
   //Save Canvas
   saveCanvas = (image) => {
     //Saving image to the answers array
-    let answerKey = null;
+    let answers = { ...this.state.answers };
 
-    for (let i in this.state.answers) {
-      if (this.state.answers[i].id == this.state.canvasQuestion.id) {
-        answerKey = i;
-      }
-    }
+    if (answers[this.state.canvasQuestion.id])
+      answers[this.state.canvasQuestion.id].canvas = image;
+    else answers[this.state.canvasQuestion.id] = { canvas: image };
 
-    if (answerKey != null) {
-      //Answer object already exist in the array
-      let answers = { ...this.state.answers };
-      answers[answerKey].canvas = image;
-      this.setState({ answers });
-    } else {
-      let answers = { ...this.state.answers };
-      answers[this.state.canvasQuestion.id] = { canvas: image };
-
-      this.setState({ answers });
-    }
-
-    this.setState({ showCanvas: false, canvasQuestion: null });
+    this.setState({ answers, showCanvas: false, canvasQuestion: null });
   };
 
   //When the options of the MCQ changes
   mcqOptionChanged = (question, value) => {
-    let answerKey = null;
+    let answers = { ...this.state.answers };
 
-    for (let i in this.state.answers) {
-      if (this.state.answers[i].id == question.id) {
-        answerKey = i;
-      }
-    }
+    if (answers[question.id]) answers[question.id].answer = value;
+    else answers[question.id] = { answer: value };
 
-    if (answerKey != null) {
-      //Answer object already exist in the array
-      let answers = { ...this.state.answers };
-      answers[answerKey].answer = value;
-      this.setState({ answers });
-    } else {
-      let answers = { ...this.state.answers };
-      answers[question.id] = { answer: value };
+    this.setState({ answers });
+  };
 
-      this.setState({ answers });
-    }
+  //When the text of the SHORT , ESSAY question value changes
+  textChange = (question, value) => {
+    let answers = { ...this.state.answers };
+
+    if (answers[question.id]) answers[question.id].answer = value;
+    else answers[question.id] = { answer: value };
+
+    this.setState({ answers });
   };
 
   componentDidMount() {

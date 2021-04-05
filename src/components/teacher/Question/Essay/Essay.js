@@ -33,6 +33,9 @@ export default class Essay extends Component {
                     placeholder="Your answer here"
                     name="essayQuestionAnswer"
                     rows="15"
+                    onChange={(e) => {
+                      this.props.textChange(e.target.value);
+                    }}
                   ></textarea>
                 </div>
                 <div className="col-sm-2">

@@ -12,6 +12,9 @@ export default class Mcq extends Component {
             name="options"
             value={option.name}
             checked={option.correct && !this.props.examMode ? true : undefined}
+            onChange={(e) => {
+              this.props.optionChange(e.target.value);
+            }}
             disabled={!this.props.examMode}
           />
           <label class="form-check-label" for="options">
