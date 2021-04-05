@@ -1,25 +1,58 @@
 import React, { Component } from "react";
 import NavBar from "../../../ui-elements/navBar/NavBar";
 import { Button } from "react-bootstrap";
-export default class ExamGuidlines extends Component {
+import { withRouter } from "react-router-dom";
+import "./examguidliness.css";
+
+class ExamGuidlines extends Component {
+  //Check if all props are correclty available
+  checkProps = () => {
+    if (!this.props.exam) {
+      window.history.back();
+    }
+  };
+
+  componentDidMount() {
+    this.checkProps();
+
+    console.log(this.props);
+  }
+
   render() {
     return (
-      <div className="root">
+      <>
         <NavBar>
           {{
             left: (
               <h5>
-                <span id="navBarBackButton">{"<"}</span>
-                Class Test
-                <br />
-                Html
+                <div id="navBarTitleContainer">
+                  <Button
+                    variant="primary"
+                    className="btn btn-primary mr-3"
+                    size="sm"
+                    onClick={() => {
+                      window.history.back();
+                    }}
+                  >
+                    {"<"}
+                  </Button>
+                  EXAM GUIDELINES
+                </div>
               </h5>
             ),
           }}
         </NavBar>
-        <div className="examguidelines">
-          <div>
-            <h3 className="text-center ml-4">EXAM GUIDELNIES</h3>
+        <div id="examguidelines">
+          <div className="col-sm-8 offset-sm-2" id="guidlinesContainer">
+            <h3 className="text-center ml-4">EXAM GUIDELINES</h3>
+            <br />
+            <div>
+              <h6>
+                EXAM NAME: {this.props.exam.examName}
+                <br />
+                SUBJECT: {this.props.exam.subject}
+              </h6>
+            </div>
             <ul className="mt-3">
               <li className="mt-3">
                 Participants must have an active internet connction throughout
@@ -47,13 +80,14 @@ export default class ExamGuidlines extends Component {
             </ul>
           </div>
           <div className="text-right mr-3">
-            {" "}
-            <Button className="text-right" variant="primary">
-              Start Exam
+            <Button className="text-right" variant="success">
+              START EXAM
             </Button>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
+
+export default withRouter(ExamGuidlines);

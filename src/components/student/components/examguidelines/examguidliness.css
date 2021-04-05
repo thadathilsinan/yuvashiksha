@@ -1,3 +1,15 @@
-.root {
-  background-color: white;
+#examguidelines {
+  background-color: rgb(196, 196, 196);
+  padding-top: 50px;
+
+  height: calc(100vh - 80px);
+}
+
+#navBarTitleContainer {
+  display: flex;
+}
+
+#guidlinesContainer {
+  height: calc(100vh - 80px - 50px - 50px);
+  overflow: auto;
 }

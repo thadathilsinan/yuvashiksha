@@ -73,7 +73,7 @@ class Student extends Component {
             height="100px"
             key={item._id}
             green={currentTime.getTime() > startTime.getTime() ? true : null}
-            onClick={(item) => this.openScheduledExam(item)}
+            onClick={() => this.openScheduledExam(item)}
           >
             {{
               left: (
@@ -121,9 +121,15 @@ class Student extends Component {
         //Exam start time reached
         alert("CAN OPEN EXAM");
       } else {
-        window.$("#warning").modal("show");
+        // window.$("#warning").modal("show");
+        this.openExamGuidlines();
       }
     });
+  };
+
+  //Open the exam guidlines page
+  openExamGuidlines = () => {
+    this.props.history.push("/student/startexam");
   };
 
   componentDidMount() {
@@ -140,43 +146,7 @@ class Student extends Component {
   render() {
     return (
       <>
-        {/* Configure the welcome modal */}
-        {configuireDialogBox(
-          "welcome",
-          "Welcome " + this.props.user.user.name,
-          <>
-            You can start writing the exams which are displayed in{" "}
-            <span style={{ backgroundColor: "lightgreen" }}>LIGHT GREEN</span>{" "}
-            color.
-            <br />
-            You an use the PREVIOUS EXAMS tab to view your previous exam
-            informations.
-          </>,
-          <input
-            type="button"
-            className="btn btn-primary"
-            value="GOT IT"
-            data-toggle="modal"
-            data-target="#welcome"
-          />
-        )}
-        {/* Configure the dialog box to show warning about the exam start timne */}
-        {configuireDialogBox(
-          "warning",
-          "Information",
-          <>
-            Your exam is not yet started! Please check the examination time and
-            try again after some time
-          </>,
-          <input
-            type="button"
-            className="btn btn-primary"
-            value="OK"
-            data-toggle="modal"
-            data-target="#warning"
-          />
-        )}
-        <Route path="/student/profile">
+        <Route path="/student/profile" exact>
           <StudentProfile
             user={this.props.user.user}
             Class={this.props.user.Class}
@@ -184,8 +154,49 @@ class Student extends Component {
             department={this.props.user.department}
           />
         </Route>
-        <Route path="/student">
+        <Route path="/student/startexam" exact>
+          <ExamGuidlines exam={this.state.selectedExam} />
+        </Route>
+        <Route path="/student" exact>
           <div>
+            {/* Configure the welcome modal */}
+            {configuireDialogBox(
+              "welcome",
+              "Welcome " + this.props.user.user.name,
+              <>
+                You can start writing the exams which are displayed in{" "}
+                <span style={{ backgroundColor: "lightgreen" }}>
+                  LIGHT GREEN
+                </span>{" "}
+                color.
+                <br />
+                You an use the PREVIOUS EXAMS tab to view your previous exam
+                informations.
+              </>,
+              <input
+                type="button"
+                className="btn btn-primary"
+                value="GOT IT"
+                data-toggle="modal"
+                data-target="#welcome"
+              />
+            )}
+            {/* Configure the dialog box to show warning about the exam start timne */}
+            {configuireDialogBox(
+              "warning",
+              "Information",
+              <>
+                Your exam is not yet started! Please check the examination time
+                and try again after some time
+              </>,
+              <input
+                type="button"
+                className="btn btn-primary"
+                value="OK"
+                data-toggle="modal"
+                data-target="#warning"
+              />
+            )}
             <NavBar>
               {{
                 left: (
@@ -206,7 +217,6 @@ class Student extends Component {
                 ),
               }}
             </TabView>
-            {/* <ExamGuidlines/> */}
           </div>
         </Route>
       </>
