@@ -136,11 +136,6 @@ class Student extends Component {
     this.openWelcomDialog();
     this.getExamData();
 
-    //Refersh the exam list every minute
-    setInterval(() => {
-      this.getExamData();
-    }, 60 * 1000);
-
     console.log(this.props);
   }
   render() {

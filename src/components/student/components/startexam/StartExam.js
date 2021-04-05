@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import NavBar from "../../../ui-elements/navBar/NavBar";
-import ListItem from "../../../ui-elements/ListItem/ListItem";
-import { withRouter } from "react-router-dom";
+import { withRouter, Route } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { FaRegCheckCircle } from "react-icons/fa";
 import "./startexam.css";
 import $ from "jquery";
 import Question from "../../../teacher/Question/Question";
+import Canvas from "../../../ui-elements/Canvas/Canvas";
 
 class StartExam extends Component {
   constructor(props) {
@@ -15,6 +15,9 @@ class StartExam extends Component {
     this.state = {
       time: {},
       seconds: 0,
+      showCanvas: false,
+      canvasQuestion: null,
+      answers: {},
     };
 
     //For time left functionality
@@ -98,6 +101,13 @@ class StartExam extends Component {
           question={question}
           index={questionNumber}
           key={question.id}
+          canvasClick={
+            question.type == "short" || question.type == "essay"
+              ? () => {
+                  this.openCanvas(question);
+                }
+              : null
+          }
           examMode //Indicate that the question is in the startExam component
         />
       );
@@ -132,6 +142,42 @@ class StartExam extends Component {
     let differenceInMilliSeconds = to.getTime() - from.getTime();
 
     this.timeDuration = this.msToTime(differenceInMilliSeconds);
+  };
+
+  //Open the canvas
+  openCanvas = (question) => {
+    this.setState({ canvasQuestion: question, showCanvas: true });
+  };
+
+  //Close canvas
+  closeCanvas = () => {
+    this.setState({ showCanvas: false });
+  };
+
+  //Save Canvas
+  saveCanvas = (image) => {
+    //Saving image to the answers array
+    let answerKey = null;
+
+    for (i in this.state.answers) {
+      if (this.state.answers[i].id == this.state.canvasQuestion.id) {
+        answerKey = i;
+      }
+    }
+
+    if (answerKey != null) {
+      //Answer object already exist in the array
+      let answers = { ...this.state.answers };
+      answers[i].canvas = image;
+      this.setState({ answers });
+    } else {
+      let answers = { ...this.state.answers };
+      answers[this.state.canvasQuestion.id] = { canvas: image };
+
+      this.setState({ answers });
+    }
+
+    this.setState({ showCanvas: false });
   };
 
   componentDidMount() {
@@ -170,43 +216,54 @@ class StartExam extends Component {
 
     return (
       <div>
-        <NavBar>
-          {{
-            left: (
-              <div>
-                Time left:{" "}
-                <h5>
-                  {this.state.time.h}h {this.state.time.m}m {this.state.time.s}s
-                </h5>
-              </div>
-            ),
-            right: (
-              <div>
-                <Button className="btn btn-success">
-                  <FaRegCheckCircle size={28} />
-                </Button>
-              </div>
-            ),
-          }}
-        </NavBar>
-        <div id="examBody">
-          {this.props.exam ? (
-            <Question
-              question={{
-                type: "header",
-                examName: this.props.exam.examName,
-                subject: this.props.exam.subject,
-                date: this.props.exam.date,
-                Class: this.props.Class,
-                batch: this.props.batch,
-                marks: this.props.exam.totalMarks,
-                time: this.timeDuration,
-              }}
+        <Route path="/student/exam" exact>
+          {/**SHOW CANVAS */}
+          {this.state.showCanvas ? (
+            <Canvas
+              close={this.closeCanvas}
+              save={this.saveCanvas}
+              // image={this.state.editSelected ? this.state.canvas : undefined}
             />
           ) : null}
+          <NavBar>
+            {{
+              left: (
+                <div>
+                  Time left:{" "}
+                  <h5>
+                    {this.state.time.h}h {this.state.time.m}m{" "}
+                    {this.state.time.s}s
+                  </h5>
+                </div>
+              ),
+              right: (
+                <div>
+                  <Button className="btn btn-success">
+                    <FaRegCheckCircle size={28} />
+                  </Button>
+                </div>
+              ),
+            }}
+          </NavBar>
+          <div id="examBody">
+            {this.props.exam ? (
+              <Question
+                question={{
+                  type: "header",
+                  examName: this.props.exam.examName,
+                  subject: this.props.exam.subject,
+                  date: this.props.exam.date,
+                  Class: this.props.Class,
+                  batch: this.props.batch,
+                  marks: this.props.exam.totalMarks,
+                  time: this.timeDuration,
+                }}
+              />
+            ) : null}
 
-          {this.parseQuestions()}
-        </div>
+            {this.parseQuestions()}
+          </div>
+        </Route>
       </div>
     );
   }

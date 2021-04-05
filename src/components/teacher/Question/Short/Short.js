@@ -37,6 +37,7 @@ export default class Short extends Component {
                     type="button"
                     value="CANVAS"
                     className="btn btn-primary"
+                    onClick={this.props.canvasClick}
                   />
                 </div>
               </div>

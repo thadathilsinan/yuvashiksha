@@ -6,7 +6,6 @@ const AnswerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Exam",
     required: true,
-    unique: true,
   },
   student: {
     type: Schema.Types.ObjectId,

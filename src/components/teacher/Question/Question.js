@@ -36,6 +36,7 @@ export default class Question extends Component {
             question={this.props.question}
             index={this.props.index}
             examMode={this.props.examMode}
+            canvasClick={this.props.canvasClick}
           />
         ),
       });
@@ -46,6 +47,7 @@ export default class Question extends Component {
             question={this.props.question}
             index={this.props.index}
             examMode={this.props.examMode}
+            canvasClick={this.props.canvasClick}
           />
         ),
       });

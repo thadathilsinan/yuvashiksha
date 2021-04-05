@@ -32,6 +32,7 @@ export default class Essay extends Component {
                   <textarea
                     placeholder="Your answer here"
                     name="essayQuestionAnswer"
+                    rows="15"
                   ></textarea>
                 </div>
                 <div className="col-sm-2">
