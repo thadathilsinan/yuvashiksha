@@ -151,7 +151,7 @@ class StartExam extends Component {
 
   //Close canvas
   closeCanvas = () => {
-    this.setState({ showCanvas: false });
+    this.setState({ showCanvas: false, canvasQuestion: null });
   };
 
   //Save Canvas
@@ -159,7 +159,7 @@ class StartExam extends Component {
     //Saving image to the answers array
     let answerKey = null;
 
-    for (i in this.state.answers) {
+    for (let i in this.state.answers) {
       if (this.state.answers[i].id == this.state.canvasQuestion.id) {
         answerKey = i;
       }
@@ -177,7 +177,7 @@ class StartExam extends Component {
       this.setState({ answers });
     }
 
-    this.setState({ showCanvas: false });
+    this.setState({ showCanvas: false, canvasQuestion: null });
   };
 
   componentDidMount() {
@@ -222,7 +222,11 @@ class StartExam extends Component {
             <Canvas
               close={this.closeCanvas}
               save={this.saveCanvas}
-              // image={this.state.editSelected ? this.state.canvas : undefined}
+              image={
+                this.state.answers[this.state.canvasQuestion.id]
+                  ? this.state.answers[this.state.canvasQuestion.id].canvas
+                  : undefined
+              }
             />
           ) : null}
           <NavBar>

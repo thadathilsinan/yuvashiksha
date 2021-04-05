@@ -40,6 +40,7 @@ export default class Essay extends Component {
                     type="button"
                     value="CANVAS"
                     className="btn btn-primary"
+                    onClick={this.props.canvasClick}
                   />
                 </div>
               </div>
