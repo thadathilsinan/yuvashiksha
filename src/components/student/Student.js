@@ -129,7 +129,7 @@ class Student extends Component {
 
   //Open the exam guidlines page
   openExamGuidlines = () => {
-    this.props.history.push("/student/startexam");
+    this.props.history.push("/student/guidelines");
   };
 
   componentDidMount() {
@@ -154,9 +154,15 @@ class Student extends Component {
             department={this.props.user.department}
           />
         </Route>
-        <Route path="/student/startexam" exact>
+
+        <Route path="/student/guidelines" exact>
           <ExamGuidlines exam={this.state.selectedExam} />
         </Route>
+
+        <Route path="/student/exam">
+          <StartExam exam={this.state.selectedExam} />
+        </Route>
+
         <Route path="/student" exact>
           <div>
             {/* Configure the welcome modal */}

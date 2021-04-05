@@ -1,11 +1,44 @@
 import React, { Component } from "react";
 import NavBar from "../../../ui-elements/navBar/NavBar";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
+import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { AiOutlineCheck } from "react-icons/ai";
 import $ from "jquery";
-export class StartExam extends Component {
+
+class StartExam extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  //Check if all props are correctly available
+  checkProps = () => {
+    if (!this.props.exam) {
+      alert("Reloading the page will return you to the homepage");
+      window.history.back();
+    }
+  };
+
+  //Prevent user page refresh
+  preventPageRefresh = () => {
+    window.onbeforeunload = function () {
+      alert("Reloading the page will return you to the homepage");
+
+      return "Reloading the page will stop the current examination. Are you sure ?";
+    };
+  };
+
+  componentDidMount() {
+    this.preventPageRefresh();
+    console.log(this.props);
+  }
+
   render() {
+    //Check the props availability
+    this.checkProps();
+
     $(document).ready(function () {
       // Disables ctrl+v, ctrl+x, ctrl+c.
       $("textarea").on("cut", function (e) {
@@ -36,6 +69,7 @@ export class StartExam extends Component {
         }
       });
     });
+
     return (
       <div className="root">
         <NavBar>
@@ -104,4 +138,4 @@ export class StartExam extends Component {
   }
 }
 
-export default StartExam;
+export default withRouter(StartExam);

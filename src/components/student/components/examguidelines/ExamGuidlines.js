@@ -8,17 +8,35 @@ class ExamGuidlines extends Component {
   //Check if all props are correclty available
   checkProps = () => {
     if (!this.props.exam) {
-      window.history.back();
+      alert("Reloading the page will return you to the homepage");
+      this.props.history.push("/student");
     }
   };
 
-  componentDidMount() {
-    this.checkProps();
+  //Prevent user page refresh
+  preventPageRefresh = () => {
+    window.onbeforeunload = function () {
+      alert("Reloading the page will return you to the homepage");
 
+      return "Reloading the page will stop the current examination. Are you sure ?";
+    };
+  };
+
+  //When clicking the start exam button
+  startExam = () => {
+    if (window.confirm("Are you sure to start the examination?"))
+      this.props.history.push("/student/exam");
+  };
+
+  componentDidMount() {
+    this.preventPageRefresh();
     console.log(this.props);
   }
 
   render() {
+    //Check if all props available
+    this.checkProps();
+
     return (
       <>
         <NavBar>
@@ -48,9 +66,9 @@ class ExamGuidlines extends Component {
             <br />
             <div>
               <h6>
-                EXAM NAME: {this.props.exam.examName}
+                EXAM NAME: {this.props.exam ? this.props.exam.examName : null}
                 <br />
-                SUBJECT: {this.props.exam.subject}
+                SUBJECT: {this.props.exam ? this.props.exam.subject : null}
               </h6>
             </div>
             <ul className="mt-3">
@@ -77,10 +95,17 @@ class ExamGuidlines extends Component {
                 Participants must NOT use any kind of communication devices
                 during examination.
               </li>
+              <li className="mt-3">
+                <b>Do NOT refresh the page during the examination</b>
+              </li>
             </ul>
           </div>
           <div className="text-right mr-3">
-            <Button className="text-right" variant="success">
+            <Button
+              className="text-right"
+              variant="success"
+              onClick={this.startExam}
+            >
               START EXAM
             </Button>
           </div>
