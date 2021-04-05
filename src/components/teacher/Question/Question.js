@@ -62,7 +62,7 @@ export default class Question extends Component {
         id={this.props.question.id}
         onClick={this.props.click}
         className="question list-group-item list-group-item-action"
-        data-toggle="list"
+        data-toggle={this.props.examMode ? undefined : "list"}
       >
         {this.state.component}
       </div>

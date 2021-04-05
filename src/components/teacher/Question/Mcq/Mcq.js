@@ -11,7 +11,7 @@ export default class Mcq extends Component {
             type="radio"
             name="options"
             value={option.name}
-            checked={option.correct ? true : undefined}
+            checked={option.correct && !this.props.examMode ? true : undefined}
             disabled={!this.props.examMode}
           />
           <label class="form-check-label" for="options">

@@ -85,6 +85,8 @@ class StartExam extends Component {
   parseQuestions = () => {
     let questionNumber = 0;
 
+    if (!this.props.exam) return;
+
     return this.props.exam.questionPaper.map((question, index) => {
       //Count the question Number
       if (question.type != "header" && question.type != "text") {
@@ -122,6 +124,8 @@ class StartExam extends Component {
 
   //Calculate time duration of the exam
   calculateTimeDuration = () => {
+    if (!this.props.exam) return;
+
     let to = new Date(`${this.props.exam.date},${this.props.exam.to}`);
     let from = new Date(`${this.props.exam.date},${this.props.exam.from}`);
 
@@ -133,23 +137,23 @@ class StartExam extends Component {
   componentDidMount() {
     this.preventPageRefresh();
 
-    //Setting the inital value of the timer
-    let currentTime = new Date();
-    let examFinishTime = new Date(
-      `${this.props.exam ? this.props.exam.date : ""},${
-        this.props.exam ? this.props.exam.to : ""
-      }`
-    );
+    if (this.props.exam) {
+      //Setting the inital value of the timer
+      let currentTime = new Date();
+      let examFinishTime = new Date(
+        `${this.props.exam ? this.props.exam.date : ""},${
+          this.props.exam ? this.props.exam.to : ""
+        }`
+      );
 
-    let timeDiffrence = examFinishTime.getTime() - currentTime.getTime();
+      let timeDiffrence = examFinishTime.getTime() - currentTime.getTime();
 
-    console.log(timeDiffrence);
-
-    this.setState({ seconds: timeDiffrence / 1000 }, () => {
-      //Counting time left initial value setup
-      let timeLeftVar = this.secondsToTime(this.state.seconds);
-      this.setState({ time: timeLeftVar });
-    });
+      this.setState({ seconds: timeDiffrence / 1000 }, () => {
+        //Counting time left initial value setup
+        let timeLeftVar = this.secondsToTime(this.state.seconds);
+        this.setState({ time: timeLeftVar });
+      });
+    }
 
     console.log(this.props);
   }
@@ -186,18 +190,21 @@ class StartExam extends Component {
           }}
         </NavBar>
         <div id="examBody">
-          <Question
-            question={{
-              type: "header",
-              examName: this.props.exam.examName,
-              subject: this.props.exam.subject,
-              date: this.props.exam.date,
-              Class: this.props.Class,
-              batch: this.props.batch,
-              marks: this.props.exam.totalMarks,
-              time: this.timeDuration,
-            }}
-          />
+          {this.props.exam ? (
+            <Question
+              question={{
+                type: "header",
+                examName: this.props.exam.examName,
+                subject: this.props.exam.subject,
+                date: this.props.exam.date,
+                Class: this.props.Class,
+                batch: this.props.batch,
+                marks: this.props.exam.totalMarks,
+                time: this.timeDuration,
+              }}
+            />
+          ) : null}
+
           {this.parseQuestions()}
         </div>
       </div>
