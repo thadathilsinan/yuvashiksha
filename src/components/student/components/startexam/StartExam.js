@@ -293,7 +293,13 @@ class StartExam extends Component {
                     .$(`#${i} input[value="${answers[i].answer}"]`)
                     .attr("checked", "true");
                 } else if (questionType == "short") {
+                  //Changing the value of the text field
+                  window
+                    .$(`#${i} input[type="text"]`)
+                    .attr("value", answers[i].answer);
                 } else if (questionType == "essay") {
+                  //Changing the value of the textarea
+                  $(`#${i} textarea`).html(answers[i].answer);
                 }
               }
             }
