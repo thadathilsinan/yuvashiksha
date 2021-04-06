@@ -23,7 +23,8 @@
     "react-redux": "^7.2.2",
     "react-scripts": "4.0.1",
     "redux": "^4.0.5",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "webcam-easy": "^1.0.5"
   },
   "scripts": {
     "start": "react-scripts start",

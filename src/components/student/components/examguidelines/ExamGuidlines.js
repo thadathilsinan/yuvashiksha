@@ -2,9 +2,18 @@ import React, { Component } from "react";
 import NavBar from "../../../ui-elements/navBar/NavBar";
 import { Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
+import Webcam from "webcam-easy";
 import "./examguidliness.css";
 
 class ExamGuidlines extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    this.webcam = null;
+  }
+
   //Check if all props are correclty available
   checkProps = () => {
     if (!this.props.exam) {
@@ -24,8 +33,49 @@ class ExamGuidlines extends Component {
 
   //When clicking the start exam button
   startExam = () => {
-    if (window.confirm("Are you sure to start the examination?"))
-      this.props.history.push("/student/exam");
+    if (
+      window.confirm(
+        "Are you sure to start the examination? \n(Make sure you have a webcam connected to your device)"
+      )
+    )
+      this.checkCamera().then((result) => {
+        if (result) {
+          this.props.history.push("/student/exam");
+        } else {
+          alert("Webcam NOT accessible. Cannot start exam.");
+        }
+      });
+  };
+
+  //check the camera of the user
+  checkCamera = async () => {
+    //Camera setup
+    this.webcamElement = document.getElementById("webcam");
+    this.canvasElement = document.getElementById("canvas");
+    this.snapSoundElement = document.getElementById("snapSound");
+    this.webcam = new Webcam(
+      this.webcamElement,
+      "user",
+      this.canvasElement,
+      this.snapSoundElement
+    );
+
+    //to indicate if the webcam working correctly
+    let flag = false;
+
+    //Starting camera
+    await this.webcam
+      .start()
+      .then((result) => {
+        console.log("webcam started");
+        flag = true;
+      })
+      .catch((err) => {
+        console.log(err);
+        flag = false;
+      });
+
+    return flag;
   };
 
   componentDidMount() {
@@ -99,6 +149,24 @@ class ExamGuidlines extends Component {
                 <b>Do NOT refresh the page during the examination</b>
               </li>
             </ul>
+
+            {/* CAMERA */}
+            <video
+              id="webcam"
+              autoplay
+              playsinline
+              width="640"
+              height="480"
+              className="d-none"
+            ></video>
+            <canvas id="canvas" className="d-none"></canvas>
+            <audio
+              id="snapSound"
+              src="audio/snap.wav"
+              preload="auto"
+              className="d-none"
+            ></audio>
+            {/* CAMERA END */}
           </div>
           <div className="text-right mr-3">
             <Button
