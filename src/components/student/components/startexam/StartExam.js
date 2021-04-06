@@ -146,12 +146,6 @@ class StartExam extends Component {
                 }
               : null
           }
-          answer={
-            (question.type == "short" || question.type == "essay") &&
-            this.state.answers[question.id]
-              ? this.state.answers[question.id].answer
-              : null
-          }
           examMode //Indicate that the question is in the startExam component
         />
       );
@@ -275,10 +269,35 @@ class StartExam extends Component {
       { exam: this.props.exam._id },
       (res) => {
         if (res.status == 200) {
-          this.setState({
-            answers: res.data.answers,
-            images: res.data.images,
-          });
+          this.setState(
+            {
+              answers: res.data.answers,
+              images: res.data.images,
+            },
+            () => {
+              //Change the value of the input fields with the restore exam data
+              let answers = this.state.answers;
+              let questionType = null;
+
+              for (let i in answers) {
+                //Getting the type of question
+                for (let question in this.props.exam.questionPaper) {
+                  if (this.props.exam.questionPaper[question].id == i) {
+                    questionType = this.props.exam.questionPaper[question].type;
+                  }
+                }
+
+                if (questionType == "mcq") {
+                  //Selecting the previosly selected option
+                  window
+                    .$(`#${i} input[value="${answers[i].answer}"]`)
+                    .attr("checked", "true");
+                } else if (questionType == "short") {
+                } else if (questionType == "essay") {
+                }
+              }
+            }
+          );
         }
         console.log(res.data);
       }
