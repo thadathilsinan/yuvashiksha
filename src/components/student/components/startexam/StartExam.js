@@ -7,6 +7,7 @@ import "./startexam.css";
 import $ from "jquery";
 import Question from "../../../teacher/Question/Question";
 import Canvas from "../../../ui-elements/Canvas/Canvas";
+import http from "../../../../shared/http";
 
 class StartExam extends Component {
   constructor(props) {
@@ -18,6 +19,8 @@ class StartExam extends Component {
       showCanvas: false,
       canvasQuestion: null,
       answers: {},
+      images: [],
+      completed: false,
     };
 
     //For time left functionality
@@ -175,7 +178,9 @@ class StartExam extends Component {
       answers[this.state.canvasQuestion.id].canvas = image;
     else answers[this.state.canvasQuestion.id] = { canvas: image };
 
-    this.setState({ answers, showCanvas: false, canvasQuestion: null });
+    this.setState({ answers, showCanvas: false, canvasQuestion: null }, () => {
+      this.uploadAnswers();
+    });
   };
 
   //When the options of the MCQ changes
@@ -185,7 +190,9 @@ class StartExam extends Component {
     if (answers[question.id]) answers[question.id].answer = value;
     else answers[question.id] = { answer: value };
 
-    this.setState({ answers });
+    this.setState({ answers }, () => {
+      this.uploadAnswers();
+    });
   };
 
   //When the text of the SHORT , ESSAY question value changes
@@ -195,7 +202,26 @@ class StartExam extends Component {
     if (answers[question.id]) answers[question.id].answer = value;
     else answers[question.id] = { answer: value };
 
-    this.setState({ answers });
+    this.setState({ answers }, () => {
+      this.uploadAnswers();
+    });
+  };
+
+  //save changes to the db
+  uploadAnswers = () => {
+    http(
+      "POST",
+      "/student/saveanswers",
+      {
+        exam: this.props.exam._id,
+        answers: this.state.answers,
+        images: this.state.images,
+        completed: this.state.completed,
+      },
+      (res) => {
+        console.log(res.data);
+      }
+    );
   };
 
   componentDidMount() {

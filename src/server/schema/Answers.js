@@ -13,7 +13,7 @@ const AnswerSchema = new Schema({
     required: true,
   },
   answers: {
-    type: Array,
+    type: Object,
     required: true,
   },
   images: {
@@ -22,7 +22,6 @@ const AnswerSchema = new Schema({
   },
   totalMarks: {
     type: Number,
-    required: true,
   },
   completed: {
     type: Boolean,

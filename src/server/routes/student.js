@@ -15,6 +15,7 @@ const Users = require("../schema/Users");
 const Exams = require("../schema/Exams");
 const Classes = require("../schema/classes");
 const Departments = require("../schema/department");
+const Answers = require("../schema/Answers");
 
 router.use(bodyParser.json());
 
@@ -44,6 +45,40 @@ router.get("/exams", async (req, res, next) => {
 
   res.statusCode = 200;
   res.json(exams);
+});
+
+//Save the answers to the db
+router.post("/saveanswers", async (req, res, next) => {
+  let answer = await Answers.findOne({
+    exam: req.body.exam,
+    student: req.user._id,
+  });
+
+  //Check if entry already exist
+  if (answer) {
+    //Updating the values
+    answer.answers = req.body.answers;
+    answer.images = req.body.images;
+    answer.completed = req.body.completed;
+
+    //save changes
+    await answer.save();
+  } else {
+    //Creating a new entry
+    answer = new Answers({
+      exam: req.body.exam,
+      student: req.user._id,
+      asnwers: req.body.answers,
+      images: req.body.images,
+      completed: req.body.completed,
+    });
+
+    //Saving changes
+    await answer.save();
+  }
+
+  res.statusCode = 200;
+  res.end("Answers updated successfully");
 });
 
 module.exports = router;
