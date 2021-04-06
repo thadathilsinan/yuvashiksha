@@ -4,7 +4,7 @@ import { withRouter, Route } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { FaRegCheckCircle } from "react-icons/fa";
 import "./startexam.css";
-import $ from "jquery";
+import $, { timers } from "jquery";
 import Question from "../../../teacher/Question/Question";
 import Canvas from "../../../ui-elements/Canvas/Canvas";
 import http from "../../../../shared/http";
@@ -30,6 +30,8 @@ class StartExam extends Component {
 
     //For the qestion Paper header
     this.timeDuration = 0;
+
+    this.timeOutId = null;
   }
 
   //Check if all props are correctly available
@@ -87,6 +89,27 @@ class StartExam extends Component {
     }
   }
 
+  //Set the inital setup for the timer
+  setUpTimer = () => {
+    if (this.props.exam) {
+      //Setting the inital value of the timer
+      let currentTime = new Date();
+      let examFinishTime = new Date(
+        `${this.props.exam ? this.props.exam.date : ""},${
+          this.props.exam ? this.props.exam.to : ""
+        }`
+      );
+
+      let timeDiffrence = examFinishTime.getTime() - currentTime.getTime();
+
+      this.setState({ seconds: timeDiffrence / 1000 }, () => {
+        //Counting time left initial value setup
+        let timeLeftVar = this.secondsToTime(this.state.seconds);
+        this.setState({ time: timeLeftVar });
+      });
+    }
+  };
+
   //Parse the questions to display it
   parseQuestions = () => {
     let questionNumber = 0;
@@ -121,6 +144,12 @@ class StartExam extends Component {
               ? (value) => {
                   this.textChange(question, value);
                 }
+              : null
+          }
+          answer={
+            (question.type == "short" || question.type == "essay") &&
+            this.state.answers[question.id]
+              ? this.state.answers[question.id].answer
               : null
           }
           examMode //Indicate that the question is in the startExam component
@@ -179,7 +208,11 @@ class StartExam extends Component {
     else answers[this.state.canvasQuestion.id] = { canvas: image };
 
     this.setState({ answers, showCanvas: false, canvasQuestion: null }, () => {
-      this.uploadAnswers();
+      if (this.timeOutId) {
+        clearTimeout(this.timeOutId);
+      }
+
+      this.timeOutId = setTimeout(this.uploadAnswers, 3000);
     });
   };
 
@@ -191,7 +224,11 @@ class StartExam extends Component {
     else answers[question.id] = { answer: value };
 
     this.setState({ answers }, () => {
-      this.uploadAnswers();
+      if (this.timeOutId) {
+        clearTimeout(this.timeOutId);
+      }
+
+      this.timeOutId = setTimeout(this.uploadAnswers, 5000);
     });
   };
 
@@ -203,7 +240,11 @@ class StartExam extends Component {
     else answers[question.id] = { answer: value };
 
     this.setState({ answers }, () => {
-      this.uploadAnswers();
+      if (this.timeOutId) {
+        clearTimeout(this.timeOutId);
+      }
+
+      this.timeOutId = setTimeout(this.uploadAnswers, 5000);
     });
   };
 
@@ -224,26 +265,32 @@ class StartExam extends Component {
     );
   };
 
+  //Check if the user data already present in the db, if true then restore data
+  restoreExamData = () => {
+    if (!this.props.exam) return;
+
+    http(
+      "POST",
+      "/student/restoreexam",
+      { exam: this.props.exam._id },
+      (res) => {
+        if (res.status == 200) {
+          this.setState({
+            answers: res.data.answers,
+            images: res.data.images,
+          });
+        }
+        console.log(res.data);
+      }
+    );
+  };
+
   componentDidMount() {
     this.preventPageRefresh();
 
-    if (this.props.exam) {
-      //Setting the inital value of the timer
-      let currentTime = new Date();
-      let examFinishTime = new Date(
-        `${this.props.exam ? this.props.exam.date : ""},${
-          this.props.exam ? this.props.exam.to : ""
-        }`
-      );
+    this.setUpTimer();
 
-      let timeDiffrence = examFinishTime.getTime() - currentTime.getTime();
-
-      this.setState({ seconds: timeDiffrence / 1000 }, () => {
-        //Counting time left initial value setup
-        let timeLeftVar = this.secondsToTime(this.state.seconds);
-        this.setState({ time: timeLeftVar });
-      });
-    }
+    this.restoreExamData();
 
     console.log(this.props);
   }

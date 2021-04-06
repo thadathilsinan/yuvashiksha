@@ -30,8 +30,10 @@ export default class Short extends Component {
                     type="text"
                     placeholder="Your answer here"
                     name="shortQuestionAnswer"
+                    // value={this.props.answer}
                     onChange={(e) => {
                       this.props.textChange(e.target.value);
+                      this.forceUpdate();
                     }}
                   />
                 </div>

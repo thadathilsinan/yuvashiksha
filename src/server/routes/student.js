@@ -81,4 +81,21 @@ router.post("/saveanswers", async (req, res, next) => {
   res.end("Answers updated successfully");
 });
 
+//Restore the exam data
+router.post("/restoreexam", async (req, res, next) => {
+  let answer = await Answers.findOne({
+    exam: req.body.exam,
+    student: req.user._id,
+    completed: false,
+  });
+
+  if (answer) {
+    res.statusCode = 200;
+    res.json(answer);
+  } else {
+    res.statusCode = 203;
+    res.end("No data available to restore exam");
+  }
+});
+
 module.exports = router;
