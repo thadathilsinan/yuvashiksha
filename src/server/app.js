@@ -14,6 +14,7 @@ let adminRouter = require("./routes/admin");
 let teacherRoute = require("./routes/teacher");
 let uploadRouter = require("./routes/upload");
 const studentRouter = require("./routes/student");
+const bodyParser = require("body-parser");
 
 mongoose.connect(
   "mongodb+srv://yuvashiksha:yuvashiksha@yuvashilsha.y1gzh.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
@@ -66,8 +67,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: "1000kb", extended: true }));
+app.use(express.json({ limit: "10000kb", extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/login", loginRouter);

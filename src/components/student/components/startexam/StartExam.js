@@ -36,6 +36,8 @@ class StartExam extends Component {
     this.timeDuration = 0;
 
     this.timeOutId = null;
+
+    this.capturedImage = "initial";
   }
 
   //Check if all props are correctly available
@@ -79,24 +81,24 @@ class StartExam extends Component {
 
   //Take photo with camera
   takePhoto = async () => {
-    let url = null;
-
-    await imageCapture
+    return await imageCapture
       .takePhoto()
-      .then((blob) => {
-        var reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = function () {
-          url = reader.result;
-        };
+      .then(
+        (blob) =>
+          new Promise((resolve, reject) => {
+            var reader = new FileReader();
 
-        // window.URL.revokeObjectURL(url);
-      })
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+              resolve(reader.result);
+            };
+
+            // window.URL.revokeObjectURL(url);
+          })
+      )
       .catch((err) => {
         console.log("Error capture photo  : " + err);
       });
-
-    return url;
   };
 
   secondsToTime(secs) {
@@ -298,7 +300,6 @@ class StartExam extends Component {
       {
         exam: this.props.exam._id,
         answers: this.state.answers,
-        images: this.state.images,
         completed: this.state.completed,
       },
       (res) => {
@@ -363,11 +364,51 @@ class StartExam extends Component {
       if (result) {
         //Camera access granted
         this.props.history.push("/student/exam");
+
+        this.randomImageCapture();
       } else {
         //Camera access failed
         this.props.history.push("/student");
       }
     });
+  };
+
+  //Get random number in a particular range
+  getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  //random image capture and save into the images state
+  randomImageCapture = () => {
+    //Time gap to capture next image
+    let nextCall = this.getRandomInt(60 * 5, 60 * 10); //Time between 5 - 10 minutes (in seconds)
+
+    this.takePhoto().then((image) => {
+      let newImages = [...this.state.images];
+      newImages.push(image);
+
+      this.setState({ images: newImages }, () => {
+        //Saving changes to d
+        this.uploadImage(image);
+
+        //Setting the next photo capture
+        setTimeout(this.randomImageCapture, nextCall * 1000);
+      });
+    });
+  };
+
+  //Upload image to the db
+  uploadImage = (image) => {
+    http(
+      "POST",
+      "/student/uploadimage",
+      { image, exam: this.props.exam._id },
+      (res) => {
+        console.log(res.data);
+      }
+    );
   };
 
   componentDidMount() {

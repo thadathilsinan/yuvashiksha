@@ -17,7 +17,7 @@ const Classes = require("../schema/classes");
 const Departments = require("../schema/department");
 const Answers = require("../schema/Answers");
 
-router.use(bodyParser.json());
+// router.use(bodyParser.json());
 
 //Save user profile
 router.post("/profile/save", async (req, res, next) => {
@@ -58,7 +58,6 @@ router.post("/saveanswers", async (req, res, next) => {
   if (answer) {
     //Updating the values
     answer.answers = req.body.answers;
-    answer.images = req.body.images;
     answer.completed = req.body.completed;
 
     //save changes
@@ -68,8 +67,8 @@ router.post("/saveanswers", async (req, res, next) => {
     answer = new Answers({
       exam: req.body.exam,
       student: req.user._id,
-      asnwers: req.body.answers,
-      images: req.body.images,
+      answers: req.body.answers,
+      images: [],
       completed: req.body.completed,
     });
 
@@ -79,6 +78,38 @@ router.post("/saveanswers", async (req, res, next) => {
 
   res.statusCode = 200;
   res.end("Answers updated successfully");
+});
+
+//Save the images to the db
+router.post("/uploadimage", async (req, res, next) => {
+  let answer = await Answers.findOne({
+    exam: req.body.exam,
+    student: req.user._id,
+  });
+
+  //Check if entry already exist
+  if (answer) {
+    //Updating the values
+    answer.images.push(req.body.image);
+
+    //save changes
+    await answer.save();
+  } else {
+    //Creating a new entry
+    answer = new Answers({
+      exam: req.body.exam,
+      student: req.user._id,
+      answers: {},
+      images: [req.body.image],
+      completed: false,
+    });
+
+    //Saving changes
+    await answer.save();
+  }
+
+  res.statusCode = 200;
+  res.end("Image uploaded successfully");
 });
 
 //Restore the exam data
