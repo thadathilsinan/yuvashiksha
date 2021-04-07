@@ -9,7 +9,9 @@ import Question from "../../../teacher/Question/Question";
 import Canvas from "../../../ui-elements/Canvas/Canvas";
 import http from "../../../../shared/http";
 
-import Webcam from "webcam-easy";
+//For camera purposes
+let imageCapture = null;
+let stream = null;
 
 class StartExam extends Component {
   constructor(props) {
@@ -51,6 +53,46 @@ class StartExam extends Component {
 
       return "Reloading the page will stop the current examination. Are you sure ?";
     };
+  };
+
+  //Get user camera privillage
+  getMediaStream = async () => {
+    let flag = false;
+
+    await window.navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(function (mediaStream) {
+        stream = mediaStream;
+        let mediaStreamTrack = mediaStream.getVideoTracks()[0];
+        imageCapture = new ImageCapture(mediaStreamTrack);
+
+        flag = true;
+      })
+      .catch((error) => {
+        alert("Camera not accessible");
+        console.log("Error getting camera : " + error);
+        flag = false;
+      });
+
+    return flag;
+  };
+
+  //Take photo with camera
+  takePhoto = async () => {
+    let url = null;
+
+    await imageCapture
+      .takePhoto()
+      .then((blob) => {
+        url = window.URL.createObjectURL(blob);
+
+        // window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        console.log("Error capture photo  : " + err);
+      });
+
+    return url;
   };
 
   secondsToTime(secs) {
@@ -307,41 +349,21 @@ class StartExam extends Component {
             }
           );
         }
-        console.log(res.data);
       }
     );
   };
 
   //Check the camera of the user
-  checkCamera = async () => {
-    //Camera setup
-    this.webcamElement = document.getElementById("webcam");
-    this.canvasElement = document.getElementById("canvas");
-    this.snapSoundElement = document.getElementById("snapSound");
-
-    this.webcam = new Webcam(
-      this.webcamElement,
-      "user",
-      this.canvasElement,
-      this.snapSoundElement
-    );
-
-    //to indicate if the webcam working correctly
-    let flag = false;
-
-    //Starting camera
-    await this.webcam
-      .start()
-      .then((result) => {
-        console.log("webcam started");
-        flag = true;
-      })
-      .catch((err) => {
-        console.log(err);
-        flag = false;
-      });
-
-    return flag;
+  checkCamera = () => {
+    this.getMediaStream().then((result) => {
+      if (result) {
+        //Camera access granted
+        this.props.history.push("/student/exam");
+      } else {
+        //Camera access failed
+        this.props.history.push("/student");
+      }
+    });
   };
 
   componentDidMount() {
@@ -351,16 +373,7 @@ class StartExam extends Component {
 
     this.restoreExamData();
 
-    this.checkCamera().then((res) => {
-      if (res) {
-        let photo = this.webcam.snap();
-        console.log(photo);
-
-        this.props.history.push("/student/exam");
-      } else {
-        alert("Camera NOT accessible! Cannot start exam");
-      }
-    });
+    this.checkCamera();
 
     console.log(this.props);
   }
@@ -427,27 +440,15 @@ class StartExam extends Component {
             ) : null}
 
             {this.parseQuestions()}
-            {/* CAMERA */}
-            <video
-              id="webcam"
-              autoplay
-              playsinline
-              width="640"
-              height="480"
-              className="d-none"
-            ></video>
-            <canvas id="canvas" className="d-none"></canvas>
-            <audio
-              id="snapSound"
-              src="audio/snap.wav"
-              preload="auto"
-              className="d-none"
-            ></audio>
-            {/* CAMERA END */}
           </div>
         </Route>
         <Route path="/student/exam/checkcamera" exact>
-          CAMERA CHECKING
+          <div
+            className="d-flex align-items-center justify-content-center"
+            id="check-camera"
+          >
+            <h5>CHECKING YOUR WEBCAM ...</h5>
+          </div>
         </Route>
       </div>
     );

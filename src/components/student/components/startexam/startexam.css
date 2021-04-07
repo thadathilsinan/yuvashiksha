@@ -10,3 +10,10 @@
 #examBody textarea {
   width: 100%;
 }
+
+#check-camera {
+  height: 100vh;
+  background-color: rgb(196, 196, 196);
+
+  overflow: auto;
+}
