@@ -84,7 +84,11 @@ class StartExam extends Component {
     await imageCapture
       .takePhoto()
       .then((blob) => {
-        url = window.URL.createObjectURL(blob);
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+          url = reader.result;
+        };
 
         // window.URL.revokeObjectURL(url);
       })
