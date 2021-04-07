@@ -20,6 +20,7 @@ class Student extends Component {
       examList: [],
       previousExamList: [],
       selectedExam: null,
+      webcam: { webcam: "webcam object here" },
     };
   }
 
@@ -151,11 +152,17 @@ class Student extends Component {
         </Route>
 
         <Route path="/student/guidelines" exact>
-          <ExamGuidlines exam={this.state.selectedExam} />
+          <ExamGuidlines
+            exam={this.state.selectedExam}
+            webcam={this.state.webcam}
+          />
         </Route>
 
         <Route path="/student/exam">
-          <StartExam exam={this.state.selectedExam} />
+          <StartExam
+            exam={this.state.selectedExam}
+            webcam={this.state.webcam}
+          />
         </Route>
 
         <Route path="/student" exact>
