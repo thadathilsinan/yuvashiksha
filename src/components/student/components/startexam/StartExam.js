@@ -468,6 +468,22 @@ class StartExam extends Component {
               ),
             }}
           </NavBar>
+          <div id="equationsBar">
+            <div className="equationItem text-center">π</div>
+            <div className="equationItem text-center">Δ</div>
+            <div className="equationItem text-center">∞</div>
+            <div className="equationItem text-center">∑</div>
+            <div className="equationItem text-center">φ</div>
+            <div className="equationItem text-center">μ</div>
+            <div className="equationItem text-center">σ</div>
+            <div className="equationItem text-center">λ</div>
+            <div className="equationItem text-center">Ø</div>
+            <div className="equationItem text-center">^</div>
+            <div className="equationItem text-center">ε</div>
+            <div className="equationItem text-center">∫</div>
+            <div className="equationItem text-center">θ</div>
+            <div className="equationItem text-center">Ω</div>
+          </div>
           <div id="examBody">
             {this.props.exam ? (
               <Question
