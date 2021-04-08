@@ -411,6 +411,22 @@ class StartExam extends Component {
     );
   };
 
+  //type the value of the equation picker into the textfields
+  typeEquation = (event) => {
+    let equationSelected = event.target.innerHTML;
+
+    if (this.lastfocusedInput) this.lastfocusedInput.value += equationSelected;
+  };
+
+  //used for knowing the last selected input field
+  setUpFocusListeners = () => {
+    let inputElements = window.$("input[type=text], textarea");
+
+    inputElements.on("focus", (event) => {
+      this.lastfocusedInput = event.target;
+    });
+  };
+
   componentDidMount() {
     this.preventPageRefresh();
 
@@ -419,6 +435,9 @@ class StartExam extends Component {
     this.restoreExamData();
 
     this.checkCamera();
+
+    //Used for equation selecter
+    setTimeout(this.setUpFocusListeners, 2000);
 
     console.log(this.props);
   }
@@ -469,7 +488,12 @@ class StartExam extends Component {
             }}
           </NavBar>
           <div id="equationsBar">
-            <div className="equationItem text-center">π</div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              π
+            </div>
             <div className="equationItem text-center">Δ</div>
             <div className="equationItem text-center">∞</div>
             <div className="equationItem text-center">∑</div>
