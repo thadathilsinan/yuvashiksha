@@ -427,6 +427,20 @@ class StartExam extends Component {
     });
   };
 
+  //Called when click the finish button in the exam page
+  finishExam = () => {
+    if (
+      window.confirm("You have some more time, Are you sure to finish exam ? ")
+    ) {
+      this.setState({ completed: true }, () => {
+        this.uploadAnswers();
+
+        alert("Exam Completed successfully");
+        this.props.history.push("/student");
+      });
+    }
+  };
+
   componentDidMount() {
     this.preventPageRefresh();
 
@@ -494,19 +508,84 @@ class StartExam extends Component {
             >
               π
             </div>
-            <div className="equationItem text-center">Δ</div>
-            <div className="equationItem text-center">∞</div>
-            <div className="equationItem text-center">∑</div>
-            <div className="equationItem text-center">φ</div>
-            <div className="equationItem text-center">μ</div>
-            <div className="equationItem text-center">σ</div>
-            <div className="equationItem text-center">λ</div>
-            <div className="equationItem text-center">Ø</div>
-            <div className="equationItem text-center">^</div>
-            <div className="equationItem text-center">ε</div>
-            <div className="equationItem text-center">∫</div>
-            <div className="equationItem text-center">θ</div>
-            <div className="equationItem text-center">Ω</div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              Δ
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              ∞
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              ∑
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              φ
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              μ
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              σ
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              λ
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              Ø
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              ^
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              ε
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              ∫
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              θ
+            </div>
+            <div
+              className="equationItem text-center"
+              onClick={this.typeEquation}
+            >
+              Ω
+            </div>
           </div>
           <div id="examBody">
             {this.props.exam ? (
