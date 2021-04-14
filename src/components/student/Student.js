@@ -120,10 +120,9 @@ class Student extends Component {
 
       if (currentTime.getTime() > startTime.getTime()) {
         //Exam start time reached
-        alert("CAN OPEN EXAM");
-      } else {
-        // window.$("#warning").modal("show");
         this.openExamGuidlines();
+      } else {
+        window.$("#warning").modal("show");
       }
     });
   };
