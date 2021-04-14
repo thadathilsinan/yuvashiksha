@@ -135,7 +135,7 @@ class StartExam extends Component {
     // Check if we're at zero.
     if (seconds == 0) {
       clearInterval(this.timer);
-      this.setState({ resendEnable: true });
+      this.examTimeOut();
     }
   }
 
@@ -439,6 +439,16 @@ class StartExam extends Component {
         this.props.history.push("/student");
       });
     }
+  };
+
+  //Called when exam time completes
+  examTimeOut = () => {
+    this.setState({ completed: true }, () => {
+      this.uploadAnswers();
+
+      alert("Exam time out! Exam data save successfully");
+      this.props.history.push("/student");
+    });
   };
 
   componentDidMount() {
