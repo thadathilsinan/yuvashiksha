@@ -390,7 +390,7 @@ class StartExam extends Component {
       newImages.push(image);
 
       this.setState({ images: newImages }, () => {
-        //Saving changes to d
+        //Saving changes to db
         this.uploadImage(image);
 
         //Setting the next photo capture

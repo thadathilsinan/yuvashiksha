@@ -16,6 +16,7 @@ const Exams = require("../schema/Exams");
 const Classes = require("../schema/classes");
 const Departments = require("../schema/department");
 const Answers = require("../schema/Answers");
+const Image = require("../schema/Images");
 
 // router.use(bodyParser.json());
 
@@ -90,7 +91,12 @@ router.post("/uploadimage", async (req, res, next) => {
   //Check if entry already exist
   if (answer) {
     //Updating the values
-    answer.images.push(req.body.image);
+    let image = new Image({ image: req.body.image });
+
+    //Saving image
+    await image.save();
+
+    answer.images.push(image._id);
 
     //save changes
     await answer.save();
