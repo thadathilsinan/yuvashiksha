@@ -27,6 +27,7 @@ class Student extends Component {
 
   //Get exam data from the server
   getExamData = () => {
+    console.log("Refreshed");
     http("GET", "/student/exams", {}, (res) => {
       if (res.status == 200) {
         this.setState({ examData: res.data }, () => {
@@ -139,14 +140,22 @@ class Student extends Component {
     this.props.history.push("/student/guidelines");
   };
 
+  //Refesh exam list
+  refreshExamList = () => {
+    let timer = setInterval(this.getExamData, 1000 * 60); //Refresh every 1 minute
+    this.setState({ examListRefreshTimer: timer });
+  };
+
   componentDidMount() {
     this.openWelcomDialog();
     this.getExamData();
 
     //Refresh exam List
+    this.refreshExamList();
 
     console.log(this.props);
   }
+
   render() {
     return (
       <>
