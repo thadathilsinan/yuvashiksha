@@ -127,16 +127,19 @@ class StartExam extends Component {
   countDown() {
     // Remove one second, set state so a re-render happens.
     let seconds = this.state.seconds - 1;
-    this.setState({
-      time: this.secondsToTime(seconds),
-      seconds: seconds,
-    });
-
-    // Check if we're at zero.
-    if (seconds == 0) {
-      clearInterval(this.timer);
-      this.examTimeOut();
-    }
+    this.setState(
+      {
+        time: this.secondsToTime(seconds),
+        seconds: seconds,
+      },
+      () => {
+        // Check if we're at zero.
+        if (seconds <= 0) {
+          clearInterval(this.timer);
+          this.examTimeOut();
+        }
+      }
+    );
   }
 
   //Set the inital setup for the timer
@@ -432,6 +435,13 @@ class StartExam extends Component {
     if (
       window.confirm("You have some more time, Are you sure to finish exam ? ")
     ) {
+      //Turn off camera
+      const tracks = stream.getTracks();
+
+      tracks.forEach(function (track) {
+        track.stop();
+      });
+
       this.setState({ completed: true }, () => {
         this.uploadAnswers();
 
@@ -445,6 +455,13 @@ class StartExam extends Component {
   examTimeOut = () => {
     this.setState({ completed: true }, () => {
       this.uploadAnswers();
+
+      //Turn off camera
+      const tracks = stream.getTracks();
+
+      tracks.forEach(function (track) {
+        track.stop();
+      });
 
       alert("Exam time out! Exam data save successfully");
       this.props.history.push("/student");
