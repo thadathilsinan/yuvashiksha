@@ -21,6 +21,7 @@ class Student extends Component {
       previousExamList: [],
       selectedExam: null,
       webcam: { webcam: "webcam object here" },
+      examListRefreshTimer: null,
     };
   }
 
@@ -117,6 +118,12 @@ class Student extends Component {
     this.setState({ selectedExam: item }, () => {
       let startTime = new Date(`${item.date},${item.from}`);
       let currentTime = new Date();
+      let stoptime = new Date(`${item.date},${item.to}`);
+
+      if (currentTime.getTime() > stoptime.getTime()) {
+        alert("Exam time ended! Cannot write exam");
+        return;
+      }
 
       if (currentTime.getTime() > startTime.getTime()) {
         //Exam start time reached
@@ -135,6 +142,8 @@ class Student extends Component {
   componentDidMount() {
     this.openWelcomDialog();
     this.getExamData();
+
+    //Refresh exam List
 
     console.log(this.props);
   }
