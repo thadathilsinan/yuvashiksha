@@ -3,6 +3,7 @@ import NavBar from "../../../ui-elements/navBar/NavBar";
 import { Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import "./examguidliness.css";
+import http from "../../../../shared/http";
 
 class ExamGuidlines extends Component {
   constructor(props) {
@@ -35,8 +36,25 @@ class ExamGuidlines extends Component {
         "Are you sure to start the examination? \n(Make sure you have a webcam connected to your device)"
       )
     ) {
-      this.props.history.push("/student/exam/checkcamera");
+      //Check if the student already finished the exam
+      this.checkCompleted();
     }
+  };
+
+  //Check if exam completed
+  checkCompleted = () => {
+    http(
+      "POST",
+      "/student/checkcompleted",
+      { exam: this.props.exam._id },
+      (res) => {
+        if (res.status == 200) {
+          this.props.history.push("/student/exam/checkcamera");
+        } else {
+          alert("You already completed this exam!");
+        }
+      }
+    );
   };
 
   componentDidMount() {

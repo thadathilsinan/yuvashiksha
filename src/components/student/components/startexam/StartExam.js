@@ -494,7 +494,7 @@ class StartExam extends Component {
               ),
               right: (
                 <div>
-                  <Button className="btn btn-success">
+                  <Button className="btn btn-success" onClick={this.finishExam}>
                     <FaRegCheckCircle size={28} />
                   </Button>
                 </div>

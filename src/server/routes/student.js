@@ -117,15 +117,35 @@ router.post("/restoreexam", async (req, res, next) => {
   let answer = await Answers.findOne({
     exam: req.body.exam,
     student: req.user._id,
-    completed: false,
   });
 
   if (answer) {
     res.statusCode = 200;
-    res.json(answer);
+    res.json({
+      exam: answer.exam,
+      answers: answer.answers,
+      images: [],
+      completed: answer.completed,
+    });
   } else {
     res.statusCode = 203;
     res.end("No data available to restore exam");
+  }
+});
+
+//Check if the student already completed the exam
+router.post("/checkcompleted", async (req, res, next) => {
+  let answer = await Answers.findOne({
+    exam: req.body.exam,
+    student: req.user._id,
+  });
+
+  if (answer && answer.completed) {
+    res.statusCode = 203;
+    res.end("Exam already completed");
+  } else {
+    res.statusCode = 200;
+    res.end("Exam completeness check finished");
   }
 });
 
