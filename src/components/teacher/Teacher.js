@@ -181,8 +181,9 @@ class Teacher extends Component {
   //onChange Listener for Batch <select>
   batchChanged = (event) => {
     if (
-      this.classRef.current.value == this.props.mentor.name &&
-      this.batchRef.current.value == this.props.mentor.batch
+      !this.props.mentor ||
+      (this.classRef.current.value == this.props.mentor.name &&
+        this.batchRef.current.value == this.props.mentor.batch)
     ) {
       this.setState({ teacherSelectDisabled: false }, () =>
         this.setUpTeacherSelect()
