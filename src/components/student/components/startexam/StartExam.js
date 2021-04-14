@@ -256,7 +256,7 @@ class StartExam extends Component {
         clearTimeout(this.timeOutId);
       }
 
-      this.timeOutId = setTimeout(this.uploadAnswers, 3000);
+      this.uploadAnswers();
     });
   };
 
@@ -272,7 +272,7 @@ class StartExam extends Component {
         clearTimeout(this.timeOutId);
       }
 
-      this.timeOutId = setTimeout(this.uploadAnswers, 5000);
+      this.timeOutId = setTimeout(this.uploadAnswers, 2000);
     });
   };
 
@@ -288,7 +288,7 @@ class StartExam extends Component {
         clearTimeout(this.timeOutId);
       }
 
-      this.timeOutId = setTimeout(this.uploadAnswers, 5000);
+      this.timeOutId = setTimeout(this.uploadAnswers, 2000);
     });
   };
 

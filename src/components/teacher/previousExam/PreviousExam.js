@@ -7,6 +7,17 @@ import { withRouter } from "react-router-dom";
 import "./PreviousExam.css";
 
 class PreviousExam extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      studentList: null,
+    };
+  }
+
+  //Setup the list of student who attended the exam
+  setUpStudentList = () => {};
+
   componentDidMount() {
     console.log(this.props);
   }
