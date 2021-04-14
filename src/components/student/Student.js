@@ -142,7 +142,7 @@ class Student extends Component {
 
   //Refesh exam list
   refreshExamList = () => {
-    let timer = setInterval(this.getExamData, 1000 * 60); //Refresh every 1 minute
+    let timer = setInterval(this.getExamData, 1000 * 30); //Refresh every 30 sec
     this.setState({ examListRefreshTimer: timer });
   };
 
