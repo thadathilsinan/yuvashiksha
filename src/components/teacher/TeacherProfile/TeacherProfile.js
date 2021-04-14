@@ -9,7 +9,7 @@ import "./TeacherProfile.css";
 import { Route, withRouter } from "react-router-dom";
 import VerifyStudent from "./VerifyStudent";
 
-export class TeacherProfile extends Component {
+class TeacherProfile extends Component {
   constructor(props) {
     super(props);
 

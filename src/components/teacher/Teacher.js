@@ -5,6 +5,7 @@ import NavBar from "../ui-elements/navBar/NavBar";
 import TabView from "../ui-elements/TabView/TabView";
 import ListItem from "../ui-elements/ListItem/ListItem";
 import NewExam from "./newExam/NewExam";
+import PreviousExam from "./previousExam/PreviousExam";
 import TeacherProfile from "./TeacherProfile/TeacherProfile";
 import { FaUserCircle } from "react-icons/fa";
 import { Route, withRouter } from "react-router-dom";
@@ -29,6 +30,7 @@ class Teacher extends Component {
       teacherData: {},
       restrictedExam: false,
       teacherSelectDisabled: true,
+      selectedExam: null,
     };
 
     this.userRole = "teacher";
@@ -236,7 +238,7 @@ class Teacher extends Component {
     let currentTime = new Date();
 
     if (currentTime.getTime() > examDate.getTime()) {
-      console.log("Previous Exam");
+      this.openPreviousExam(examItem);
     } else {
       this.openEditExam(examItem);
     }
@@ -362,6 +364,13 @@ class Teacher extends Component {
     this.setState({ teacherSelect: hodOrMentor });
   };
 
+  //When an previos exam is clicked
+  openPreviousExam = (exam) => {
+    this.setState({ selectedExam: exam }, () => {
+      this.props.history.push("/teacher/previousexam");
+    });
+  };
+
   componentDidMount() {
     this.getTeacherData();
     this.checkClassSelected();
@@ -455,6 +464,9 @@ class Teacher extends Component {
         </Route>
         <Route path="/teacher/newexam">
           <NewExam />
+        </Route>
+        <Route path="/teacher/previousexam">
+          <PreviousExam exam={this.state.selectedExam} />
         </Route>
         <Route path="/teacher/previewexam">
           {this.state.editExam ? (
