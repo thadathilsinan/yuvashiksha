@@ -88,14 +88,14 @@ router.post("/uploadimage", async (req, res, next) => {
     student: req.user._id,
   });
 
+  //Uploading image
+  let image = new Image({ image: req.body.image });
+
+  //Saving image
+  await image.save();
+
   //Check if entry already exist
   if (answer) {
-    //Updating the values
-    let image = new Image({ image: req.body.image });
-
-    //Saving image
-    await image.save();
-
     answer.images.push(image._id);
 
     //save changes
@@ -106,7 +106,7 @@ router.post("/uploadimage", async (req, res, next) => {
       exam: req.body.exam,
       student: req.user._id,
       answers: {},
-      images: [req.body.image],
+      images: [image._id],
       completed: false,
     });
 
