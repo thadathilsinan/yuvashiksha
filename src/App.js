@@ -14,7 +14,14 @@ import $ from "jquery";
 import Canvas from "./components/ui-elements/Canvas/Canvas";
 import StudentMain from "./components/student/StudentMain";
 
+import FileSaver from "file-saver";
+
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { show: false };
+  }
+
   //disable right click
   preventRightClick = () => {
     document.addEventListener("contextmenu", (event) => event.preventDefault());
@@ -34,7 +41,7 @@ class App extends React.Component {
   //Prevent keys for security in KIOSK mode
   preventKeys = () => {
     $(document).ready(() => {
-      window.$(document).keydown((event) => {
+      $(document).keydown((event) => {
         let key = event.which;
 
         //Disabling keys
@@ -62,10 +69,18 @@ class App extends React.Component {
         ) {
           event.preventDefault();
         }
-
-        console.log(event);
       });
     });
+  };
+
+  //Check if running in kiosk mode or not
+  checkKiosk = () => {
+    if (
+      (window.screen.availHeight || window.screen.height - 30) <=
+      window.innerHeight
+    ) {
+      this.setState({ show: true });
+    }
   };
 
   componentDidMount() {
@@ -92,26 +107,30 @@ class App extends React.Component {
     };
 
     this.preventKeys();
+
+    this.checkKiosk();
   }
 
   render() {
     return (
       <BrowserRouter>
         <Provider store={store}>
-          <div>
-            {/* Routes of the app */}
-            <Route path="/" component={LoginRoute} />
-            <Route path="/student" component={StudentMain} />
-            <Route path="/teacher" component={TeacherMain} />
-            <Route path="/admin" component={AdminMain} />
+          {this.state.show ? (
+            <div>
+              {/* Routes of the app */}
+              <Route path="/" component={LoginRoute} />
+              <Route path="/student" component={StudentMain} />
+              <Route path="/teacher" component={TeacherMain} />
+              <Route path="/admin" component={AdminMain} />
 
-            {/* //Test route for development purposes */}
-            <Route path="/test">
-              <>
-                <Canvas />
-              </>
-            </Route>
-          </div>
+              {/* //Test route for development purposes */}
+              <Route path="/test"></Route>
+            </div>
+          ) : (
+            <center>
+              <h2>OPEN YUVASHIKSHA USING THE LAUNCHER</h2>
+            </center>
+          )}
         </Provider>
       </BrowserRouter>
     );

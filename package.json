@@ -12,6 +12,7 @@
     "bootstrap": "^4.5.3",
     "cors": "^2.8.5",
     "express-session": "^1.17.1",
+    "file-saver": "^2.0.5",
     "jquery": "^3.5.1",
     "nodemailer": "^6.4.17",
     "passport-local": "^1.0.0",

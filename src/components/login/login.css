@@ -15,3 +15,9 @@
 #loginBody {
   background-color: rgb(196, 196, 196);
 }
+
+#yuvashikshaExit {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+}

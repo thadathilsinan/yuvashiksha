@@ -11,6 +11,7 @@ import VerifyOtp from "./verifyOtp/verifyOtp";
 import SetPassword from "./setPassword/SetPassword";
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import GoogleSignup from "./sigup/googleSignup/GoogleSignup";
+import { FaPowerOff } from "react-icons/fa";
 
 //DISPATH ACTIONS TO CHANGE REDUX STORE DATA (USED FOR SIGNUP PROCEDURE)
 const mapDispatchToProps = (dispatch) => {
@@ -106,6 +107,19 @@ class Login extends Component {
 
     return (
       <div id="loginBody">
+        {/* EXIT BUTTON */}
+        <div id="yuvashikshaExit">
+          <button
+            className="btn btn-danger"
+            title="Exit Yuvashiksha"
+            onClick={() => {
+              navigator.clipboard.writeText("close-yuvashiksha");
+            }}
+          >
+            <FaPowerOff />
+          </button>
+        </div>
+
         <div
           className="d-flex align-items-center justify-content-center"
           style={{ height: "100vh" }}

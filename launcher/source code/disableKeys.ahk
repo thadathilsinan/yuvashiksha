@@ -120,3 +120,9 @@ F12::Return
 
 ;Disable Alt+Shift+Esc
 <^>!+Esc::Return
+
+;Disable Shift+Esc
++Esc::Return
+
+;Disable Win+L
+#l::Return

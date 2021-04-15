@@ -6,6 +6,7 @@ FileCreateDir, C:\Yuvashiksha
 FileInstall, C:\Users\Sinan\Desktop\disableKeys.exe, C:\Yuvashiksha\disableKeys.exe, 1
 FileInstall, C:\Users\Sinan\Desktop\killTaskMgr.exe, C:\Yuvashiksha\killTaskMgr.exe, 1
 FileInstall, C:\Users\Sinan\Desktop\activateChrome.exe, C:\Yuvashiksha\activateChrome.exe, 1
+FileInstall, C:\Users\Sinan\Desktop\chromeExit.exe, C:\Yuvashiksha\chromeExit.exe, 1
 
 ;Chcking if chrome installed or not
 if (FileExist("C:\Program Files\Google\Chrome\Application\chrome.exe") or FileExist("C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"))
@@ -80,7 +81,7 @@ Kill(chrome:=0)
 
 		if (WinExist(chrome))
 		{
-			WinKill
+			Process, Close, chrome.exe
 		}
 	}
 	else
@@ -88,7 +89,7 @@ Kill(chrome:=0)
 		;Default chrome location
 		if (WinExist("ahk_exe chrome.exe"))
 		{
-			WinKill
+			Process, Close, chrome.exe
 		}
 	}
 }
@@ -100,6 +101,9 @@ DisableKeys()
 		Run, C:\Yuvashiksha\disableKeys.exe
 		Run, C:\Yuvashiksha\killTaskMgr.exe
 		Run, C:\Yuvashiksha\activateChrome.exe
+		Run, C:\Yuvashiksha\chromeExit.exe
+		
+		Run TASKKILL /F /IM explorer.exe
 	} catch e {
 		MsgBox, % Options 0+16, Cannot Start Yuvashiksha, Cannot Run dependancy programs
 		Exit
@@ -129,4 +133,7 @@ EnableKeys()
 	Process, Close, disableKeys.exe
 	Process, Close, killTaskMgr.exe
 	Process, Close, activateChrome.exe
+	Process, Close, chromeExit.exe
+
+	Run explorer.exe
 }
