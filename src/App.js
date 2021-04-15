@@ -31,6 +31,43 @@ class App extends React.Component {
     });
   };
 
+  //Prevent keys for security in KIOSK mode
+  preventKeys = () => {
+    $(document).ready(() => {
+      window.$(document).keydown((event) => {
+        let key = event.which;
+
+        //Disabling keys
+        if (
+          key === 17 ||
+          key === 18 ||
+          key === 91 ||
+          key === 92 ||
+          key === 93 ||
+          key === 112 ||
+          key === 113 ||
+          key === 114 ||
+          key === 115 ||
+          key === 116 ||
+          key === 117 ||
+          key === 118 ||
+          key === 119 ||
+          key === 120 ||
+          key === 121 ||
+          key === 122 ||
+          key === 123 ||
+          key === 44 ||
+          event.ctrlKey ||
+          event.altKey
+        ) {
+          event.preventDefault();
+        }
+
+        console.log(event);
+      });
+    });
+  };
+
   componentDidMount() {
     //Disabling right click menu
     this.preventRightClick();
@@ -53,6 +90,8 @@ class App extends React.Component {
         </div>`
       );
     };
+
+    this.preventKeys();
   }
 
   render() {
