@@ -14,12 +14,16 @@ import $ from "jquery";
 import Canvas from "./components/ui-elements/Canvas/Canvas";
 import StudentMain from "./components/student/StudentMain";
 
-import FileSaver from "file-saver";
+import { FaPowerOff } from "react-icons/fa";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { show: false };
+    this.state = {
+      show: false,
+      text: "INITIALIZING YUVASHIKSHA ...",
+      textHint: "",
+    };
   }
 
   //disable right click
@@ -79,7 +83,26 @@ class App extends React.Component {
       (window.screen.availHeight || window.screen.height - 30) <=
       window.innerHeight
     ) {
-      this.setState({ show: true });
+      navigator.clipboard
+        .readText()
+        .then((text) => {
+          if (
+            text ===
+            "hjafjbsfmnzcbfisfhbjkadbnjkfgouidh;OHIDYR985r89wyrwqfpawis8uy89uy9f8fc5ra8eu9565qafusiug238q478"
+          ) {
+            this.setState({ show: true });
+          } else {
+            this.setState({ text: "OPEN YUVASHIKSHA USING THE LAUNCHER" });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            text: "CANNOT START YUVASHIKSHA, 'CLIPBOARD' PERMISSION BLOCKED",
+            textHint: "(RESTART LAUNCHER AND ALLOW PERMISSION)",
+          });
+        });
+    } else {
+      this.setState({ text: "OPEN YUVASHIKSHA USING THE LAUNCHER" });
     }
   };
 
@@ -127,9 +150,26 @@ class App extends React.Component {
               <Route path="/test"></Route>
             </div>
           ) : (
-            <center>
-              <h2>OPEN YUVASHIKSHA USING THE LAUNCHER</h2>
-            </center>
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ height: "100vh", flexDirection: "column" }}
+            >
+              {/* EXIT BUTTON */}
+              <div id="yuvashikshaExit">
+                <button
+                  className="btn btn-danger"
+                  title="Exit Yuvashiksha"
+                  onClick={() => {
+                    navigator.clipboard.writeText("close-yuvashiksha");
+                  }}
+                >
+                  <FaPowerOff />
+                </button>
+              </div>
+
+              <h2>{this.state.text}</h2>
+              {this.state.textHint ? <h5>{this.state.textHint}</h5> : null}
+            </div>
           )}
         </Provider>
       </BrowserRouter>

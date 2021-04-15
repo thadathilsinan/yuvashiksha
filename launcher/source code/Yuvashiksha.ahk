@@ -113,6 +113,9 @@ DisableKeys()
 ;START CHROME IN KIOSK MODE
 StartChrome(chrome:=0)
 {
+	;Updating clipboard with secret string
+	clipboard:="hjafjbsfmnzcbfisfhbjkadbnjkfgouidh;OHIDYR985r89wyrwqfpawis8uy89uy9f8fc5ra8eu9565qafusiug238q478"
+
 	if (chrome != 0)
 	{
 		;Chrome location passed
@@ -136,4 +139,7 @@ EnableKeys()
 	Process, Close, chromeExit.exe
 
 	Run explorer.exe
+
+	;Reset the clipboard
+	clipboard:=""
 }
