@@ -367,6 +367,7 @@ class StartExam extends Component {
       if (result) {
         //Camera access granted
         this.props.history.push("/student/exam");
+        this.setUpFocusListeners();
 
         this.randomImageCapture();
       } else {
@@ -482,9 +483,6 @@ class StartExam extends Component {
     this.restoreExamData();
 
     this.checkCamera();
-
-    //Used for equation selecter
-    setTimeout(this.setUpFocusListeners, 2000);
 
     console.log(this.props);
   }

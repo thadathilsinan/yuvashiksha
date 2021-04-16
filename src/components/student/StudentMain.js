@@ -11,7 +11,7 @@ class StudentMain extends Component {
 
     this.state = {
       component: null,
-      show: false,
+      show: true,
       text: "PLEASE WAIT ...",
       textHint: "",
       showCloseButton: false,
@@ -124,7 +124,7 @@ class StudentMain extends Component {
   };
 
   componentDidMount() {
-    this.checkKiosk();
+    // this.checkKiosk();
 
     //Disabling right click menu
     this.preventRightClick();
