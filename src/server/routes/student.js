@@ -83,10 +83,10 @@ router.post("/saveanswers", async (req, res, next) => {
 
 //Save the images to the db
 router.post("/uploadimage", async (req, res, next) => {
-  let answer = await Answers.findOne({
-    exam: req.body.exam,
-    student: req.user._id,
-  });
+  // let answer = await Answers.findOne({
+  //   exam: req.body.exam,
+  //   student: req.user._id,
+  // });
 
   //Uploading image
   let image = new Image({ image: req.body.image });
@@ -94,28 +94,28 @@ router.post("/uploadimage", async (req, res, next) => {
   //Saving image
   await image.save();
 
-  //Check if entry already exist
-  if (answer) {
-    answer.images.push(image._id);
+  // //Check if entry already exist
+  // if (answer) {
+  //   answer.images.push(image._id);
 
-    //save changes
-    await answer.save();
-  } else {
-    //Creating a new entry
-    answer = new Answers({
-      exam: req.body.exam,
-      student: req.user._id,
-      answers: {},
-      images: [image._id],
-      completed: false,
-    });
+  //   //save changes
+  //   await answer.save();
+  // } else {
+  //   //Creating a new entry
+  //   answer = new Answers({
+  //     exam: req.body.exam,
+  //     student: req.user._id,
+  //     answers: {},
+  //     images: [image._id],
+  //     completed: false,
+  //   });
 
-    //Saving changes
-    await answer.save();
-  }
+  //   //Saving changes
+  //   await answer.save();
+  // }
 
   res.statusCode = 200;
-  res.end("Image uploaded successfully");
+  res.json({ image: image._id });
 });
 
 //Restore the exam data

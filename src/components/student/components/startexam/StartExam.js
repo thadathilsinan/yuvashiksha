@@ -389,16 +389,11 @@ class StartExam extends Component {
     let nextCall = this.getRandomInt(60 * 5, 60 * 10); //Time between 5 - 10 minutes (in seconds)
 
     this.takePhoto().then((image) => {
-      let newImages = [...this.state.images];
-      newImages.push(image);
+      //Saving changes to db
+      this.uploadImage(image);
 
-      this.setState({ images: newImages }, () => {
-        //Saving changes to db
-        this.uploadImage(image);
-
-        //Setting the next photo capture
-        setTimeout(this.randomImageCapture, nextCall * 1000);
-      });
+      //Setting the next photo capture
+      setTimeout(this.randomImageCapture, nextCall * 1000);
     });
   };
 
@@ -409,7 +404,12 @@ class StartExam extends Component {
       "/student/uploadimage",
       { image, exam: this.props.exam._id },
       (res) => {
-        console.log(res.data);
+        if (res.status == 200) {
+          let newImages = [...this.state.images];
+          newImages.push(res.data.image);
+
+          this.setState({ images: newImages });
+        }
       }
     );
   };
