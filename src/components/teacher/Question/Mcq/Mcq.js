@@ -9,7 +9,7 @@ export default class Mcq extends Component {
           <input
             class="form-check-input"
             type="radio"
-            name="options"
+            name={`options${this.props.question.id}`}
             value={option.name}
             checked={option.correct && !this.props.examMode ? true : undefined}
             onChange={(e) => {
