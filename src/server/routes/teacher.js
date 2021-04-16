@@ -313,7 +313,7 @@ router.post("/previousexam/getstudents", async (req, res, next) => {
   }
 
   res.statusCode = 200;
-  res.json(answers);
+  res.json(responseObject);
 });
 
 module.exports = router;

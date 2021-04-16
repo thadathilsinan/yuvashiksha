@@ -12,6 +12,7 @@ class PreviousExam extends Component {
     super(props);
 
     this.state = {
+      studentData: null,
       studentList: null,
     };
   }
@@ -29,18 +30,44 @@ class PreviousExam extends Component {
       "/teacher/previousexam/getstudents",
       { exam: this.props.exam._id },
       (res) => {
-        console.log(res.data);
+        if (res.status == 200) {
+          this.setState({ studentData: res.data }, () => {
+            this.setupStudentList();
+          });
+        }
       }
     );
   };
 
   //Setup the list of students
-  setupStudentList = () => {};
+  setupStudentList = () => {
+    console.log(this.state.studentData);
+
+    let studentList = this.state.studentData.map((student, index, array) => {
+      return (
+        <ListItem height="100px">
+          {{
+            left: (
+              <div id="leftListItem">
+                <p>Name: {student.name}</p>
+                <p>Register Number: {student.registerNumber}</p>
+              </div>
+            ),
+            right: (
+              <div id="rightListItem">
+                <p>Marks :{student.marks}</p>
+              </div>
+            ),
+          }}
+        </ListItem>
+      );
+    });
+
+    this.setState({ studentList });
+  };
 
   componentDidMount() {
     this.getStudentList();
-
-    this.setupStudentList();
 
     console.log(this.props);
   }
@@ -81,23 +108,7 @@ class PreviousExam extends Component {
             ),
           }}
         </NavBar>
-        <div id="studentListContainer">
-          <ListItem height="100px">
-            {{
-              left: (
-                <div id="leftListItem">
-                  <p>Student name</p>
-                  <p>Roll Number</p>
-                </div>
-              ),
-              right: (
-                <div id="rightListItem">
-                  <p>Mark :0</p>
-                </div>
-              ),
-            }}
-          </ListItem>
-        </div>
+        <div id="studentListContainer">{this.state.studentList}</div>
       </div>
     );
   }
