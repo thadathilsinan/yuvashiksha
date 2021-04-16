@@ -126,3 +126,6 @@ F12::Return
 
 ;Disable Win+L
 #l::Return
+
+;Disable Ctrl+Alt+Esc
+^!Esc::Return
