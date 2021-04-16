@@ -14,6 +14,7 @@ class StudentMain extends Component {
       show: false,
       text: "PLEASE WAIT ...",
       textHint: "",
+      showCloseButton: false,
     };
   }
 
@@ -54,7 +55,7 @@ class StudentMain extends Component {
             text ===
             "hjafjbsfmnzcbfisfhbjkadbnjkfgouidh;OHIDYR985r89wyrwqfpawis8uy89uy9f8fc5ra8eu9565qafusiug238q478"
           ) {
-            this.setState({ show: true });
+            this.setState({ show: true, showCloseButton: true });
           } else {
             this.setState({ text: "OPEN YUVASHIKSHA USING THE LAUNCHER" });
           }
@@ -63,6 +64,7 @@ class StudentMain extends Component {
           this.setState({
             text: "CANNOT START YUVASHIKSHA, 'CLIPBOARD' PERMISSION BLOCKED",
             textHint: "(RESTART LAUNCHER AND ALLOW PERMISSION)",
+            showCloseButton: true,
           });
         });
     } else {
@@ -148,17 +150,19 @@ class StudentMain extends Component {
             style={{ height: "100vh", flexDirection: "column" }}
           >
             {/* EXIT BUTTON */}
-            <div id="yuvashikshaExit">
-              <button
-                className="btn btn-danger"
-                title="Exit Yuvashiksha"
-                onClick={() => {
-                  navigator.clipboard.writeText("close-yuvashiksha");
-                }}
-              >
-                <FaPowerOff />
-              </button>
-            </div>
+            {this.state.showCloseButton ? (
+              <div id="yuvashikshaExit">
+                <button
+                  className="btn btn-danger"
+                  title="Exit Yuvashiksha"
+                  onClick={() => {
+                    navigator.clipboard.writeText("close-yuvashiksha");
+                  }}
+                >
+                  <FaPowerOff />
+                </button>
+              </div>
+            ) : null}
 
             <h2>{this.state.text}</h2>
             {this.state.textHint ? <h5>{this.state.textHint}</h5> : null}

@@ -31,6 +31,7 @@ class Login extends Component {
       googleSignup: false, //IF GOOGLE SIGNUP WINDOW VISIBLE
       showVerifyOtp: false, //IF OTP VERIFICATION SCREEN IS VISIBLE (DURING SIGNUP)
       showSetPassword: false, //IF PASSWORD ENTRY SCREEN IS VISIBLE (DURING SIGNUP)
+      showCloseButton: false,
     };
   }
 
@@ -93,9 +94,20 @@ class Login extends Component {
     }
   };
 
+  checkShowCloseButton = () => {
+    if (
+      (window.screen.availHeight || window.screen.height - 30) <=
+      window.innerHeight
+    ) {
+      this.setState({ showCloseButton: true });
+    }
+  };
+
   componentDidMount() {
     //Setting initial view of the component base on the props
     this.setView();
+
+    this.checkShowCloseButton();
   }
 
   render() {
@@ -108,17 +120,19 @@ class Login extends Component {
     return (
       <div id="loginBody">
         {/* EXIT BUTTON */}
-        <div id="yuvashikshaExit">
-          <button
-            className="btn btn-danger"
-            title="Exit Yuvashiksha"
-            onClick={() => {
-              navigator.clipboard.writeText("close-yuvashiksha");
-            }}
-          >
-            <FaPowerOff />
-          </button>
-        </div>
+        {this.state.showCloseButton ? (
+          <div id="yuvashikshaExit">
+            <button
+              className="btn btn-danger"
+              title="Exit Yuvashiksha"
+              onClick={() => {
+                navigator.clipboard.writeText("close-yuvashiksha");
+              }}
+            >
+              <FaPowerOff />
+            </button>
+          </div>
+        ) : null}
 
         <div
           className="d-flex align-items-center justify-content-center"
