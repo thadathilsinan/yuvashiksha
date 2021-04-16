@@ -298,7 +298,7 @@ router.post("/previousexam/getstudents", async (req, res, next) => {
 
   for (let answer of answers) {
     let student = await Users.findOne({ _id: answer.student });
-    let mark = 0;
+    let mark = "Not Evaluated";
 
     if (answer.totalMarks) {
       mark = answer.totalMarks;

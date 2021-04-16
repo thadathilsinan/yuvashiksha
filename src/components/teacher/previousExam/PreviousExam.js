@@ -3,7 +3,8 @@ import NavBar from "../../ui-elements/navBar/NavBar";
 import ListItem from "../../ui-elements/ListItem/ListItem";
 import { Button } from "react-bootstrap";
 import { BiPrinter } from "react-icons/bi";
-import { withRouter } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
+import Evaluation from "../Evaluation/Evaluation";
 import "./PreviousExam.css";
 import http from "../../../shared/http";
 
@@ -41,11 +42,13 @@ class PreviousExam extends Component {
 
   //Setup the list of students
   setupStudentList = () => {
-    console.log(this.state.studentData);
-
     let studentList = this.state.studentData.map((student, index, array) => {
       return (
-        <ListItem height="100px">
+        <ListItem
+          height="100px"
+          key={student.id}
+          onClick={() => this.openEvaluation(student)}
+        >
           {{
             left: (
               <div id="leftListItem">
@@ -55,7 +58,7 @@ class PreviousExam extends Component {
             ),
             right: (
               <div id="rightListItem">
-                <p>Marks :{student.marks}</p>
+                <p>Marks: {student.marks}</p>
               </div>
             ),
           }}
@@ -64,6 +67,13 @@ class PreviousExam extends Component {
     });
 
     this.setState({ studentList });
+  };
+
+  //Open evaluation window
+  openEvaluation = (student) => {
+    this.setState({ selectedStudent: student }, () => {
+      this.props.history.push("/teacher/previousexam/evaluate");
+    });
   };
 
   componentDidMount() {
@@ -76,40 +86,50 @@ class PreviousExam extends Component {
     this.checkProps();
 
     return (
-      <div>
-        <NavBar>
-          {{
-            left: (
-              <h5 style={{ display: "flex" }}>
-                <Button
-                  variant="primary"
-                  className="btn btn-primary mr-3"
-                  size="sm"
-                  onClick={() => {
-                    window.history.back();
-                  }}
-                >
-                  {"<"}
-                </Button>
-                <div>
-                  {this.props.exam.examName}
-                  <br />
-                  {this.props.exam.subject}
-                </div>
-              </h5>
-            ),
-            right: (
-              <h4>
-                <Button className="btn btn-light">
-                  <BiPrinter />
-                </Button>
-                <Button className="btn btn-success ml-2">PUBLISH</Button>
-              </h4>
-            ),
-          }}
-        </NavBar>
-        <div id="studentListContainer">{this.state.studentList}</div>
-      </div>
+      <>
+        <Route path="/teacher/previousexam" exact>
+          <div>
+            <NavBar>
+              {{
+                left: (
+                  <h5 style={{ display: "flex" }}>
+                    <Button
+                      variant="primary"
+                      className="btn btn-primary mr-3"
+                      size="sm"
+                      onClick={() => {
+                        window.history.back();
+                      }}
+                    >
+                      {"<"}
+                    </Button>
+                    <div>
+                      {this.props.exam.examName}
+                      <br />
+                      {this.props.exam.subject}
+                    </div>
+                  </h5>
+                ),
+                right: (
+                  <h4>
+                    <Button className="btn btn-light">
+                      <BiPrinter />
+                    </Button>
+                    <Button className="btn btn-success ml-2">PUBLISH</Button>
+                  </h4>
+                ),
+              }}
+            </NavBar>
+            <div id="studentListContainer">{this.state.studentList}</div>
+          </div>
+        </Route>
+        <Route path="/teacher/previousexam/evaluate">
+          <Evaluation
+            exam={this.props.exam._id}
+            student={this.state.selectedStudent}
+          />
+        </Route>
+      </>
     );
   }
 }
