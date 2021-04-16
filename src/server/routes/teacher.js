@@ -15,6 +15,7 @@ const Users = require("../schema/Users");
 const Exams = require("../schema/Exams");
 const Classes = require("../schema/classes");
 const Departments = require("../schema/department");
+const Answers = require("../schema/Answers");
 const { response } = require("express");
 
 router.use(bodyParser.json());
@@ -288,6 +289,31 @@ router.post("/profile/verifystudents/reject", async (req, res, next) => {
 
   res.statusCode = 200;
   res.end("Account rejected successfully");
+});
+
+//Return the list of students attended the exam
+router.post("/previousexam/getstudents", async (req, res, next) => {
+  let responseObject = [];
+  let answers = await Answers.find({ exam: req.body.exam });
+
+  for (let answer of answers) {
+    let student = await Users.findOne({ _id: answer.student });
+    let mark = 0;
+
+    if (answer.totalMarks) {
+      mark = answer.totalMarks;
+    }
+
+    responseObject.push({
+      id: student._id,
+      name: student.name,
+      registerNumber: student.registerNumber,
+      marks: mark,
+    });
+  }
+
+  res.statusCode = 200;
+  res.json(answers);
 });
 
 module.exports = router;

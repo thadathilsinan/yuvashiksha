@@ -366,9 +366,14 @@ class Teacher extends Component {
 
   //When an previos exam is clicked
   openPreviousExam = (exam) => {
+    // if (exam.teacher == this.props.user.user._id) {
     this.setState({ selectedExam: exam }, () => {
       this.props.history.push("/teacher/previousexam");
     });
+    // } else {
+    //   alert("You cannot evaluate this exam");
+    //   console.log(exam.teacher, this.props.user.user._id);
+    // }
   };
 
   componentDidMount() {

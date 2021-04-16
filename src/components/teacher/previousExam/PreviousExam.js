@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { BiPrinter } from "react-icons/bi";
 import { withRouter } from "react-router-dom";
 import "./PreviousExam.css";
+import http from "../../../shared/http";
 
 class PreviousExam extends Component {
   constructor(props) {
@@ -15,14 +16,38 @@ class PreviousExam extends Component {
     };
   }
 
-  //Setup the list of student who attended the exam
-  setUpStudentList = () => {};
+  checkProps = () => {
+    if (!this.props.exam) {
+      window.history.back();
+    }
+  };
+
+  //Get the list of student who attended the exam
+  getStudentList = () => {
+    http(
+      "POST",
+      "/teacher/previousexam/getstudents",
+      { exam: this.props.exam._id },
+      (res) => {
+        console.log(res.data);
+      }
+    );
+  };
+
+  //Setup the list of students
+  setupStudentList = () => {};
 
   componentDidMount() {
+    this.getStudentList();
+
+    this.setupStudentList();
+
     console.log(this.props);
   }
 
   render() {
+    this.checkProps();
+
     return (
       <div>
         <NavBar>
