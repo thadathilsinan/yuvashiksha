@@ -408,7 +408,13 @@ class StartExam extends Component {
           let newImages = [...this.state.images];
           newImages.push(res.data.image);
 
-          this.setState({ images: newImages });
+          this.setState({ images: newImages }, () => {
+            if (this.timeOutId) {
+              clearTimeout(this.timeOutId);
+            }
+
+            this.uploadAnswers();
+          });
         }
       }
     );
