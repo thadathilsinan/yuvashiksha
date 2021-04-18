@@ -316,4 +316,15 @@ router.post("/previousexam/getstudents", async (req, res, next) => {
   res.json(responseObject);
 });
 
+//Return the answers of exam for evaluation
+router.post("/previousexam/evaluate/getanswers", async (req, res, next) => {
+  let answer = await Answers.findOne({
+    exam: req.body.exam,
+    student: req.body.student,
+  });
+
+  res.statusCode = 200;
+  res.json(answer);
+});
+
 module.exports = router;

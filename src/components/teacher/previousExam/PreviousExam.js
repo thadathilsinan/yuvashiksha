@@ -20,7 +20,7 @@ class PreviousExam extends Component {
 
   checkProps = () => {
     if (!this.props.exam) {
-      window.history.back();
+      document.location.href = "http://localhost:3000/teacher";
     }
   };
 
@@ -104,9 +104,9 @@ class PreviousExam extends Component {
                       {"<"}
                     </Button>
                     <div>
-                      {this.props.exam.examName}
+                      {this.props.exam ? this.props.exam.examName : null}
                       <br />
-                      {this.props.exam.subject}
+                      {this.props.exam ? this.props.exam.subject : null}
                     </div>
                   </h5>
                 ),
@@ -125,7 +125,7 @@ class PreviousExam extends Component {
         </Route>
         <Route path="/teacher/previousexam/evaluate">
           <Evaluation
-            exam={this.props.exam._id}
+            exam={this.props.exam}
             student={this.state.selectedStudent}
           />
         </Route>

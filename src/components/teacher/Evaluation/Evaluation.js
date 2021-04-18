@@ -1,16 +1,96 @@
 import React, { Component } from "react";
 import NavBar from "../../ui-elements/navBar/NavBar";
 import ListItem from "../../ui-elements/ListItem/ListItem";
+import Question from "../Question/Question";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "./Evaluation.css";
+import http from "../../../shared/http";
 
 class Evaluation extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      answers: {},
+    };
+  }
+
+  //Check if all props available
+  checkProps = () => {
+    if (!this.props.exam || !this.props.student) {
+      document.location.href = "http://localhost:3000/teacher";
+    }
+  };
+
+  //Parse the questions to display it
+  parseQuestions = () => {
+    let questionNumber = 0;
+
+    if (!this.props.exam) return;
+
+    return this.props.exam.questionPaper.map((question, index) => {
+      //Count the question Number
+      if (question.type != "header" && question.type != "text") {
+        questionNumber++;
+      }
+
+      return (
+        <Question
+          question={question}
+          index={questionNumber}
+          key={question.id}
+          canvasClick={
+            question.type == "short" || question.type == "essay"
+              ? () => {
+                  this.openCanvas(question);
+                }
+              : null
+          }
+          optionChange={
+            question.type == "mcq"
+              ? (value) => this.mcqOptionChanged(question, value)
+              : null
+          }
+          textChange={
+            question.type == "short" || question.type == "essay"
+              ? (value) => {
+                  this.textChange(question, value);
+                }
+              : null
+          }
+          examMode //Indicate that the question is in the startExam component
+        />
+      );
+    });
+  };
+
+  //Get answers from DB
+  getAnswers = () => {
+    http(
+      "POST",
+      "/teacher/previousexam/evaluate/getanswers",
+      {
+        exam: this.props.exam._id,
+        student: this.props.student.id,
+      },
+      (res) => {
+        if (res.status == 200) {
+          this.setState({ answers: res.data });
+        }
+      }
+    );
+  };
+
   componentDidMount() {
+    this.getAnswers();
+
     console.log(this.props);
   }
 
   render() {
+    this.checkProps();
+
     return (
       <div>
         <NavBar>
@@ -43,23 +123,21 @@ class Evaluation extends Component {
           }}
         </NavBar>
         <div id="bodyContainer">
-          <ListItem height="100px">
-            {{
-              left: (
-                <div id="leftListItem">
-                  <p>DATE:DD-MM-YYYY</p>
-                  <p>TIME:HH:MM:SS</p>
-                  <p>Name of Examination:</p>
-                </div>
-              ),
-              right: (
-                <div id="rightListItem">
-                  <p>Subject:</p>
-                  <p>MARK:80</p>
-                </div>
-              ),
-            }}
-          </ListItem>
+          {this.props.exam ? (
+            <Question
+              question={{
+                type: "header",
+                examName: this.props.exam.examName,
+                subject: this.props.exam.subject,
+                date: this.props.exam.date,
+                Class: this.props.Class,
+                batch: this.props.batch,
+                marks: this.props.exam.totalMarks,
+                time: this.timeDuration,
+              }}
+            />
+          ) : null}
+          {this.parseQuestions()}
         </div>
       </div>
     );
