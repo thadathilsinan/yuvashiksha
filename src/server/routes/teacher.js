@@ -298,7 +298,7 @@ router.post("/previousexam/getstudents", async (req, res, next) => {
 
   for (let answer of answers) {
     let student = await Users.findOne({ _id: answer.student });
-    let mark = 0;
+    let mark = "Not Evaluated";
 
     if (answer.totalMarks) {
       mark = answer.totalMarks;
@@ -313,7 +313,18 @@ router.post("/previousexam/getstudents", async (req, res, next) => {
   }
 
   res.statusCode = 200;
-  res.json(answers);
+  res.json(responseObject);
+});
+
+//Return the answers of exam for evaluation
+router.post("/previousexam/evaluate/getanswers", async (req, res, next) => {
+  let answer = await Answers.findOne({
+    exam: req.body.exam,
+    student: req.body.student,
+  });
+
+  res.statusCode = 200;
+  res.json(answer);
 });
 
 module.exports = router;
