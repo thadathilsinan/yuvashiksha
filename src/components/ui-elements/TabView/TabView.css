@@ -9,15 +9,21 @@
   display: flex;
   align-items: center;
 
-  height: 50px;
-  background-color: rgb(0, 145, 230);
+  height: 38px;
+  background-color: rgb(87, 87, 87);
   color: white;
+  border-radius: 0px;
+  background: #565656;
+  box-shadow: inset 6px 6px 12px #363636,
+            inset -6px -6px 12px #767676;
+  
+  
 }
 
 #leftTab {
   width: 50%;
   height: 100%;
-  border-right: 2px solid white;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +32,7 @@
 #rightTab {
   width: 50%;
   height: 100%;
-  border-left: 2px solid white;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +40,11 @@
 
 .selectedTab {
   background-color: rgb(87, 87, 87);
-  border-bottom: 5px solid rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(255, 255, 255);
+  border-radius: 0px;
+  background: #1854c3;
+  box-shadow:  1px 1px 1px #2a834c,
+              -1px -1px 1px #309356;
 }
 
 #tabViewBody {

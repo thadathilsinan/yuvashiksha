@@ -939,6 +939,7 @@ class NewExam extends Component {
               <Col>
                 <Form.Control
                   ref={this.examNameRef}
+                  className="text-box"
                   type="text"
                   placeholder="Exam name"
                 />
@@ -951,6 +952,7 @@ class NewExam extends Component {
               <Col>
                 <Form.Control
                   ref={this.subjectRef}
+                  className="text-box"
                   type="text"
                   placeholder="Subject"
                 />
@@ -968,6 +970,7 @@ class NewExam extends Component {
               <Col>
                 <Form.Control
                   ref={this.timeFromRef}
+                  className="text-box"
                   type="time"
                   placeholder="FROM"
                 />
@@ -980,6 +983,7 @@ class NewExam extends Component {
               <Col>
                 <Form.Control
                   ref={this.timeToRef}
+                  className="text-box"
                   type="time"
                   placeholder="TO"
                 />
@@ -992,6 +996,7 @@ class NewExam extends Component {
               <Col>
                 <Form.Control
                   ref={this.dateRef}
+                  className="text-box"
                   type="date"
                   placeholder="Date"
                 />
@@ -1004,6 +1009,7 @@ class NewExam extends Component {
               <Col>
                 <Form.Control
                   ref={this.marksRef}
+                  className="text-box"
                   type="number"
                   placeholder="Marks"
                   disabled
@@ -1017,8 +1023,9 @@ class NewExam extends Component {
               <Col>
                 <Form.Control
                   ref={this.classRef}
+                  
                   as="select"
-                  className="my-1 mr-sm-2"
+                  className="my-1 mr-sm-2 text-box"
                   id="inlineFormCustomSelectPref"
                   onChange={() => {
                     //Setup batch details based on the selected class
@@ -1039,7 +1046,7 @@ class NewExam extends Component {
                 <Form.Control
                   ref={this.batchRef}
                   as="select"
-                  className="my-1 mr-sm-2"
+                  className="mr-1 mr-sm-2 text-box"
                   id="inlineFormCustomSelectPref"
                   custom
                 >
@@ -1053,8 +1060,7 @@ class NewExam extends Component {
           </>,
           <>
             <button
-              variant="light"
-              className="btn btn-primary"
+              className="create-btn"
               onClick={this.scheduleExam}
             >
               {this.props.exam ? "EDIT EXAM" : "CREATE EXAM"}
@@ -1081,7 +1087,7 @@ class NewExam extends Component {
           </>,
           <>
             <button
-              className="btn btn-primary"
+              className="create-btn"
               onClick={
                 this.state.editSelected ? this.editText : this.addNewText
               }
@@ -1097,7 +1103,7 @@ class NewExam extends Component {
             ? "EDIT MULTIPLE CHOICE QUESTION"
             : "ADD MULTIPLE CHOICE QUESTION",
           <>
-            <form>
+            <form className="mcq-form">
               <label className="black" for="mcq">
                 Enter Question:{" "}
               </label>
@@ -1142,14 +1148,14 @@ class NewExam extends Component {
             </form>
           </>,
           <>
-            <button className="btn btn-primary" onClick={this.addMcqOption}>
+            <button className="create-btn" onClick={this.addMcqOption}>
               Add option
             </button>
-            <button className="btn btn-primary" onClick={this.openCanvas}>
+            <button className="create-btn" onClick={this.openCanvas}>
               Canvas{" "}
             </button>
             <button
-              className="btn btn-primary"
+              className="create-btn"
               onClick={() => {
                 window.$("#uploadImage").modal("show");
               }}
@@ -1157,7 +1163,7 @@ class NewExam extends Component {
               Upload
             </button>
             <button
-              className="btn btn-primary"
+              className="create-btn"
               onClick={
                 this.state.editSelected ? this.editMcq : this.addMcqQuestion
               }
@@ -1199,11 +1205,11 @@ class NewExam extends Component {
             </form>
           </>,
           <>
-            <button className="btn btn-primary" onClick={this.openCanvas}>
+            <button className="create-btn" onClick={this.openCanvas}>
               Canvas{" "}
             </button>
             <button
-              className="btn btn-primary"
+              className="create-btn"
               onClick={() => {
                 window.$("#uploadImage").modal("show");
               }}
@@ -1211,7 +1217,7 @@ class NewExam extends Component {
               Upload
             </button>
             <button
-              className="btn btn-primary"
+              className="create-btn"
               onClick={this.state.editSelected ? this.editShort : this.addShort}
             >
               OK
@@ -1251,11 +1257,11 @@ class NewExam extends Component {
             </form>
           </>,
           <>
-            <button className="btn btn-primary" onClick={this.openCanvas}>
+            <button className="create-btn" onClick={this.openCanvas}>
               Canvas
             </button>
             <button
-              className="btn btn-primary"
+              className="create-btn"
               onClick={() => {
                 window.$("#uploadImage").modal("show");
               }}
@@ -1263,7 +1269,7 @@ class NewExam extends Component {
               Upload
             </button>
             <button
-              className="btn btn-primary"
+              className="create-btn"
               onClick={this.state.editSelected ? this.editEssay : this.addEssay}
             >
               OK
@@ -1312,7 +1318,11 @@ class NewExam extends Component {
                 <Button
                   variant="primary"
                   className="btn btn-primary mr-3"
+                  id="navBack"
                   size="sm"
+                  data-bs-toggle="tooltip" 
+                  data-bs-placement="bottom" 
+                  title="Go back"
                   onClick={() => {
                     this.props.history.push("/teacher");
                   }}
@@ -1334,6 +1344,9 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light "
                       id="navBarDown"
+                      data-bs-toggle="tooltip" 
+                      data-bs-placement="bottom" 
+                      title="Move question to bottom"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.questionDown}
                     >
@@ -1344,6 +1357,9 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light ml-3 "
                       id="navBarUp"
+                      data-bs-toggle="tooltip" 
+                      data-bs-placement="bottom" 
+                      title="Move Question to top"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.questionUp}
                     >
@@ -1354,6 +1370,9 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light ml-3 "
                       id="navBarEdit"
+                      data-bs-toggle="tooltip" 
+                      data-bs-placement="bottom" 
+                      title="Edit Question"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.editSelectedQuestion}
                     >
@@ -1364,6 +1383,9 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light ml-3 "
                       id="navBarDelete"
+                      data-bs-toggle="tooltip" 
+                      data-bs-placement="bottom" 
+                      title="Delete Question"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.removeQuestion}
                     >
@@ -1372,7 +1394,10 @@ class NewExam extends Component {
                   </Col>
                   <Col>
                     <Dropdown>
-                      <Dropdown.Toggle variant="light" id="dropdown-basic">
+                      <Dropdown.Toggle variant="light" id="dropdown-basic"
+                      data-bs-toggle="tooltip" 
+                      data-bs-placement="bottom" 
+                      title="Add Question">
                         <BsPlus />
                       </Dropdown.Toggle>
 
@@ -1386,6 +1411,7 @@ class NewExam extends Component {
                         >
                           Text
                         </Dropdown.Item>
+                        <div class="dropdown-divider"></div>
                         <Dropdown.Item
                           data-toggle="modal"
                           data-target="#mcqModal"
@@ -1395,6 +1421,7 @@ class NewExam extends Component {
                         >
                           Multiple Choice question
                         </Dropdown.Item>
+                        <div class="dropdown-divider"></div>
                         <Dropdown.Item
                           data-toggle="modal"
                           data-target="#shortModal"
@@ -1404,6 +1431,7 @@ class NewExam extends Component {
                         >
                           Short answer
                         </Dropdown.Item>
+                        <div class="dropdown-divider"></div>
                         <Dropdown.Item
                           data-toggle="modal"
                           data-target="#essayModal"
@@ -1418,6 +1446,10 @@ class NewExam extends Component {
                   </Col>
                   <Button
                     className="btn btn-success ml-3"
+                    id="navSuccess"
+                    data-bs-toggle="tooltip" 
+                    data-bs-placement="bottom" 
+                    title="Finish"
                     onClick={this.openScheduleExam}
                   >
                     <BsCheck />

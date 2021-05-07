@@ -1,11 +1,29 @@
 #login-btn {
   width: 55%;
   margin: 10px;
+  font-size: 15px;
+  border:none;
+  border-radius: 50px;
+  box-shadow:  3px 3px 8px #b1b1b1,
+              -3px -3px 8px #ffffff;
+  background-color: #7777e7;
+}
+#login-btn:hover{
+background-color: blue;
 }
 
 #google-login-btn {
   width: 55%;
   margin: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 50px;
+  background-color: #cc4e4e;
+  box-shadow:  5px 5px 8px #b1b1b1,
+              -5px -5px 8px #ffffff;
+}
+#google-login-btn:hover{
+  background-color: #f31717;
 }
 
 .form-group {
@@ -15,6 +33,13 @@
 .form-group {
   padding-top: 8px;
   padding-bottom: 8px;
+}
+.form-group input{
+  border-radius: 50px;
+  background: #e0e0e0;
+  box-shadow: inset 20px 20px 60px #bebebe,
+              inset -20px -20px 60px #ffffff;
+
 }
 
 label {

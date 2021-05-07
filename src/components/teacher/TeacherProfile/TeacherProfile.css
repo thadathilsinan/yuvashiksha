@@ -1,9 +1,64 @@
 #userProfileBody {
   height: calc(100vh - 80px);
   overflow: scroll;
-  background-color: rgb(196, 196, 196);
+  background-color: #e0e0e0;
 }
 
 body {
   overflow: hidden;
+}
+#changeBtn{
+  font-size: 14px;
+  border:none;
+  border-radius: 50px;
+  background: #001EC7;
+  box-shadow:  5px 5px 8px #b1b1b1,
+              -5px -5px 8px #ffffff;
+  color: white;
+}
+
+#changeBtn:hover{
+  background-color: blue;
+}
+
+#saveBtn{
+  font-size: 14px;
+  border-radius: 50px;
+  background-color: #001ec7;
+  box-shadow:  5px 5px 8px #b1b1b1,
+              -5px -5px 8px #ffffff;
+}
+#saveBtn:hover{
+  background-color: blue;
+
+}
+#verifyStudentsBtn{
+  border: none;
+  border-radius: 50px;
+  font-size: 13px;
+  background: #001EC7;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;
+}
+#verifyStudentsBtn:hover{
+  background-color: blue;
+}
+#logoutBtn{
+  font-size: 14px;
+  border: none;
+  border-radius: 50px;
+  background-color: red;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;
+}
+#logoutBtn:hover{
+  border: none;
+  background-color: red;
+}
+#backBtn{
+  background: #001ec7;
+  border-style: none;
+  color: white;
 }

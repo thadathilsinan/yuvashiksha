@@ -188,6 +188,7 @@ class TeacherProfile extends Component {
                     <Button
                       variant="primary"
                       className="btn btn-primary mr-3"
+                      id="backBtn"
                       size="sm"
                       onClick={() => {
                         window.history.back();
@@ -206,6 +207,7 @@ class TeacherProfile extends Component {
                           <Button
                             variant="primary"
                             ClassName="btn bg-light"
+                            id="verifyStudentsBtn"
                             size="sm"
                             onClick={this.verifyStudents}
                           >
@@ -218,6 +220,7 @@ class TeacherProfile extends Component {
                         <Button
                           variant="danger"
                           className="btn bg-danger"
+                          id="logoutBtn"
                           size="md"
                           onClick={this.logout}
                         >
@@ -250,6 +253,7 @@ class TeacherProfile extends Component {
                     <input
                       type="button"
                       value="CHANGE"
+                      id="changeBtn"
                       className="btn btn-primary mt-3"
                       data-toggle="modal"
                       data-target="#change-email"
@@ -285,6 +289,7 @@ class TeacherProfile extends Component {
                 <p className="ml-2 text-right">
                   <Button
                     className="ml-7"
+                    id="saveBtn"
                     variant="primary"
                     onClick={this.saveUserAccount}
                   >

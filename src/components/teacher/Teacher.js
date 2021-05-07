@@ -332,7 +332,7 @@ class Teacher extends Component {
       hodOrMentor = (
         <div className="col-sm-2" id="teacher-select">
           <select
-            className="form-select mt-3"
+            className="form-select mt-2"
             name="teacher"
             id="teacher"
             onChange={this.checkClassSelected}
@@ -347,7 +347,7 @@ class Teacher extends Component {
       hodOrMentor = (
         <div className="col-sm-2" id="teacher-select">
           <select
-            className="form-select mt-3"
+            className="form-select mt-1"
             name="teacher"
             id="teacher"
             ref={this.teacherRef}
@@ -408,7 +408,7 @@ class Teacher extends Component {
                     </div>
                     <div className="col-sm-3">
                       <select
-                        className="form-select mt-3"
+                        className="form-select mt-1"
                         name="class"
                         ref={this.classRef}
                         id="class"
@@ -420,7 +420,7 @@ class Teacher extends Component {
                     </div>
                     <div className="col-sm-3">
                       <select
-                        className="form-select mt-3"
+                        className="form-select mt-1"
                         name="batch"
                         ref={this.batchRef}
                         id="batch"

@@ -177,9 +177,7 @@ export class StudentProfile extends Component {
             right: (
               <h5>
                 <Button
-                  variant="danger"
-                  className="btn bg-danger"
-                  size="md"
+                  className="logoutBtn"
                   onClick={this.logout}
                 >
                   LOGOUT
@@ -214,6 +212,7 @@ export class StudentProfile extends Component {
               <input
                 type="button"
                 value="CHANGE EMAIL"
+                id="changeBtn"
                 className="btn btn-primary mb-2"
                 data-toggle="modal"
                 data-target="#change-email"

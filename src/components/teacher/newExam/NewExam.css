@@ -5,7 +5,6 @@ h5 {
 #navBarBackButton {
   font-size: 40px;
   margin: 10px;
-
   margin-right: 20px;
 }
 .modal-body {
@@ -17,8 +16,8 @@ h5 {
 #newExamBody {
   height: calc(100vh - 80px);
   overflow: auto;
-
-  background-color: rgb(217, 237, 255);
+  font-family: 'Donegal One', serif;
+  background-color: #e0e0e0;
 }
 
 #emptyQuestion {
@@ -63,4 +62,87 @@ h5 {
 
 .mcqOptionsContainer table tr:last-of-type td:hover {
   background-color: rgb(197, 197, 197);
+}
+
+#navBarUp{
+  border-radius: 35px;
+  border-style: none;
+  background: #001EC7;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;            
+}
+
+
+#navBarDown{
+  border-radius: 35px;
+  border-style: none;
+  background: #001EC7;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;            
+}
+
+#navBarEdit{
+  border-radius: 35px;
+  border-style: none;
+  background: #001EC7;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;
+}
+
+#navBarDelete{
+  border-radius: 35px;
+  border-style: none;
+  background: #001EC7;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;
+}
+#navBack{
+  background: #001ec7;
+  border-style: none;
+  color: white;
+}
+
+#dropdown-basic{
+  border-radius: 35px;
+  border-style: none;
+  background: #001EC7;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;            
+}
+
+#navSuccess{
+  border-radius: 35px;
+  border-style: none;
+  background: #2d8b51;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;            
+}
+#navSuccess:hover{
+  background-color: green;
+}
+.text-box{
+  border-radius: 5px;
+  background: #ecf0f3;
+  box-shadow: inset 15px 15px 30px #9ea1a3,
+              inset -15px -15px 30px #ffffff;;
+}
+.create-btn{
+  border: none;
+  padding: 8px 8px;
+  border-radius: 12px;
+  border: none;
+  color: #ecf0f3;
+  background: #001EC7;
+  box-shadow:  4px 4px 7px #00179b,
+              -4px -4px 7px #0025f3;
+  color: white;
+}
+.create-btn:hover{
+  background-color: blue;
 }

@@ -37,6 +37,8 @@
  *
  * @return  {JSX}               The content to render modal in the screen
  */
+import "./dialogBox.css"
+
 let configuireDialogBox = (modalName, modalTitle, modalBody, modalFooter) => {
   return (
     <div
@@ -48,8 +50,8 @@ let configuireDialogBox = (modalName, modalTitle, modalBody, modalFooter) => {
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id={`${modalName}ModalLabel`}>
+          <div className="modal-header">
+            <h5 className="modal-title" id={`${modalName}ModalLabel`}>
               {modalTitle}
             </h5>
             <button
@@ -61,8 +63,8 @@ let configuireDialogBox = (modalName, modalTitle, modalBody, modalFooter) => {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">{modalBody}</div>
-          <div class="modal-footer">{modalFooter}</div>
+          <div className="modal-body">{modalBody}</div>
+          <div className="modal-footer">{modalFooter}</div>
         </div>
       </div>
     </div>

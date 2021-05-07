@@ -1,15 +1,22 @@
 #login-card {
-  background-color: rgba(46, 46, 255, 0.89);
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 20px 20px 60px #8b8b8b,
+            -20px -20px 60px #ffffff;
+              ;
 }
 
 #signin-tab {
-  background-color: rgb(75, 75, 75);
+  background-color: #2d8b51;
   color: white;
+  border-radius: 50px 0px 0px 50px;
 }
 
 #signup-tab {
-  background-color: rgb(75, 75, 75);
+  background-color:#2d8b51;
+  border-radius: 0px 50px 50px 0px;
   color: white;
+  
 }
 
 #loginBody {

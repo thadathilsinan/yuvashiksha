@@ -2,6 +2,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Redirect, Route } from "react-router-dom";
 import "./App.css";
 
+
 import LoginRoute from "./components/login/LoginRoute";
 import Student from "./components/student/Student";
 import TeacherMain from "./components/teacher/TeacherMain";
@@ -13,6 +14,7 @@ import React from "react";
 import $ from "jquery";
 import Canvas from "./components/ui-elements/Canvas/Canvas";
 import StudentMain from "./components/student/StudentMain";
+
 
 class App extends React.Component {
   componentDidMount() {
