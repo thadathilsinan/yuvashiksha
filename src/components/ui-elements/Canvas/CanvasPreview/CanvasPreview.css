@@ -4,7 +4,7 @@
 }
 
 #canvasPreview {
-  z-index: 1000000;
+  z-index: 100000000;
 
   position: fixed;
   top: 0;

@@ -56,6 +56,9 @@ export default class Question extends Component {
             examMode={this.props.examMode}
             canvasClick={this.props.canvasClick}
             textChange={this.props.textChange}
+            evaluationMode={this.props.evaluationMode}
+            answer={this.props.answer}
+            canvas={this.props.canvas}
           />
         ),
       });
