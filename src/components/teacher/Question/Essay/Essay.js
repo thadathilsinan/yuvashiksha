@@ -11,6 +11,21 @@ class Essay extends Component {
     };
   }
 
+  //Trigger when changing the marks in evaluation mode
+  marksChange = (event) => {
+    if (event.target.value > this.props.question.marks) {
+      event.target.value = this.props.question.marks;
+    }
+
+    if (event.target.value < 0) {
+      event.target.value = 0;
+    }
+
+    if (!Number.isInteger(parseInt(event.target.value))) {
+      event.target.value = 0;
+    }
+  };
+
   //Show the canvas preview
   showCanvasPreview = () => {
     this.setState({ canvasPreview: true });
@@ -39,7 +54,17 @@ class Essay extends Component {
           />
         ) : null}
 
-        <div className="text-right">{this.props.question.marks} Mark(s)</div>
+        <div className="text-right">
+          <input
+            type="number"
+            className="mr-1"
+            min="0"
+            max={this.props.question.marks}
+            step="1"
+            onChange={this.marksChange}
+          ></input>
+          /{this.props.question.marks} Mark(s)
+        </div>
         {this.props.index ? this.props.index + ". " : null}
         {this.props.question.question}
 
@@ -92,12 +117,14 @@ class Essay extends Component {
             <hr />
             <div className="container">
               <div className="row">
-                <div className="col-sm-10">
+                <div className="col-sm-12">
                   <textarea name="essayQuestionAnswer" rows="15" disabled>
                     {this.props.answer}
                   </textarea>
                 </div>
-                <div className="col-sm-2">
+              </div>
+              {this.props.canvas ? (
+                <div className="text-right mt-3 mb-3">
                   <input
                     type="button"
                     value="CANVAS"
@@ -105,7 +132,7 @@ class Essay extends Component {
                     onClick={this.showCanvasPreview}
                   />
                 </div>
-              </div>
+              ) : null}
             </div>
           </>
         ) : null}
