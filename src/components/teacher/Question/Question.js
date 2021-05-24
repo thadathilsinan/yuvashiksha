@@ -29,6 +29,7 @@ export default class Question extends Component {
             optionChange={this.props.optionChange}
             evaluationMode={this.props.evaluationMode}
             answer={this.props.answer}
+            onMarksChange={this.props.onMarksChange}
           />
         ),
       });
@@ -44,6 +45,7 @@ export default class Question extends Component {
             evaluationMode={this.props.evaluationMode}
             answer={this.props.answer}
             canvas={this.props.canvas}
+            onMarksChange={this.props.onMarksChange}
           />
         ),
       });
@@ -59,6 +61,7 @@ export default class Question extends Component {
             evaluationMode={this.props.evaluationMode}
             answer={this.props.answer}
             canvas={this.props.canvas}
+            onMarksChange={this.props.onMarksChange}
           />
         ),
       });

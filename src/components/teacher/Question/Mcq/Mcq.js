@@ -15,6 +15,9 @@ export default class Mcq extends Component {
     if (!Number.isInteger(parseInt(event.target.value))) {
       event.target.value = 0;
     }
+
+    //Execute the passed onMarksChange function
+    this.props.onMarksChange(event.target.value, this.props.question.id);
   };
 
   render() {

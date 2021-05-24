@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import NavBar from "../../ui-elements/navBar/NavBar";
-import ListItem from "../../ui-elements/ListItem/ListItem";
 import Question from "../Question/Question";
 import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "./Evaluation.css";
 import http from "../../../shared/http";
 import Images from "./Images/Images";
+import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
 
 class Evaluation extends Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class Evaluation extends Component {
       answers: {},
       questionsParsed: null,
       showImages: false,
+      total: 0,
     };
   }
 
@@ -57,6 +58,7 @@ class Evaluation extends Component {
             key={question.id}
             answer={answer}
             canvas={canvas}
+            onMarksChange={this.changeMarks}
             evaluationMode //Indicate that the Question is contained in the Evaluation Component
           />
         );
@@ -64,6 +66,9 @@ class Evaluation extends Component {
     );
 
     this.setState({ questionsParsed });
+
+    //Calculate total marks
+    this.calcTotalMarks();
   };
 
   //Get answers from DB
@@ -93,6 +98,29 @@ class Evaluation extends Component {
   //Close images
   closeImages = () => {
     this.setState({ showImages: false });
+  };
+
+  //Change marks
+  changeMarks = (marks, questionId) => {
+    let answers = this.state.answers;
+
+    answers.answers[questionId].marks = marks;
+    this.setState({ answers }, () => {
+      let total = this.calcTotalMarks();
+      this.setState({ total });
+    });
+  };
+
+  //Calculate total marks
+  calcTotalMarks = () => {
+    let answers = this.state.answers.answers;
+    let total = 0;
+
+    for (let i in answers) {
+      if (answers[i].marks) total += parseInt(answers[i].marks);
+    }
+
+    return total;
   };
 
   componentDidMount() {
@@ -134,7 +162,7 @@ class Evaluation extends Component {
             ),
             right: (
               <h5>
-                TOTAL MARKS: {this.props.student.marks}
+                TOTAL MARKS: {this.state.total} / {this.props.exam.totalMarks}
                 <Button
                   className="btn btn-light ml-5"
                   onClick={this.openImages}
@@ -161,6 +189,16 @@ class Evaluation extends Component {
             />
           ) : null}
           {this.state.questionsParsed}
+
+          <div id="evaluationFooter">
+            <button className="btn btn-light">
+              <GrLinkPrevious color="white" />
+            </button>
+            <button className="btn btn-light">SAVE</button>
+            <button className="btn btn-light">
+              <GrLinkNext />
+            </button>
+          </div>
         </div>
       </div>
     );

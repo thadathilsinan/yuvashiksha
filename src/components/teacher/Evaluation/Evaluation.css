@@ -1,5 +1,23 @@
 #bodyContainer {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 80px - 60px);
   overflow: auto;
   background-color: rgb(196, 196, 196);
+}
+
+#evaluationFooter {
+  height: 60px;
+  width: 100vw;
+
+  background-color: #001ec7;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: fixed;
+  bottom: 0;
+}
+
+#evaluationFooter button {
+  margin: 0 20px;
 }
