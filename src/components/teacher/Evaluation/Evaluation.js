@@ -13,6 +13,7 @@ class Evaluation extends Component {
 
     this.state = {
       answers: {},
+      questionsParsed: null,
     };
   }
 
@@ -29,37 +30,38 @@ class Evaluation extends Component {
 
     if (!this.props.exam) return;
 
-    return this.props.exam.questionPaper.map((question, index) => {
-      let answer = null;
+    let questionsParsed = this.props.exam.questionPaper.map(
+      (question, index) => {
+        let answer = null;
+        let canvas = null;
 
-      //Count the question Number
-      if (question.type != "header" && question.type != "text") {
-        questionNumber++;
+        //Count the question Number
+        if (question.type != "header" && question.type != "text") {
+          questionNumber++;
 
-        //Getting the answer written by the student
-        if (this.state.answers.answers) {
-          answer = this.state.answers.answers[question.id].answer;
-          console.log(answer);
-        }
-      }
-
-      return (
-        <Question
-          question={question}
-          index={questionNumber}
-          key={question.id}
-          canvasClick={
-            question.type == "short" || question.type == "essay"
-              ? () => {
-                  this.openCanvas(question);
-                }
-              : null
+          //Getting the answer written by the student
+          if (this.state.answers.answers) {
+            answer = this.state.answers.answers[question.id].answer;
+            if (this.state.answers.answers[question.id].canvas) {
+              canvas = this.state.answers.answers[question.id].canvas;
+            }
           }
-          answer={answer}
-          evaluationMode //Indicate that the Question is contained in the Evaluation Component
-        />
-      );
-    });
+        }
+
+        return (
+          <Question
+            question={question}
+            index={questionNumber}
+            key={question.id}
+            answer={answer}
+            canvas={canvas}
+            evaluationMode //Indicate that the Question is contained in the Evaluation Component
+          />
+        );
+      }
+    );
+
+    this.setState({ questionsParsed });
   };
 
   //Get answers from DB
@@ -73,7 +75,9 @@ class Evaluation extends Component {
       },
       (res) => {
         if (res.status == 200) {
-          this.setState({ answers: res.data });
+          this.setState({ answers: res.data }, () => {
+            this.parseQuestions();
+          });
         }
       }
     );
@@ -134,7 +138,7 @@ class Evaluation extends Component {
               }}
             />
           ) : null}
-          {this.parseQuestions()}
+          {this.state.questionsParsed}
         </div>
       </div>
     );

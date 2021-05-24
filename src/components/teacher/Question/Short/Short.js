@@ -1,10 +1,39 @@
 import React, { Component } from "react";
 import "./Short.css";
 
-export default class Short extends Component {
+import CanvasPreview from "../../../ui-elements/Canvas/CanvasPreview/CanvasPreview";
+
+class Short extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      canvasPreview: false,
+    };
+  }
+
+  //Show the canvas preview
+  showCanvasPreview = () => {
+    this.setState({ canvasPreview: true });
+  };
+
+  //Hide the canvasPreview component
+  hideCanvasPreview = () => {
+    this.setState({ canvasPreview: false });
+  };
+
   render() {
+    console.log(this.props);
     return (
       <div>
+        {/* CANVAS PREVIEW */}
+        {this.state.canvasPreview ? (
+          <CanvasPreview
+            img={this.props.canvas}
+            close={this.hideCanvasPreview}
+          />
+        ) : null}
+
         <div className="text-right">{this.props.question.marks} Mark(s)</div>
         {this.props.index ? this.props.index + ". " : null}
         {this.props.question.question}
@@ -48,7 +77,37 @@ export default class Short extends Component {
             </div>
           </>
         ) : null}
+
+        {/* Evalution Mode - Display the answer */}
+        {this.props.evaluationMode ? (
+          <>
+            <br />
+            <hr />
+            <div className="container">
+              <div className="row">
+                <div className="col-sm-10">
+                  <input
+                    type="text"
+                    name="shortQuestionAnswer"
+                    value={this.props.answer}
+                    disabled
+                  />
+                </div>
+                <div className="col-sm-2">
+                  <input
+                    type="button"
+                    value="CANVAS"
+                    className="btn btn-primary"
+                    onClick={this.showCanvasPreview}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        ) : null}
       </div>
     );
   }
 }
+
+export default Short;

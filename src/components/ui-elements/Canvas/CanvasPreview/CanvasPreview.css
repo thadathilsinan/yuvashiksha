@@ -1,0 +1,12 @@
+#canvasDiv img {
+  height: 100%;
+  width: 100%;
+}
+
+#canvasPreview {
+  z-index: 1000000;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+}

@@ -2,7 +2,6 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Redirect, Route } from "react-router-dom";
 import "./App.css";
 
-
 import LoginRoute from "./components/login/LoginRoute";
 import Student from "./components/student/Student";
 import TeacherMain from "./components/teacher/TeacherMain";
@@ -14,7 +13,7 @@ import React from "react";
 import $ from "jquery";
 import Canvas from "./components/ui-elements/Canvas/Canvas";
 import StudentMain from "./components/student/StudentMain";
-
+import CanvasPreview from "./components/ui-elements/Canvas/CanvasPreview/CanvasPreview";
 
 class App extends React.Component {
   componentDidMount() {
@@ -47,7 +46,9 @@ class App extends React.Component {
             <Route path="/admin" component={AdminMain} />
 
             {/* //Test route for development purposes */}
-            <Route path="/test"></Route>
+            <Route path="/test">
+              <CanvasPreview />
+            </Route>
           </div>
         </Provider>
       </BrowserRouter>

@@ -3,11 +3,7 @@ import "./Mcq.css";
 
 export default class Mcq extends Component {
   render() {
-    console.log(this.props); //DEBUG
-
     let optionsList = this.props.question.options.map((option, index) => {
-      console.log(option); //DEBUG
-
       return (
         <div class="form-check" key={this.props.question.id + option.name}>
           <input
