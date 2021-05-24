@@ -7,3 +7,7 @@
   border: 2px solid black;
   overflow: auto;
 }
+
+#essayQuestion {
+  z-index: 1;
+}

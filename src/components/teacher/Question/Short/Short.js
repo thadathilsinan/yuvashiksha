@@ -20,10 +20,16 @@ class Short extends Component {
   //Hide the canvasPreview component
   hideCanvasPreview = () => {
     this.setState({ canvasPreview: false });
+
+    //Reset the zIndex of the elements
+    let allElements = document.getElementsByTagName("*");
+    for (let i = 0, len = allElements.length; i < len; i++) {
+      let element = allElements[i];
+      element.style.zIndex = "initial";
+    }
   };
 
   render() {
-    console.log(this.props);
     return (
       <div>
         {/* CANVAS PREVIEW */}
