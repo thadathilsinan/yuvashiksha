@@ -27,6 +27,8 @@ export default class Question extends Component {
             index={this.props.index}
             examMode={this.props.examMode}
             optionChange={this.props.optionChange}
+            evaluationMode={this.props.evaluationMode}
+            answer={this.props.answer}
           />
         ),
       });

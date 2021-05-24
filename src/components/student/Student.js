@@ -64,7 +64,7 @@ class Student extends Component {
                   <p>
                     Time: {item.from} - {item.to}
                   </p>
-                  <p>{item.marks} Marks</p>
+                  <p>{item.totalMarks} Marks</p>
                 </div>
               ),
             }}
@@ -91,7 +91,7 @@ class Student extends Component {
                   <p>
                     Time: {item.from} - {item.to}
                   </p>
-                  <p>{item.marks} Marks</p>
+                  <p>{item.totalMarks} Marks</p>
                 </div>
               ),
             }}

@@ -3,7 +3,11 @@ import "./Mcq.css";
 
 export default class Mcq extends Component {
   render() {
+    console.log(this.props); //DEBUG
+
     let optionsList = this.props.question.options.map((option, index) => {
+      console.log(option); //DEBUG
+
       return (
         <div class="form-check" key={this.props.question.id + option.name}>
           <input
@@ -11,7 +15,15 @@ export default class Mcq extends Component {
             type="radio"
             name={`options${this.props.question.id}`}
             value={option.name}
-            checked={option.correct && !this.props.examMode ? true : undefined}
+            checked={
+              option.correct &&
+              !this.props.examMode &&
+              !this.props.evaluationMode
+                ? true
+                : this.props.evaluationMode && option.name == this.props.answer
+                ? true
+                : undefined
+            }
             onChange={(e) => {
               this.props.optionChange(e.target.value);
             }}

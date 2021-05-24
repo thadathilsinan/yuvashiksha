@@ -30,9 +30,17 @@ class Evaluation extends Component {
     if (!this.props.exam) return;
 
     return this.props.exam.questionPaper.map((question, index) => {
+      let answer = null;
+
       //Count the question Number
       if (question.type != "header" && question.type != "text") {
         questionNumber++;
+
+        //Getting the answer written by the student
+        if (this.state.answers.answers) {
+          answer = this.state.answers.answers[question.id].answer;
+          console.log(answer);
+        }
       }
 
       return (
@@ -47,19 +55,8 @@ class Evaluation extends Component {
                 }
               : null
           }
-          optionChange={
-            question.type == "mcq"
-              ? (value) => this.mcqOptionChanged(question, value)
-              : null
-          }
-          textChange={
-            question.type == "short" || question.type == "essay"
-              ? (value) => {
-                  this.textChange(question, value);
-                }
-              : null
-          }
-          examMode //Indicate that the question is in the startExam component
+          answer={answer}
+          evaluationMode //Indicate that the Question is contained in the Evaluation Component
         />
       );
     });
