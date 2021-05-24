@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "./Evaluation.css";
 import http from "../../../shared/http";
+import Images from "./Images/Images";
 
 class Evaluation extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class Evaluation extends Component {
     this.state = {
       answers: {},
       questionsParsed: null,
+      showImages: false,
     };
   }
 
@@ -83,6 +85,16 @@ class Evaluation extends Component {
     );
   };
 
+  //Open images captured
+  openImages = () => {
+    this.setState({ showImages: true });
+  };
+
+  //Close images
+  closeImages = () => {
+    this.setState({ showImages: false });
+  };
+
   componentDidMount() {
     this.getAnswers();
 
@@ -94,6 +106,11 @@ class Evaluation extends Component {
 
     return (
       <div>
+        {/* IMAGES  */}
+        {this.state.showImages ? (
+          <Images close={this.closeImages} images={this.state.answers.images} />
+        ) : null}
+
         <NavBar>
           {{
             left: (
@@ -118,7 +135,12 @@ class Evaluation extends Component {
             right: (
               <h5>
                 TOTAL MARKS: {this.props.student.marks}
-                <Button className="btn btn-light ml-5">IMAGES</Button>
+                <Button
+                  className="btn btn-light ml-5"
+                  onClick={this.openImages}
+                >
+                  IMAGES
+                </Button>
               </h5>
             ),
           }}

@@ -1,0 +1,13 @@
+#imagesBody {
+  height: calc(100vh - 80px);
+  width: 100vw;
+
+  background-color: white;
+
+  overflow: scroll;
+}
+
+.student-image {
+  margin: 30px 0;
+  width: 100%;
+}

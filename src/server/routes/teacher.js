@@ -16,7 +16,7 @@ const Exams = require("../schema/Exams");
 const Classes = require("../schema/classes");
 const Departments = require("../schema/department");
 const Answers = require("../schema/Answers");
-const { response } = require("express");
+const Images = require("../schema/Images");
 
 router.use(bodyParser.json());
 
@@ -325,6 +325,19 @@ router.post("/previousexam/evaluate/getanswers", async (req, res, next) => {
 
   res.statusCode = 200;
   res.json(answer);
+});
+
+//Return the images from the images collection
+router.post("/previousexam/evaluate/getimages", async (req, res, next) => {
+  let images = [];
+
+  for (let image of req.body.images) {
+    let img = await Images.findOne({ _id: image });
+    images.push(img.image);
+  }
+
+  res.statusCode = 200;
+  res.json(images);
 });
 
 module.exports = router;
