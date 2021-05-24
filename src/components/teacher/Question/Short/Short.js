@@ -12,6 +12,9 @@ class Short extends Component {
     };
   }
 
+  //Reference for marks input
+  marksRef = React.createRef();
+
   //Trigger when changing the marks in evaluation mode
   marksChange = (event) => {
     if (event.target.value > this.props.question.marks) {
@@ -47,6 +50,10 @@ class Short extends Component {
     }
   };
 
+  componentDidMount() {
+    if (this.props.marks) this.marksRef.current.value = this.props.marks;
+  }
+
   render() {
     console.log(this.props);
     return (
@@ -60,15 +67,21 @@ class Short extends Component {
         ) : null}
 
         <div className="text-right">
-          <input
-            type="number"
-            className="mr-1"
-            min="0"
-            max={this.props.question.marks}
-            step="1"
-            onChange={this.marksChange}
-          ></input>
-          /{this.props.question.marks} Mark(s)
+          {this.props.evaluationMode ? (
+            <>
+              <input
+                type="number"
+                className="mr-1"
+                min="0"
+                max={this.props.question.marks}
+                step="1"
+                ref={this.marksRef}
+                onChange={this.marksChange}
+              ></input>
+              /
+            </>
+          ) : null}
+          {this.props.question.marks} Mark(s)
         </div>
 
         {this.props.index ? this.props.index + ". " : null}

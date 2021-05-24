@@ -37,6 +37,7 @@ class Evaluation extends Component {
       (question, index) => {
         let answer = null;
         let canvas = null;
+        let marks = null;
 
         //Count the question Number
         if (question.type != "header" && question.type != "text") {
@@ -48,6 +49,8 @@ class Evaluation extends Component {
             if (this.state.answers.answers[question.id].canvas) {
               canvas = this.state.answers.answers[question.id].canvas;
             }
+
+            marks = this.state.answers.answers[question.id].marks;
           }
         }
 
@@ -59,16 +62,18 @@ class Evaluation extends Component {
             answer={answer}
             canvas={canvas}
             onMarksChange={this.changeMarks}
+            marks={marks}
             evaluationMode //Indicate that the Question is contained in the Evaluation Component
           />
         );
       }
     );
 
-    this.setState({ questionsParsed });
-
-    //Calculate total marks
-    this.calcTotalMarks();
+    this.setState({ questionsParsed }, () => {
+      //Calculate total marks
+      let total = this.calcTotalMarks();
+      this.setState({ total });
+    });
   };
 
   //Get answers from DB
@@ -121,6 +126,18 @@ class Evaluation extends Component {
     }
 
     return total;
+  };
+
+  //Save the marks to the DB
+  saveMarks = () => {
+    http(
+      "POST",
+      "/teacher/previousexam/evaluate/savemarks",
+      { answers: this.state.answers.answers, id: this.state.answers._id },
+      (res) => {
+        alert(res.data);
+      }
+    );
   };
 
   componentDidMount() {
@@ -194,7 +211,9 @@ class Evaluation extends Component {
             <button className="btn btn-light">
               <GrLinkPrevious color="white" />
             </button>
-            <button className="btn btn-light">SAVE</button>
+            <button className="btn btn-light" onClick={this.saveMarks}>
+              SAVE
+            </button>
             <button className="btn btn-light">
               <GrLinkNext />
             </button>

@@ -340,4 +340,21 @@ router.post("/previousexam/evaluate/getimages", async (req, res, next) => {
   res.json(images);
 });
 
+router.post("/previousexam/evaluate/savemarks", async (req, res, next) => {
+  //getting the document for saving new data
+  let answer = await Answers.findOne({ _id: req.body.id });
+
+  if (answer) {
+    answer.answers = req.body.answers;
+
+    await answer.save();
+
+    res.statusCode = 200;
+    res.end("Marks saved successfully");
+  } else {
+    res.statusCode = 203;
+    res.end("Answer document not found");
+  }
+});
+
 module.exports = router;

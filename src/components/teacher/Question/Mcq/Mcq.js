@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import "./Mcq.css";
 
-export default class Mcq extends Component {
+class Mcq extends Component {
+  //Reference for marks input
+  marksRef = React.createRef();
+
   //Trigger when changing the marks in evaluation mode
   marksChange = (event) => {
     if (event.target.value > this.props.question.marks) {
@@ -19,6 +22,10 @@ export default class Mcq extends Component {
     //Execute the passed onMarksChange function
     this.props.onMarksChange(event.target.value, this.props.question.id);
   };
+
+  componentDidMount() {
+    if (this.props.marks) this.marksRef.current.value = this.props.marks;
+  }
 
   render() {
     let optionsList = this.props.question.options.map((option, index) => {
@@ -53,15 +60,21 @@ export default class Mcq extends Component {
     return (
       <div>
         <div className="text-right">
-          <input
-            type="number"
-            className="mr-1"
-            min="0"
-            max={this.props.question.marks}
-            step="1"
-            onChange={this.marksChange}
-          ></input>
-          /{this.props.question.marks} Mark(s)
+          {this.props.evaluationMode ? (
+            <>
+              <input
+                type="number"
+                className="mr-1"
+                min="0"
+                max={this.props.question.marks}
+                step="1"
+                ref={this.marksRef}
+                onChange={this.marksChange}
+              ></input>
+              /
+            </>
+          ) : null}
+          {this.props.question.marks} Mark(s)
         </div>
         {this.props.index ? this.props.index + ". " : null}
         {this.props.question.question}
@@ -83,3 +96,5 @@ export default class Mcq extends Component {
     );
   }
 }
+
+export default Mcq;
