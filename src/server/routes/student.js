@@ -60,6 +60,7 @@ router.post("/saveanswers", async (req, res, next) => {
     //Updating the values
     answer.answers = req.body.answers;
     answer.completed = req.body.completed;
+    answer.images = req.body.images;
 
     //save changes
     await answer.save();
@@ -69,7 +70,7 @@ router.post("/saveanswers", async (req, res, next) => {
       exam: req.body.exam,
       student: req.user._id,
       answers: req.body.answers,
-      images: [],
+      images: req.body.images,
       completed: req.body.completed,
     });
 

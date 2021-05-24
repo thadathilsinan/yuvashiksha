@@ -304,9 +304,11 @@ class StartExam extends Component {
         exam: this.props.exam._id,
         answers: this.state.answers,
         completed: this.state.completed,
+        images: this.state.images,
       },
       (res) => {
         console.log(res.data);
+        return true;
       }
     );
   };
