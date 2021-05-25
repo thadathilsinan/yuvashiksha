@@ -346,6 +346,7 @@ router.post("/previousexam/evaluate/savemarks", async (req, res, next) => {
 
   if (answer) {
     answer.answers = req.body.answers;
+    answer.totalMarks = req.body.total;
 
     await answer.save();
 

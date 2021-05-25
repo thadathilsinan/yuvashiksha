@@ -8,6 +8,8 @@ import http from "../../../shared/http";
 import Images from "./Images/Images";
 import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
 import $ from "jquery";
+import { BsImages } from "react-icons/bs";
+import { IoIosSave } from "react-icons/io";
 
 class Evaluation extends Component {
   constructor(props) {
@@ -140,7 +142,11 @@ class Evaluation extends Component {
     http(
       "POST",
       "/teacher/previousexam/evaluate/savemarks",
-      { answers: this.state.answers.answers, id: this.state.answers._id },
+      {
+        answers: this.state.answers.answers,
+        id: this.state.answers._id,
+        total: this.state.total,
+      },
       (res) => {
         alert(res.data);
       }
@@ -201,12 +207,32 @@ class Evaluation extends Component {
             right: (
               <h5>
                 TOTAL MARKS: {this.state.total} / {this.props.exam.totalMarks}
-                <Button
+                <button
                   className="btn btn-light ml-5"
+                  onClick={this.props.prev}
+                >
+                  <GrLinkPrevious color="white" />
+                </button>
+                <Button
+                  className="btn btn-light ml-3"
                   onClick={this.openImages}
                 >
-                  IMAGES
+                  <BsImages />
                 </Button>
+                {this.state.restrictAccess ? null : (
+                  <button
+                    className="btn btn-light ml-3"
+                    onClick={this.saveMarks}
+                  >
+                    <IoIosSave />
+                  </button>
+                )}
+                <button
+                  className="btn btn-light ml-3"
+                  onClick={this.props.next}
+                >
+                  <GrLinkNext />
+                </button>
               </h5>
             ),
           }}
@@ -227,24 +253,6 @@ class Evaluation extends Component {
             />
           ) : null}
           {this.state.questionsParsed}
-
-          {/* Footer */}
-          {!this.state.showImages ? (
-            <div id="evaluationFooter">
-              <button className="btn btn-light" onClick={this.props.prev}>
-                <GrLinkPrevious color="white" />
-              </button>
-              {this.state.restrictAccess ? null : (
-                <button className="btn btn-light" onClick={this.saveMarks}>
-                  SAVE
-                </button>
-              )}
-
-              <button className="btn btn-light" onClick={this.props.next}>
-                <GrLinkNext />
-              </button>
-            </div>
-          ) : null}
         </div>
       </div>
     );

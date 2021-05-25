@@ -1,8 +1,6 @@
-
-
 #root {
   background-color: rgb(160, 160, 160);
-  font-family: 'Work Sans', sans-serif;
+  font-family: "Work Sans", sans-serif;
 }
 
 #systemAlert {
@@ -11,7 +9,11 @@
   left: 5%;
   z-index: 100000;
   width: 90%;
-  opacity: 90%;
+  opacity: 0.9;
+
+  animation: fadealert 2s 1;
+  animation-fill-mode: forwards;
+  animation-delay: 2s;
 }
 
 body {
@@ -27,4 +29,14 @@ body {
   position: fixed;
   right: 10px;
   top: 10px;
+}
+
+@keyframes fadealert {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
 }

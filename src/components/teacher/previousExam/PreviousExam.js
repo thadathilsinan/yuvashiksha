@@ -58,7 +58,12 @@ class PreviousExam extends Component {
             ),
             right: (
               <div id="rightListItem">
-                <p>Marks: {student.marks}</p>
+                <p>
+                  Marks: {student.marks}{" "}
+                  {isNaN(student.marks)
+                    ? null
+                    : `/ ${this.props.exam.totalMarks}`}
+                </p>
               </div>
             ),
           }}

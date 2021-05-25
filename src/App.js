@@ -19,7 +19,7 @@ class App extends React.Component {
     //Replacing system default alert with custom alert
     window.alert = (text) => {
       $("body").append(
-        `<div class="alert alert-info alert-dismissible" role="alert" id="systemAlert">
+        `<div class="alert alert-info alert-dismissible " role="alert" id="systemAlert">
           <button
             type="button"
             class="close"
