@@ -44,7 +44,7 @@ class Evaluation extends Component {
           questionNumber++;
 
           //Getting the answer written by the student
-          if (this.state.answers.answers) {
+          if (this.state.answers.answers[question.id]) {
             answer = this.state.answers.answers[question.id].answer;
             if (this.state.answers.answers[question.id].canvas) {
               canvas = this.state.answers.answers[question.id].canvas;
@@ -58,7 +58,7 @@ class Evaluation extends Component {
           <Question
             question={question}
             index={questionNumber}
-            key={question.id}
+            key={`${Date.now()}${question.id}`}
             answer={answer}
             canvas={canvas}
             onMarksChange={this.changeMarks}
@@ -146,6 +146,12 @@ class Evaluation extends Component {
     console.log(this.props);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.student.id != prevProps.student.id) {
+      this.getAnswers();
+    }
+  }
+
   render() {
     this.checkProps();
 
@@ -210,13 +216,13 @@ class Evaluation extends Component {
           {/* Footer */}
           {!this.state.showImages ? (
             <div id="evaluationFooter">
-              <button className="btn btn-light">
+              <button className="btn btn-light" onClick={this.props.prev}>
                 <GrLinkPrevious color="white" />
               </button>
               <button className="btn btn-light" onClick={this.saveMarks}>
                 SAVE
               </button>
-              <button className="btn btn-light">
+              <button className="btn btn-light" onClick={this.props.next}>
                 <GrLinkNext />
               </button>
             </div>

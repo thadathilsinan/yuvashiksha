@@ -75,6 +75,7 @@ class Essay extends Component {
                 step="1"
                 ref={this.marksRef}
                 onChange={this.marksChange}
+                disabled={!this.props.answer ? true : undefined}
               ></input>
               /
             </>

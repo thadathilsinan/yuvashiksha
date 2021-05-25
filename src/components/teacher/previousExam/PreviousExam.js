@@ -76,6 +76,36 @@ class PreviousExam extends Component {
     });
   };
 
+  //Next Button click in Evaluation Component
+  nextStudent = () => {
+    let students = this.state.studentData;
+
+    for (let i in students) {
+      if (this.state.selectedStudent == students[i]) {
+        if (students[parseInt(i) + 1]) {
+          this.setState({ selectedStudent: students[parseInt(i) + 1] });
+        } else {
+          alert("This is the last student");
+        }
+      }
+    }
+  };
+
+  //Previous Button click in Evaluation Component
+  prevStudent = () => {
+    let students = this.state.studentData;
+
+    for (let i in students) {
+      if (this.state.selectedStudent == students[i]) {
+        if (students[parseInt(i) - 1]) {
+          this.setState({ selectedStudent: students[parseInt(i) - 1] });
+        } else {
+          alert("This is the first student");
+        }
+      }
+    }
+  };
+
   componentDidMount() {
     this.getStudentList();
 
@@ -129,6 +159,9 @@ class PreviousExam extends Component {
           <Evaluation
             exam={this.props.exam}
             student={this.state.selectedStudent}
+            studentList={this.state.studentData}
+            next={this.nextStudent}
+            prev={this.prevStudent}
           />
         </Route>
       </>
