@@ -207,17 +207,20 @@ class Evaluation extends Component {
           ) : null}
           {this.state.questionsParsed}
 
-          <div id="evaluationFooter">
-            <button className="btn btn-light">
-              <GrLinkPrevious color="white" />
-            </button>
-            <button className="btn btn-light" onClick={this.saveMarks}>
-              SAVE
-            </button>
-            <button className="btn btn-light">
-              <GrLinkNext />
-            </button>
-          </div>
+          {/* Footer */}
+          {!this.state.showImages ? (
+            <div id="evaluationFooter">
+              <button className="btn btn-light">
+                <GrLinkPrevious color="white" />
+              </button>
+              <button className="btn btn-light" onClick={this.saveMarks}>
+                SAVE
+              </button>
+              <button className="btn btn-light">
+                <GrLinkNext />
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );

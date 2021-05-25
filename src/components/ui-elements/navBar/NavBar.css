@@ -1,9 +1,7 @@
 #navBar {
   width: 100%;
   height: 76px;
-  background: #001EC7;
-  box-shadow:  20px 20px 60px #051270,
-              -20px -20px 60px #0d34ff; 
+  background: #001ec7;
   color: #ffffff;
 }
 
