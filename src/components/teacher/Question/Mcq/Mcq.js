@@ -7,11 +7,11 @@ class Mcq extends Component {
 
   //Trigger when changing the marks in evaluation mode
   marksChange = (event) => {
-    if (event.target.value > this.props.question.marks) {
+    if (parseInt(event.target.value) > this.props.question.marks) {
       event.target.value = this.props.question.marks;
     }
 
-    if (event.target.value < 0) {
+    if (parseInt(event.target.value) < 0) {
       event.target.value = 0;
     }
 
