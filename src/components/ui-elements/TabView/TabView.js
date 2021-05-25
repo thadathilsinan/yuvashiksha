@@ -27,7 +27,11 @@ class TabView extends Component {
   };
 
   componentDidMount() {
-    this.changeToLeftTab();
+    if (this.props.right) {
+      this.changeToRightTab();
+    } else {
+      this.changeToLeftTab();
+    }
   }
 
   render() {

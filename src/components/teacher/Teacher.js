@@ -31,6 +31,7 @@ class Teacher extends Component {
       restrictedExam: false,
       teacherSelectDisabled: true,
       selectedExam: null,
+      rightTab: false,
     };
 
     this.userRole = "teacher";
@@ -220,6 +221,10 @@ class Teacher extends Component {
     } else {
       this.setState({ showEmpty: true });
     }
+
+    //SETTING LOCALSTORAGE VALUE
+    localStorage.setItem("class", this.classRef.current.value);
+    localStorage.setItem("batch", this.batchRef.current.value);
   };
 
   //When an exam list item is clicked
@@ -376,6 +381,20 @@ class Teacher extends Component {
     // }
   };
 
+  //Restore the state of the app when coming back from other inner pages like previosExam
+  restoreState = () => {
+    if (localStorage.getItem("back") == "true") {
+      localStorage.setItem("back", "false");
+
+      this.classRef.current.value = localStorage.getItem("class");
+      this.batchRef.current.value = localStorage.getItem("batch");
+
+      this.checkClassSelected();
+
+      this.setState({ rightTab: true });
+    }
+  };
+
   componentDidMount() {
     this.getTeacherData();
     this.checkClassSelected();
@@ -384,8 +403,13 @@ class Teacher extends Component {
     console.log(this.props);
   }
 
+  componentDidUpdate() {
+    this.restoreState();
+  }
+
   render() {
     this.checkUserRole();
+
     return (
       <div>
         <Route path="/teacher" exact>
@@ -449,7 +473,7 @@ class Teacher extends Component {
             </div>
           ) : (
             <>
-              <TabView>
+              <TabView right={this.state.rightTab ? true : undefined}>
                 {{
                   leftTab: <span>SCHEDULED EXAMS</span>,
                   rightTab: <span>PREVIOUS EXAMS</span>,

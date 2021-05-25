@@ -98,6 +98,7 @@ class PreviousExam extends Component {
                       className="btn btn-primary mr-3"
                       size="sm"
                       onClick={() => {
+                        localStorage.setItem("back", "true");
                         window.history.back();
                       }}
                     >
