@@ -391,7 +391,10 @@ class Teacher extends Component {
 
       this.checkClassSelected();
 
-      this.setState({ rightTab: true });
+      if (localStorage.getItem("right") == "true") {
+        localStorage.setItem("right", "false");
+        this.setState({ rightTab: true });
+      }
     }
   };
 

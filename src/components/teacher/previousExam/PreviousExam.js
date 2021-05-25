@@ -99,6 +99,7 @@ class PreviousExam extends Component {
                       size="sm"
                       onClick={() => {
                         localStorage.setItem("back", "true");
+                        localStorage.setItem("right", "true");
                         window.history.back();
                       }}
                     >
