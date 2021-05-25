@@ -7,6 +7,7 @@ import "./Evaluation.css";
 import http from "../../../shared/http";
 import Images from "./Images/Images";
 import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
+import $ from "jquery";
 
 class Evaluation extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class Evaluation extends Component {
       questionsParsed: null,
       showImages: false,
       total: 0,
+      restrictAccess: false,
     };
   }
 
@@ -72,7 +74,12 @@ class Evaluation extends Component {
     this.setState({ questionsParsed }, () => {
       //Calculate total marks
       let total = this.calcTotalMarks();
-      this.setState({ total });
+      this.setState({ total }, () => {
+        if (this.state.restrictAccess) {
+          let inputs = window.$("input[type=number]");
+          inputs.attr("disabled", "disabled");
+        }
+      });
     });
   };
 
@@ -140,8 +147,16 @@ class Evaluation extends Component {
     );
   };
 
+  //Check Teacher access to evaluate the exam
+  checkTeacherAccess = () => {
+    if (!(this.props.exam.teacher == this.props.user)) {
+      this.setState({ restrictAccess: true });
+    }
+  };
+
   componentDidMount() {
     this.getAnswers();
+    this.checkTeacherAccess();
 
     console.log(this.props);
   }
@@ -219,9 +234,12 @@ class Evaluation extends Component {
               <button className="btn btn-light" onClick={this.props.prev}>
                 <GrLinkPrevious color="white" />
               </button>
-              <button className="btn btn-light" onClick={this.saveMarks}>
-                SAVE
-              </button>
+              {this.state.restrictAccess ? null : (
+                <button className="btn btn-light" onClick={this.saveMarks}>
+                  SAVE
+                </button>
+              )}
+
               <button className="btn btn-light" onClick={this.props.next}>
                 <GrLinkNext />
               </button>

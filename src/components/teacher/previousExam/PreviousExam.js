@@ -162,6 +162,7 @@ class PreviousExam extends Component {
             studentList={this.state.studentData}
             next={this.nextStudent}
             prev={this.prevStudent}
+            user={this.props.user}
           />
         </Route>
       </>
