@@ -11,24 +11,49 @@ class PrintPreview extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { examData: null };
+    this.state = { examData: null, studentData: null };
   }
 
   //parse examData
   parseExamData = () => {
     let examData = [];
 
-    for (let key in this.props.data) {
+    for (let key in this.props.data.examData) {
       let newLine = (
-        <p key={Date.now() + key}>
-          {key} : {this.props.data[key]}
-        </p>
+        <tr key={key}>
+          <td width="150px">{key}</td>
+          <td>: {this.props.data.examData[key]}</td>
+        </tr>
       );
 
       examData.push(newLine);
     }
 
     this.setState({ examData });
+  };
+
+  //Parse the student Data
+  parseStudentData = () => {
+    let studentData = [];
+    let count = 1;
+
+    let students = this.props.data.studentData;
+    for (let key in students) {
+      let newRow = (
+        <tr key={key}>
+          <td>{count}</td>
+          <td>{students[key].name}</td>
+          <td>{key}</td>
+          <td>{students[key].email}</td>
+          <td>{students[key].marks ? students[key].marks : "---"}</td>
+        </tr>
+      );
+
+      count++;
+      studentData.push(newRow);
+    }
+
+    this.setState({ studentData });
   };
 
   //Print the DOM as PDF
@@ -43,7 +68,7 @@ class PrintPreview extends Component {
       <head>
       <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-      <title>Print Exam Data</title>
+      <title>Exam Data</title>
       <style>
       body {
         width: 21cm;
@@ -65,20 +90,16 @@ class PrintPreview extends Component {
       </body>
       <script>
       window.print();
-        document.addEventListener("DOMContentLoaded", function(event) {
-            window.print();
-        });
+      window.close();
       </script>
       </html>
       `);
-      //   printWindow.document.close();
-      //   printWindow.print();
-      //   printWindow.close();
     }
   };
 
   componentDidMount() {
     this.parseExamData();
+    this.parseStudentData();
 
     console.log(this.props);
   }
@@ -103,10 +124,39 @@ class PrintPreview extends Component {
         </NavBar>
         <div id="printPreviewBody">
           <div className="a4-paper" id="print-data">
-            <h3 className="text-center">EXAMINATION DETAILS</h3>
+            <b>
+              <u>
+                <center>
+                  <h4>EXAMINATION DETAILS</h4>
+                </center>
+              </u>
+            </b>
+            <br />
+            <table>{this.state.examData}</table>
             <br />
             <br />
-            {this.state.examData}
+
+            <b>
+              <u>
+                <center>
+                  <h4>EXAM RESULT</h4>
+                </center>
+              </u>
+            </b>
+            <br />
+
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Name</th>
+                  <th>Register No.</th>
+                  <th>Email</th>
+                  <th>Marks</th>
+                </tr>
+              </thead>
+              <tbody>{this.state.studentData}</tbody>
+            </table>
           </div>
         </div>
       </>

@@ -12,8 +12,8 @@
 .a4-paper {
   background-color: white;
 
-  /* width: 21cm;
-  height: 29.7cm; */
+  width: 21cm;
+  height: 29.7cm;
 
   min-width: 21cm;
   min-height: 29.7cm;
