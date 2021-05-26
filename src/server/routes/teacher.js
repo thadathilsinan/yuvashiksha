@@ -397,18 +397,28 @@ router.post("/previousexam/print", async (req, res, next) => {
   let teacher = await Users.findOne({ _id: exam.teacher });
   let Class = await Classes.findOne({ _id: exam.Class });
 
-  let examTable = `
-  EXAM NAME: ${exam.examName}
-  SUBJECT: ${exam.subject}
-  TEACHER: ${teacher.name} (${teacher.registerNumber})
-  CLASS: ${Class.name} (${Class.batch})
-  DATE: ${exam.date}
-  TIME: ${exam.from} - ${exam.to}
-  TOTAL MARKS: ${exam.totalMarks}
-  `;
+  // let examTable = `
+  // EXAM NAME: ${exam.examName} \n
+  // SUBJECT: ${exam.subject} \n
+  // TEACHER: ${teacher.name} (${teacher.registerNumber}) \n
+  // CLASS: ${Class.name} (${Class.batch}) \n
+  // DATE: ${exam.date} \n
+  // TIME: ${exam.from} - ${exam.to} \n
+  // TOTAL MARKS: ${exam.totalMarks} \n
+  // `;
+
+  let examTable = {
+    "EXAM NAME": `${exam.examName}`,
+    SUBJECT: `${exam.subject}`,
+    TEACHER: `${teacher.name} (${teacher.registerNumber})`,
+    CLASS: `${Class.name} (${Class.batch})`,
+    DATE: `${exam.date}`,
+    TIME: `${exam.from} - ${exam.to}`,
+    "TOTAL MARKS": `${exam.totalMarks}`,
+  };
 
   res.statusCode = 200;
-  res.end(examTable);
+  res.json(examTable);
 });
 
 module.exports = router;

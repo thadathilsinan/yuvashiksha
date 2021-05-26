@@ -7,6 +7,7 @@ import { Route, withRouter } from "react-router-dom";
 import Evaluation from "../Evaluation/Evaluation";
 import "./PreviousExam.css";
 import http from "../../../shared/http";
+import PrintPreview from "../../ui-elements/printPreview/PrintPreview";
 
 class PreviousExam extends Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class PreviousExam extends Component {
       studentData: null,
       studentList: null,
       restrictAccess: false,
+      showPrint: false,
+      printData: null,
     };
   }
 
@@ -141,10 +144,22 @@ class PreviousExam extends Component {
         "/teacher/previousexam/print",
         { exam: this.props.exam._id },
         (res) => {
-          console.log(res.data);
+          this.setState({ printData: res.data }, () => {
+            this.openPrintPreview();
+          });
         }
       );
     }
+  };
+
+  //open PrintPreviw component
+  openPrintPreview = () => {
+    this.setState({ showPrint: true });
+  };
+
+  //Close the printPreview component
+  closePrintPreview = () => {
+    this.setState({ showPrint: false });
   };
 
   componentDidMount() {
@@ -160,6 +175,14 @@ class PreviousExam extends Component {
     return (
       <>
         <Route path="/teacher/previousexam" exact>
+          {/* PRINT PREVIEW  */}
+          {this.state.showPrint ? (
+            <PrintPreview
+              data={this.state.printData}
+              close={this.closePrintPreview}
+            />
+          ) : null}
+
           <div>
             <NavBar>
               {{

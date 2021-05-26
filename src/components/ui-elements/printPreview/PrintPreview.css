@@ -1,0 +1,29 @@
+#printPreviewBody {
+  width: 100vw;
+  height: calc(100vh - 80px);
+  background-color: rgb(190, 190, 190);
+
+  display: flex;
+  justify-content: center;
+
+  overflow: auto;
+}
+
+.a4-paper {
+  background-color: white;
+
+  /* width: 21cm;
+  height: 29.7cm; */
+
+  min-width: 21cm;
+  min-height: 29.7cm;
+
+  max-width: 21cm;
+  max-height: 29.7cm;
+
+  margin: 50px 0;
+
+  overflow: auto;
+
+  padding: 60px;
+}
