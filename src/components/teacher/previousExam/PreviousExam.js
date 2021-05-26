@@ -121,14 +121,30 @@ class PreviousExam extends Component {
 
   //Publish the exam result
   publishResult = () => {
-    http(
-      "POST",
-      "/teacher/previousexam/publish",
-      { exam: this.props.exam._id },
-      (res) => {
-        alert(res.data);
-      }
-    );
+    if (window.confirm("Are you sure to publish exam result?")) {
+      http(
+        "POST",
+        "/teacher/previousexam/publish",
+        { exam: this.props.exam._id },
+        (res) => {
+          alert(res.data);
+        }
+      );
+    }
+  };
+
+  //Print the exam result
+  printResult = () => {
+    if (window.confirm("Are you sure print the exam result?")) {
+      http(
+        "POST",
+        "/teacher/previousexam/print",
+        { exam: this.props.exam._id },
+        (res) => {
+          console.log(res.data);
+        }
+      );
+    }
   };
 
   componentDidMount() {
@@ -170,7 +186,10 @@ class PreviousExam extends Component {
                 ),
                 right: (
                   <h4>
-                    <Button className="btn btn-light">
+                    <Button
+                      className="btn btn-light"
+                      onClick={this.printResult}
+                    >
                       <BiPrinter />
                     </Button>
                     {this.state.restrictAccess ? null : (

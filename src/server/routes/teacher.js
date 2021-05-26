@@ -389,4 +389,26 @@ router.post("/previousexam/publish", async (req, res, next) => {
   res.end("Result published successfully");
 });
 
+//Print the exam result
+router.post("/previousexam/print", async (req, res, next) => {
+  let answers = await Answers.find({ exam: req.body.exam });
+  let exam = await Exams.findOne({ _id: req.body.exam });
+
+  let teacher = await Users.findOne({ _id: exam.teacher });
+  let Class = await Classes.findOne({ _id: exam.Class });
+
+  let examTable = `
+  EXAM NAME: ${exam.examName}
+  SUBJECT: ${exam.subject}
+  TEACHER: ${teacher.name} (${teacher.registerNumber})
+  CLASS: ${Class.name} (${Class.batch})
+  DATE: ${exam.date}
+  TIME: ${exam.from} - ${exam.to}
+  TOTAL MARKS: ${exam.totalMarks}
+  `;
+
+  res.statusCode = 200;
+  res.end(examTable);
+});
+
 module.exports = router;
