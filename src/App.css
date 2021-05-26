@@ -13,7 +13,7 @@
 
   animation: fadealert 2s 1;
   animation-fill-mode: forwards;
-  animation-delay: 2s;
+  animation-delay: 3s;
 }
 
 body {
@@ -34,9 +34,10 @@ body {
 @keyframes fadealert {
   from {
     opacity: 0.9;
+    transform: translateX(0);
   }
   to {
     opacity: 0;
-    display: none;
+    transform: translateX(100vw);
   }
 }

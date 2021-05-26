@@ -18,6 +18,9 @@ const Departments = require("../schema/department");
 const Answers = require("../schema/Answers");
 const Images = require("../schema/Images");
 
+//Helper function for sending emails
+let sendMail = require("../functions/sendMail");
+
 router.use(bodyParser.json());
 
 //Save user profile
@@ -356,6 +359,34 @@ router.post("/previousexam/evaluate/savemarks", async (req, res, next) => {
     res.statusCode = 203;
     res.end("Answer document not found");
   }
+});
+
+//Publish exam result
+router.post("/previousexam/publish", async (req, res, next) => {
+  let answers = await Answers.find({ exam: req.body.exam });
+  let exam = await Exams.findOne({ _id: req.body.exam });
+  let subject = "Yuvashiksha Exam Result";
+  let body = "";
+
+  for (let answer of answers) {
+    let student = await Users.findOne({ _id: answer.student });
+
+    if (!isNaN(parseInt(answer.totalMarks))) {
+      body = `Dear ${student.name},
+    The result for the ${exam.subject} subject of your ${exam.examName} is published.
+    Your total marks in the exam is: ${answer.totalMarks} / ${exam.totalMarks}.`;
+    } else {
+      body = `Dear ${student.name},
+      The result for the ${exam.subject} subject of  ${exam.examName} is published.
+      Unfortunately your teacher did not evaluated your answer paper. 
+      Please contact your teacher for more info `;
+    }
+
+    sendMail(student.email, subject, body);
+  }
+
+  res.statusCode = 200;
+  res.end("Result published successfully");
 });
 
 module.exports = router;

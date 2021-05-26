@@ -15,6 +15,7 @@ class PreviousExam extends Component {
     this.state = {
       studentData: null,
       studentList: null,
+      restrictAccess: false,
     };
   }
 
@@ -111,8 +112,28 @@ class PreviousExam extends Component {
     }
   };
 
+  //Check Teacher access to evaluate the exam
+  checkTeacherAccess = () => {
+    if (!(this.props.exam.teacher == this.props.user)) {
+      this.setState({ restrictAccess: true });
+    }
+  };
+
+  //Publish the exam result
+  publishResult = () => {
+    http(
+      "POST",
+      "/teacher/previousexam/publish",
+      { exam: this.props.exam._id },
+      (res) => {
+        alert(res.data);
+      }
+    );
+  };
+
   componentDidMount() {
     this.getStudentList();
+    this.checkTeacherAccess();
 
     console.log(this.props);
   }
@@ -152,7 +173,14 @@ class PreviousExam extends Component {
                     <Button className="btn btn-light">
                       <BiPrinter />
                     </Button>
-                    <Button className="btn btn-success ml-2">PUBLISH</Button>
+                    {this.state.restrictAccess ? null : (
+                      <Button
+                        className="btn btn-success ml-2"
+                        onClick={this.publishResult}
+                      >
+                        PUBLISH
+                      </Button>
+                    )}
                   </h4>
                 ),
               }}
