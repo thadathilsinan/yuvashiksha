@@ -704,10 +704,22 @@ router.post("/report/getdetails", async (req, res, next) => {
           filteredExams.push(exam);
         }
       }
+    } else {
+      filteredExams = allExams;
     }
 
     if (cDepartment && !cClass && !cBatch) {
       //Department wise report
+      let dateFilteredExams = filteredExams;
+      filteredExams = [];
+
+      for (let exam of dateFilteredExams) {
+        let Class = await Classes.findOne({ _id: exam.Class });
+
+        if (Class && Class.department == cDepartment) {
+          filteredExams.push(exam);
+        }
+      }
     }
   }
 
