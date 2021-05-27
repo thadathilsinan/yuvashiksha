@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import "./Report.css";
 
 import http from "../../../../shared/http";
+import $ from "jquery";
 
 class Report extends React.Component {
   constructor(props) {
@@ -13,6 +14,8 @@ class Report extends React.Component {
       departments: null,
       batches: null,
       Classes: null,
+      selectionType: "range",
+      dateFilter: false,
     };
   }
 
@@ -35,220 +38,68 @@ class Report extends React.Component {
     });
   };
 
-  // //Parse department Data
-  // parseDepartmentOptions = () => {
-  //   let departmentsList = [];
+  //Change the selection type
+  changeSelectionType = (event) => {
+    if (event.target.id == "singleSelectionRadio") {
+      this.toSingleSelection();
+    } else {
+      this.toRangeSelection();
+    }
+  };
 
-  //   for (let department of this.state.formData.departments) {
-  //     let option = (
-  //       <option key={department.id} value={department.id}>
-  //         {department.name}
-  //       </option>
-  //     );
+  //Change to range selection
+  toRangeSelection = () => {
+    this.setState({ selectionType: "range" }, () => {
+      window
+        .$("#singleSelectionDiv input,#singleSelectionDiv select")
+        .prop("disabled", true);
 
-  //     departmentsList.push(option);
-  //   }
+      window
+        .$("#rangeSelectionDiv input,#rangeSelectionDiv select")
+        .prop("disabled", false);
+    });
+  };
 
-  //   this.setState({ departments: departmentsList });
-  // };
+  //Change to single selection
+  toSingleSelection = () => {
+    this.setState({ selectionType: "single" }, () => {
+      window
+        .$("#rangeSelectionDiv input,#rangeSelectionDiv select")
+        .prop("disabled", true);
 
-  // //Parse the Classes options
-  // parseClassOptions = () => {
-  //   let ClassList = [];
+      window
+        .$("#singleSelectionDiv input,#singleSelectionDiv select")
+        .prop("disabled", false);
+    });
+  };
 
-  //   let Classes = this.state.formData.Classes;
+  //When the date filter check box changes
+  toggleDateFilter = (event) => {
+    if (event.target.checked) {
+      this.onDateFilter();
+    } else {
+      this.offDateFilter();
+    }
+  };
 
-  //   for (let i in Classes) {
-  //     let classOption = (
-  //       <option key={Classes[i].id} value={Classes[i].name}>
-  //         {Classes[i].name}
-  //       </option>
-  //     );
+  //Off the dateFilter
+  offDateFilter = () => {
+    this.setState({ dateFilter: false });
+    window.$("#dateFilterDiv input").prop("disabled", true);
+  };
 
-  //     ClassList.push(classOption);
-  //   }
-
-  //   this.setState({ Classes: ClassList });
-  // };
-
-  // //Parse batch options
-  // parseBatchOptions = () => {
-  //   let Class = this.ClassRef.current.value;
-  //   let batches = [];
-
-  //   console.log(Class);
-
-  //   for (let batch of this.state.formData.Classes[Class].batches) {
-  //     let batchOption = (
-  //       <option key={batch} value={batch}>
-  //         {batch}
-  //       </option>
-  //     );
-
-  //     batches.push(batchOption);
-  //   }
-
-  //   this.setState({ batches });
-  // };
-
-  // //Parse the form data
-  // parseFormData = () => {
-  //   //Parse the Class and Batch options
-  //   let ClassList = [];
-  //   let batches = {};
-
-  //   let Classes = this.state.formData.Classes;
-
-  //   for (let i in Classes) {
-  //     let classOption = (
-  //       <option key={Classes[i].id} value={Classes[i].name}>
-  //         {Classes[i].name}
-  //       </option>
-  //     );
-
-  //     batches[Classes[i].name] = [];
-
-  //     for (let batch of Classes[i].batches) {
-  //       let batchOption = (
-  //         <option key={Classes[i].id + batch} value={batch}>
-  //           {batch}
-  //         </option>
-  //       );
-
-  //       batches[Classes[i].name].push(batchOption);
-  //     }
-
-  //     ClassList.push(classOption);
-  //   }
-
-  //   this.setState({
-  //     batches: batches,
-  //     Classes: ClassList,
-  //   });
-  // };
-
-  // //When the check boxes in the form changes
-  // chechBoxChanged = (event) => {
-  //   let checked = event.target.checked;
-  //   let element = event.target.id;
-
-  //   switch (element) {
-  //     case "departmentCheck":
-  //       if (checked) {
-  //         document.getElementById("classCheck").disabled = true;
-  //         document.getElementById("batchCheck").disabled = true;
-  //         this.ClassRef.current.disabled = true;
-  //         this.batchRef.current.disabled = true;
-  //         document.getElementById("registerNoCheck").disabled = true;
-  //         this.registerNoRef.current.disabled = true;
-
-  //         //parse departments
-  //         this.parseDepartmentOptions();
-  //       } else {
-  //         document.getElementById("classCheck").disabled = false;
-  //         document.getElementById("batchCheck").disabled = false;
-  //         this.ClassRef.current.disabled = false;
-  //         this.batchRef.current.disabled = false;
-  //         document.getElementById("registerNoCheck").disabled = false;
-  //         this.registerNoRef.current.disabled = false;
-
-  //         //Reset the department values
-  //         this.setState({ departments: null });
-  //       }
-  //       break;
-  //     case "classCheck":
-  //       if (checked) {
-  //         document.getElementById("departmentCheck").disabled = true;
-  //         this.departmentRef.current.disabled = true;
-  //         document.getElementById("registerNoCheck").disabled = true;
-  //         this.registerNoRef.current.disabled = true;
-
-  //         //Parse class options
-  //         this.parseClassOptions();
-  //       } else {
-  //         //Reset the parsed list values
-  //         this.setState({ Classes: null });
-
-  //         if (
-  //           !document.getElementById("batchCheck").checked &&
-  //           !document.getElementById("classCheck").checked
-  //         ) {
-  //           document.getElementById("departmentCheck").disabled = false;
-  //           this.departmentRef.current.disabled = false;
-  //         }
-
-  //         if (
-  //           !document.getElementById("batchCheck").checked &&
-  //           !document.getElementById("classCheck").checked &&
-  //           !document.getElementById("departmentCheck").checked
-  //         ) {
-  //           document.getElementById("registerNoCheck").disabled = false;
-  //           this.registerNoRef.current.disabled = false;
-  //         }
-  //       }
-  //       break;
-  //     case "batchCheck":
-  //       if (checked) {
-  //         document.getElementById("departmentCheck").disabled = true;
-  //         this.departmentRef.current.disabled = true;
-  //         document.getElementById("registerNoCheck").disabled = true;
-  //         this.registerNoRef.current.disabled = true;
-
-  //         //parse batch options
-  //         if (this.ClassRef.current.value) {
-  //           this.parseBatchOptions();
-  //         } else {
-  //           alert("Please select a Class first");
-  //         }
-  //       } else {
-  //         if (
-  //           !document.getElementById("batchCheck").checked &&
-  //           !document.getElementById("classCheck").checked
-  //         ) {
-  //           document.getElementById("departmentCheck").disabled = false;
-  //           this.departmentRef.current.disabled = false;
-  //         }
-
-  //         if (
-  //           !document.getElementById("batchCheck").checked &&
-  //           !document.getElementById("classCheck").checked &&
-  //           !document.getElementById("departmentCheck").checked
-  //         ) {
-  //           document.getElementById("registerNoCheck").disabled = false;
-  //           this.registerNoRef.current.disabled = false;
-  //         }
-  //       }
-  //       break;
-  //     case "registerNoCheck":
-  //       if (checked) {
-  //         document.getElementById("departmentCheck").disabled = true;
-  //         document.getElementById("classCheck").disabled = true;
-  //         document.getElementById("batchCheck").disabled = true;
-
-  //         this.ClassRef.current.disabled = true;
-  //         this.batchRef.current.disabled = true;
-  //         this.departmentRef.current.disabled = true;
-  //       } else {
-  //         document.getElementById("departmentCheck").disabled = false;
-  //         document.getElementById("classCheck").disabled = false;
-  //         document.getElementById("batchCheck").disabled = false;
-
-  //         this.ClassRef.current.disabled = false;
-  //         this.batchRef.current.disabled = false;
-  //         this.departmentRef.current.disabled = false;
-  //       }
-  //       break;
-  //     case "dateFromCheck":
-  //       console.log("dateFrom");
-  //       break;
-  //     case "dateToCheck":
-  //       console.log("dateTo");
-  //       break;
-  //   }
-  // };
+  //On the date filter
+  onDateFilter = () => {
+    this.setState({ dateFilter: true });
+    window.$("#dateFilterDiv input").prop("disabled", false);
+  };
 
   componentDidMount() {
     this.getFormData();
+
+    //UI default configuration
+    this.toRangeSelection();
+    this.offDateFilter();
 
     console.log(this.props);
   }
@@ -256,16 +107,22 @@ class Report extends React.Component {
   render() {
     return (
       <div className="container mt-5 mb-5">
-        <input type="radio" name="selectionType" id="rangeSelectionRadio" />
+        <input
+          type="radio"
+          name="selectionType"
+          onChange={this.changeSelectionType}
+          id="rangeSelectionRadio"
+          defaultChecked
+        />
         <span>
           <b> RANGE SELECTION</b>
         </span>
-        <div className="inputGroup">
+        <div className="inputGroup" id="rangeSelectionDiv">
           <div class="input-group input-group-lg">
             <div class="input-group-prepend">
               <span class="input-group-text">DEPARTMENT</span>
             </div>
-            <select className="form-control">
+            <select className="form-control" ref={this.departmentRef}>
               <option>--SELECT--</option>
             </select>
           </div>
@@ -274,7 +131,7 @@ class Report extends React.Component {
             <div class="input-group-prepend">
               <span class="input-group-text">CLASS</span>
             </div>
-            <select className="form-control">
+            <select className="form-control" ref={this.ClassRef}>
               <option>--SELECT--</option>
             </select>
           </div>
@@ -283,17 +140,22 @@ class Report extends React.Component {
             <div class="input-group-prepend">
               <span class="input-group-text">BATCH</span>
             </div>
-            <select className="form-control">
+            <select className="form-control" ref={this.batchRef}>
               <option>--SELECT--</option>
             </select>
           </div>
         </div>
 
-        <input type="radio" name="selectionType" id="singleSelectionRadio" />
+        <input
+          type="radio"
+          name="selectionType"
+          id="singleSelectionRadio"
+          onChange={this.changeSelectionType}
+        />
         <span>
           <b> SINGLE SELECTION</b>
         </span>
-        <div className="inputGroup">
+        <div className="inputGroup" id="singleSelectionDiv">
           <div class="input-group input-group-lg">
             <div class="input-group-prepend">
               <span class="input-group-text">REGISTER NO.</span>
@@ -306,11 +168,15 @@ class Report extends React.Component {
           </div>
         </div>
 
-        <input type="checkbox" id="dateFilterCheck" />
+        <input
+          type="checkbox"
+          id="dateFilterCheck"
+          onChange={this.toggleDateFilter}
+        />
         <span>
           <b> DATE FILTER</b>
         </span>
-        <div className="inputGroup">
+        <div className="inputGroup" id="dateFilterDiv">
           <div class="input-group input-group-lg">
             <div class="input-group-prepend">
               <span class="input-group-text">DATE FROM</span>
