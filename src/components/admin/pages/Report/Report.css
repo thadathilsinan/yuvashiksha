@@ -3,3 +3,12 @@
 
   margin-bottom: 30px;
 }
+
+.input-group-text {
+  width: 200px;
+}
+
+.inputGroup {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
