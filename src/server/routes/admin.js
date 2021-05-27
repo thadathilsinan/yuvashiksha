@@ -12,6 +12,7 @@ const Answers = require("../schema/Answers");
 const mongoose = require("mongoose");
 
 const sendMail = require("../functions/sendMail");
+const Exam = require("../schema/Exams");
 
 var router = express.Router();
 
@@ -663,6 +664,54 @@ router.get("/report/formdata", async (req, res, next) => {
 
   res.statusCode = 200;
   res.json(responseObject);
+});
+
+//Return the exam details for the report
+router.post("/report/getdetails", async (req, res, next) => {
+  if (req.body.mode == "range") {
+    let cDepartment = req.body.department;
+    let cClass = req.body.Class;
+    let cBatch = req.body.batch;
+    let cDateFrom = req.body.dateFrom;
+    let cDateTo = req.body.dateTo;
+
+    //Fetch all exams
+    let allExams = await Exam.find({});
+    let filteredExams = [];
+
+    //Date Filtering
+    if (cDateFrom && cDateTo) {
+      //Ranged date filter
+      let minDate = Date.parse(cDateFrom);
+      let maxDate = Date.parse(cDateTo);
+
+      for (let exam of allExams) {
+        let examDate = Date.parse(exam.date);
+
+        if (examDate >= minDate && examDate <= maxDate) {
+          filteredExams.push(exam);
+        }
+      }
+    } else if (cDateFrom || cDateTo) {
+      //Single date filter
+      let cDate = cDateFrom || cDateTo;
+      let date = Date.parse(cDate);
+
+      for (let exam of allExams) {
+        let examDate = Date.parse(exam.date);
+
+        if (date == examDate) {
+          filteredExams.push(exam);
+        }
+      }
+    }
+
+    if (cDepartment && !cClass && !cBatch) {
+      //Department wise report
+    }
+  }
+
+  res.end("OKK");
 });
 
 module.exports = router;

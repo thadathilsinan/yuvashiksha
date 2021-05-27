@@ -171,6 +171,45 @@ class Report extends React.Component {
     this.setState({ batches: parsedBatches });
   };
 
+  //When the GET DETAILS Button is clicked
+  getDetails = () => {
+    let dateFrom = this.dateFromRef.current.value;
+    let dateTo = this.dateToRef.current.value;
+
+    if (this.state.selectionType == "range") {
+      let department = this.departmentRef.current.value;
+      let Class = this.ClassRef.current.value;
+      let batch = this.batchRef.current.value;
+
+      if (!department) {
+        alert("Please select atleast the department option");
+        return;
+      }
+
+      http(
+        "POST",
+        "/admin/report/getdetails",
+        {
+          mode: this.state.selectionType,
+          department,
+          Class,
+          batch,
+          dateFrom,
+          dateTo,
+        },
+        (res) => {
+          console.log(res.data);
+        }
+      );
+    } else {
+      let registerNo = this.registerNoRef.current.value;
+
+      if (!registerNo) {
+        alert("Please enter the register number");
+      }
+    }
+  };
+
   componentDidMount() {
     this.getFormData();
 
@@ -204,7 +243,7 @@ class Report extends React.Component {
               ref={this.departmentRef}
               onChange={this.parseClassOptions}
             >
-              <option vlaue="">--SELECT--</option>
+              <option value="">--SELECT--</option>
               {this.state.departments}
             </select>
           </div>
@@ -283,7 +322,12 @@ class Report extends React.Component {
         </div>
 
         <div className="text-center">
-          <Button className=" mr-3  p-2 btn btn-light mt-3">GET DETAILS</Button>
+          <Button
+            className=" mr-3  p-2 btn btn-light mt-3"
+            onClick={this.getDetails}
+          >
+            GET DETAILS
+          </Button>
         </div>
       </div>
     );
