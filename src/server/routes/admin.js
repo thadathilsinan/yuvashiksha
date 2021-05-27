@@ -735,6 +735,27 @@ router.post("/report/getdetails", async (req, res, next) => {
         }
       }
     }
+    //Batch wise filering
+    else if (cDepartment && cClass && cBatch) {
+      let dateFilteredExams = filteredExams;
+      filteredExams = [];
+
+      for (let exam of dateFilteredExams) {
+        let Class = await Classes.findOne({ _id: exam.Class });
+
+        if (
+          Class &&
+          Class.department == cDepartment &&
+          Class.name == cClass &&
+          Class.batch == cBatch
+        ) {
+          filteredExams.push(exam);
+        }
+      }
+    }
+
+    //COMPLETED ALL FILTERS
+    console.log(filteredExams.length);
   }
 
   res.end("OKK");
