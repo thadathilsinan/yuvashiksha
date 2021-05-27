@@ -708,8 +708,8 @@ router.post("/report/getdetails", async (req, res, next) => {
       filteredExams = allExams;
     }
 
+    //Department wise filtering
     if (cDepartment && !cClass && !cBatch) {
-      //Department wise report
       let dateFilteredExams = filteredExams;
       filteredExams = [];
 
@@ -717,6 +717,20 @@ router.post("/report/getdetails", async (req, res, next) => {
         let Class = await Classes.findOne({ _id: exam.Class });
 
         if (Class && Class.department == cDepartment) {
+          filteredExams.push(exam);
+        }
+      }
+    }
+    //Class wise filering
+    else if (cDepartment && cClass && !cBatch) {
+      let dateFilteredExams = filteredExams;
+      filteredExams = [];
+
+      for (let exam of dateFilteredExams) {
+        let Class = await Classes.findOne({ _id: exam.Class });
+
+        if (Class && Class.department == cDepartment && Class.name == cClass) {
+          console.log(Class.name);
           filteredExams.push(exam);
         }
       }
