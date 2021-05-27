@@ -1,77 +1,316 @@
 import React from "react";
-import { Form } from "react-bootstrap";
-
 import { Button } from "react-bootstrap";
-
 import "./Report.css";
 
-function Report() {
-  return (
-    <div className="container mt-5 mb-5">
-      <Form className="">
-        <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Department" />
-          <Form.Control as="select" defaultValue="Department">
-            <option>cs</option>
-            <option>hm</option>
-          </Form.Control>
-        </Form.Group>
-      </Form>
-      <Form>
-        <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Class" />
-          <Form.Control as="select" defaultValue="Class">
-            <option>bca</option>
-            <option>cs</option>
-          </Form.Control>
-        </Form.Group>
-      </Form>
-      <Form>
-        <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Batch" />
-          <Form.Control as="select" defaultValue="Batch">
-            <option>2018-21</option>
-            <option>2019-22</option>
-          </Form.Control>
-        </Form.Group>
-      </Form>
-      <Form>
-        <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Admission number" />
-          <Form.Control as="select" defaultValue="Admission number">
-            <option>1</option>
-            <option>2</option>
-          </Form.Control>
-        </Form.Group>
-      </Form>
-      <Form>
-        <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Id number" />
-          <Form.Control as="select" defaultValue="Admission number">
-            <option>1</option>
-            <option>2</option>
-          </Form.Control>
-        </Form.Group>
-      </Form>
-      <Form>
-        <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Date from" />
-          <Form.Control type="date" placeholder="date"></Form.Control>
-        </Form.Group>
-      </Form>
-      <Form>
-        <Form.Group controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Date to" />
-          <Form.Control type="date" placeholder="date"></Form.Control>
-        </Form.Group>
-      </Form>
-      <div className="text-right">
-        <Button type="submit" className=" mr-3  p-2 btn btn-success">
-          Report
-        </Button>
+import http from "../../../../shared/http";
+
+class Report extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      formData: null,
+      departments: null,
+      batches: null,
+      Classes: null,
+    };
+  }
+
+  //REF Objects
+  departmentRef = React.createRef();
+  ClassRef = React.createRef();
+  batchRef = React.createRef();
+  registerNoRef = React.createRef();
+  dateFromRef = React.createRef();
+  dateToRef = React.createRef();
+
+  //Get the form input data from DB
+  getFormData = () => {
+    http("GET", "/admin/report/formdata", {}, (res) => {
+      console.log(res.data);
+
+      this.setState({ formData: res.data }, () => {
+        // this.parseFormData();
+      });
+    });
+  };
+
+  //Parse department Data
+  parseDepartmentOptions = () => {
+    let departmentsList = [];
+
+    for (let department of this.state.formData.departments) {
+      let option = (
+        <option key={department.id} value={department.id}>
+          {department.name}
+        </option>
+      );
+
+      departmentsList.push(option);
+    }
+
+    this.setState({ departments: departmentsList });
+  };
+
+  //Parse the form data
+  parseFormData = () => {
+    //Parse the departments
+    let departmentsList = [];
+
+    for (let department of this.state.formData.departments) {
+      let option = (
+        <option key={department.id} value={department.id}>
+          {department.name}
+        </option>
+      );
+
+      departmentsList.push(option);
+    }
+
+    //Parse the Class and Batch options
+    let ClassList = [];
+    let batches = {};
+
+    let Classes = this.state.formData.Classes;
+
+    for (let i in Classes) {
+      let classOption = (
+        <option key={Classes[i].id} value={Classes[i].name}>
+          {Classes[i].name}
+        </option>
+      );
+
+      batches[Classes[i].name] = [];
+
+      for (let batch of Classes[i].batches) {
+        let batchOption = (
+          <option key={Classes[i].id + batch} value={batch}>
+            {batch}
+          </option>
+        );
+
+        batches[Classes[i].name].push(batchOption);
+      }
+
+      ClassList.push(classOption);
+    }
+
+    this.setState({
+      departments: departmentsList,
+      batches: batches,
+      Classes: ClassList,
+    });
+  };
+
+  //When the check boxes in the form changes
+  chechBoxChanged = (event) => {
+    let checked = event.target.checked;
+    let element = event.target.id;
+
+    switch (element) {
+      case "departmentCheck":
+        if (checked) {
+          document.getElementById("classCheck").disabled = true;
+          document.getElementById("batchCheck").disabled = true;
+          this.ClassRef.current.disabled = true;
+          this.batchRef.current.disabled = true;
+          document.getElementById("registerNoCheck").disabled = true;
+          this.registerNoRef.current.disabled = true;
+
+          //parse departments
+          this.parseDepartmentOptions();
+        } else {
+          document.getElementById("classCheck").disabled = false;
+          document.getElementById("batchCheck").disabled = false;
+          this.ClassRef.current.disabled = false;
+          this.batchRef.current.disabled = false;
+          document.getElementById("registerNoCheck").disabled = false;
+          this.registerNoRef.current.disabled = false;
+
+          //Reset the department values
+          this.setState({ departments: null });
+        }
+        break;
+      case "classCheck":
+        if (checked) {
+          document.getElementById("departmentCheck").disabled = true;
+          this.departmentRef.current.disabled = true;
+
+          document.getElementById("registerNoCheck").disabled = true;
+          this.registerNoRef.current.disabled = true;
+        } else {
+          if (
+            !document.getElementById("batchCheck").checked &&
+            !document.getElementById("classCheck").checked
+          ) {
+            document.getElementById("departmentCheck").disabled = false;
+            this.departmentRef.current.disabled = false;
+          }
+
+          if (
+            !document.getElementById("batchCheck").checked &&
+            !document.getElementById("classCheck").checked &&
+            !document.getElementById("departmentCheck").checked
+          ) {
+            document.getElementById("registerNoCheck").disabled = false;
+            this.registerNoRef.current.disabled = false;
+          }
+        }
+        break;
+      case "batchCheck":
+        if (checked) {
+          document.getElementById("departmentCheck").disabled = true;
+          this.departmentRef.current.disabled = true;
+
+          document.getElementById("registerNoCheck").disabled = true;
+          this.registerNoRef.current.disabled = true;
+        } else {
+          if (
+            !document.getElementById("batchCheck").checked &&
+            !document.getElementById("classCheck").checked
+          ) {
+            document.getElementById("departmentCheck").disabled = false;
+            this.departmentRef.current.disabled = false;
+          }
+
+          if (
+            !document.getElementById("batchCheck").checked &&
+            !document.getElementById("classCheck").checked &&
+            !document.getElementById("departmentCheck").checked
+          ) {
+            document.getElementById("registerNoCheck").disabled = false;
+            this.registerNoRef.current.disabled = false;
+          }
+        }
+        break;
+      case "registerNoCheck":
+        if (checked) {
+          document.getElementById("departmentCheck").disabled = true;
+          document.getElementById("classCheck").disabled = true;
+          document.getElementById("batchCheck").disabled = true;
+
+          this.ClassRef.current.disabled = true;
+          this.batchRef.current.disabled = true;
+          this.departmentRef.current.disabled = true;
+        } else {
+          document.getElementById("departmentCheck").disabled = false;
+          document.getElementById("classCheck").disabled = false;
+          document.getElementById("batchCheck").disabled = false;
+
+          this.ClassRef.current.disabled = false;
+          this.batchRef.current.disabled = false;
+          this.departmentRef.current.disabled = false;
+        }
+        break;
+      case "dateFromCheck":
+        console.log("dateFrom");
+        break;
+      case "dateToCheck":
+        console.log("dateTo");
+        break;
+    }
+  };
+
+  componentDidMount() {
+    this.getFormData();
+
+    console.log(this.props);
+  }
+
+  render() {
+    return (
+      <div className="container mt-5 mb-5">
+        <div className="form-container">
+          <input
+            type="checkbox"
+            id="departmentCheck"
+            onChange={this.chechBoxChanged}
+          />{" "}
+          DEPARTMENT
+          <select id="department" ref={this.departmentRef}>
+            <option>--DEPARTMENT--</option>
+            {this.state.departments}
+          </select>
+        </div>
+
+        <div className="form-container">
+          <input
+            type="checkbox"
+            id="classCheck"
+            onChange={this.chechBoxChanged}
+          />{" "}
+          CLASS
+          <select id="class" ref={this.ClassRef}>
+            <option>--CLASS--</option>
+            {this.state.Classes}
+          </select>
+        </div>
+
+        <div className="form-container">
+          <input
+            type="checkbox"
+            id="batchCheck"
+            onChange={this.chechBoxChanged}
+          />{" "}
+          BATCH
+          <select id="batch" ref={this.batchRef}>
+            <option>--BATCH--</option>
+            {this.state.batches ? this.state.batches["BCA"] : null}
+          </select>
+        </div>
+
+        <div className="form-container">
+          <input
+            type="checkbox"
+            id="registerNoCheck"
+            onChange={this.chechBoxChanged}
+          />{" "}
+          REGISTER NUMBER
+          <input
+            className="form-control"
+            type="text"
+            placeholder="Register Number"
+            id="registerNo"
+            ref={this.registerNoRef}
+          />
+        </div>
+
+        <div className="form-container">
+          <input
+            type="checkbox"
+            id="dateFromCheck"
+            onChange={this.chechBoxChanged}
+          />{" "}
+          DATE FROM
+          <input
+            className="form-control"
+            type="date"
+            id="dateFrom"
+            ref={this.dateFromRef}
+          />
+        </div>
+
+        <div className="form-container">
+          <input
+            type="checkbox"
+            id="dateToCheck"
+            onChange={this.chechBoxChanged}
+          />{" "}
+          DATE TO
+          <input
+            className="form-control"
+            type="date"
+            id="dateTo"
+            ref={this.dateToRef}
+          />
+        </div>
+
+        <div className="text-center">
+          <Button className=" mr-3  p-2 btn btn-light mt-3">GET DETAILS</Button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Report;

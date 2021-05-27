@@ -7,6 +7,7 @@ const Department = require("../schema/department");
 const Users = require("../schema/Users");
 const Classes = require("../schema/classes");
 const BugReports = require("../schema/BugReport");
+const Answers = require("../schema/Answers");
 
 const mongoose = require("mongoose");
 
@@ -613,6 +614,42 @@ router.post("/usermanagement/student/search", async (req, res, next) => {
     ) {
       responseObject.push(newUser);
     }
+  }
+
+  res.statusCode = 200;
+  res.json(responseObject);
+});
+
+//Return the form data for the report section of admin
+router.get("/report/formdata", async (req, res, next) => {
+  let responseObject = {
+    departments: [],
+    Classes: {},
+  };
+
+  //Get the department details
+  let departments = await Department.find({});
+
+  for (let i in departments) {
+    responseObject.departments.push({
+      name: departments[i].name,
+      id: departments[i]._id,
+    });
+  }
+
+  //Get the class details
+  let Class = await Classes.find({});
+
+  for (let i in Class) {
+    let currentClass = { name: Class[i].name, batches: [], id: Class[i]._id };
+
+    for (let j in Class) {
+      if (Class[j].name == currentClass.name) {
+        currentClass.batches.push(Class[j].batch);
+      }
+    }
+
+    responseObject.Classes[currentClass.name] = currentClass;
   }
 
   res.statusCode = 200;
