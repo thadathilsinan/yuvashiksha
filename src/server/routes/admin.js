@@ -624,32 +624,41 @@ router.post("/usermanagement/student/search", async (req, res, next) => {
 router.get("/report/formdata", async (req, res, next) => {
   let responseObject = {
     departments: [],
-    Classes: {},
   };
 
-  //Get the department details
   let departments = await Department.find({});
 
   for (let i in departments) {
-    responseObject.departments.push({
-      name: departments[i].name,
+    let department = {
       id: departments[i]._id,
-    });
-  }
+      name: departments[i].name,
+      Classes: {},
+    };
 
-  //Get the class details
-  let Class = await Classes.find({});
-
-  for (let i in Class) {
-    let currentClass = { name: Class[i].name, batches: [], id: Class[i]._id };
+    //Getting the class details
+    let Class = await Classes.find({ department: department.id });
 
     for (let j in Class) {
-      if (Class[j].name == currentClass.name) {
-        currentClass.batches.push(Class[j].batch);
+      let newClass = {
+        id: Class[j].id,
+        name: Class[j].name,
+        batches: [],
+      };
+
+      //Getting batch details
+      let classes = await Classes.find({
+        department: department.id,
+        name: Class[j].name,
+      });
+
+      for (let k in classes) {
+        newClass.batches.push(classes[k].batch);
       }
+
+      department.Classes[Class[j].name] = newClass;
     }
 
-    responseObject.Classes[currentClass.name] = currentClass;
+    responseObject.departments.push(department);
   }
 
   res.statusCode = 200;

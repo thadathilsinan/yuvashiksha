@@ -33,7 +33,7 @@ class Report extends React.Component {
       console.log(res.data);
 
       this.setState({ formData: res.data }, () => {
-        // this.parseFormData();
+        this.parseDepartmentOptions();
       });
     });
   };
@@ -94,6 +94,83 @@ class Report extends React.Component {
     window.$("#dateFilterDiv input").prop("disabled", false);
   };
 
+  //Parse the department <option>
+  parseDepartmentOptions = () => {
+    let departments = [];
+
+    for (let department of this.state.formData.departments) {
+      let option = (
+        <option key={department.id} value={department.id}>
+          {department.name}
+        </option>
+      );
+
+      departments.push(option);
+    }
+
+    this.setState({ departments });
+  };
+
+  //Parse the class options
+  parseClassOptions = () => {
+    let department = this.departmentRef.current.value;
+    let Classes = [];
+    let parsedClass = [];
+
+    //Get classes of currently selected department
+    for (let dept of this.state.formData.departments) {
+      if (dept.id == department) {
+        Classes = dept.Classes;
+      }
+    }
+
+    //Parsing options
+    for (let i in Classes) {
+      let option = (
+        <option key={Classes[i].id} value={Classes[i].name}>
+          {Classes[i].name}
+        </option>
+      );
+
+      parsedClass.push(option);
+    }
+
+    this.setState({ Classes: parsedClass });
+  };
+
+  //Parse the batches options
+  parseBatchOptions = () => {
+    let department = this.departmentRef.current.value;
+    let Class = this.ClassRef.current.value;
+    let batches = [];
+    let parsedBatches = [];
+
+    if (!Class) {
+      this.setState({ batches: null });
+      return;
+    }
+
+    //Get batches of currently selected department and class
+    for (let dept of this.state.formData.departments) {
+      if (dept.id == department) {
+        batches = dept.Classes[Class].batches;
+      }
+    }
+
+    //parsing
+    for (let batch of batches) {
+      let option = (
+        <option key={batch} value={batch}>
+          {batch}
+        </option>
+      );
+
+      parsedBatches.push(option);
+    }
+
+    this.setState({ batches: parsedBatches });
+  };
+
   componentDidMount() {
     this.getFormData();
 
@@ -122,8 +199,13 @@ class Report extends React.Component {
             <div class="input-group-prepend">
               <span class="input-group-text">DEPARTMENT</span>
             </div>
-            <select className="form-control" ref={this.departmentRef}>
-              <option>--SELECT--</option>
+            <select
+              className="form-control"
+              ref={this.departmentRef}
+              onChange={this.parseClassOptions}
+            >
+              <option vlaue="">--SELECT--</option>
+              {this.state.departments}
             </select>
           </div>
 
@@ -131,8 +213,13 @@ class Report extends React.Component {
             <div class="input-group-prepend">
               <span class="input-group-text">CLASS</span>
             </div>
-            <select className="form-control" ref={this.ClassRef}>
-              <option>--SELECT--</option>
+            <select
+              className="form-control"
+              ref={this.ClassRef}
+              onChange={this.parseBatchOptions}
+            >
+              <option value="">--SELECT--</option>
+              {this.state.Classes}
             </select>
           </div>
 
@@ -141,7 +228,8 @@ class Report extends React.Component {
               <span class="input-group-text">BATCH</span>
             </div>
             <select className="form-control" ref={this.batchRef}>
-              <option>--SELECT--</option>
+              <option value="">--SELECT--</option>
+              {this.state.batches}
             </select>
           </div>
         </div>
