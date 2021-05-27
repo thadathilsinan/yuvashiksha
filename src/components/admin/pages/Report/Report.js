@@ -52,21 +52,47 @@ class Report extends React.Component {
     this.setState({ departments: departmentsList });
   };
 
-  //Parse the form data
-  parseFormData = () => {
-    //Parse the departments
-    let departmentsList = [];
+  //Parse the Classes options
+  parseClassOptions = () => {
+    let ClassList = [];
 
-    for (let department of this.state.formData.departments) {
-      let option = (
-        <option key={department.id} value={department.id}>
-          {department.name}
+    let Classes = this.state.formData.Classes;
+
+    for (let i in Classes) {
+      let classOption = (
+        <option key={Classes[i].id} value={Classes[i].name}>
+          {Classes[i].name}
         </option>
       );
 
-      departmentsList.push(option);
+      ClassList.push(classOption);
     }
 
+    this.setState({ Classes: ClassList });
+  };
+
+  //Parse batch options
+  parseBatchOptions = () => {
+    let Class = this.ClassRef.current.value;
+    let batches = [];
+
+    console.log(Class);
+
+    for (let batch of this.state.formData.Classes[Class].batches) {
+      let batchOption = (
+        <option key={batch} value={batch}>
+          {batch}
+        </option>
+      );
+
+      batches.push(batchOption);
+    }
+
+    this.setState({ batches });
+  };
+
+  //Parse the form data
+  parseFormData = () => {
     //Parse the Class and Batch options
     let ClassList = [];
     let batches = {};
@@ -96,7 +122,6 @@ class Report extends React.Component {
     }
 
     this.setState({
-      departments: departmentsList,
       batches: batches,
       Classes: ClassList,
     });
@@ -135,10 +160,15 @@ class Report extends React.Component {
         if (checked) {
           document.getElementById("departmentCheck").disabled = true;
           this.departmentRef.current.disabled = true;
-
           document.getElementById("registerNoCheck").disabled = true;
           this.registerNoRef.current.disabled = true;
+
+          //Parse class options
+          this.parseClassOptions();
         } else {
+          //Reset the parsed list values
+          this.setState({ Classes: null });
+
           if (
             !document.getElementById("batchCheck").checked &&
             !document.getElementById("classCheck").checked
@@ -161,9 +191,15 @@ class Report extends React.Component {
         if (checked) {
           document.getElementById("departmentCheck").disabled = true;
           this.departmentRef.current.disabled = true;
-
           document.getElementById("registerNoCheck").disabled = true;
           this.registerNoRef.current.disabled = true;
+
+          //parse batch options
+          if (this.ClassRef.current.value) {
+            this.parseBatchOptions();
+          } else {
+            alert("Please select a Class first");
+          }
         } else {
           if (
             !document.getElementById("batchCheck").checked &&
@@ -228,7 +264,7 @@ class Report extends React.Component {
           />{" "}
           DEPARTMENT
           <select id="department" ref={this.departmentRef}>
-            <option>--DEPARTMENT--</option>
+            <option value="">--DEPARTMENT--</option>
             {this.state.departments}
           </select>
         </div>
@@ -241,7 +277,7 @@ class Report extends React.Component {
           />{" "}
           CLASS
           <select id="class" ref={this.ClassRef}>
-            <option>--CLASS--</option>
+            <option value="">--CLASS--</option>
             {this.state.Classes}
           </select>
         </div>
@@ -254,8 +290,8 @@ class Report extends React.Component {
           />{" "}
           BATCH
           <select id="batch" ref={this.batchRef}>
-            <option>--BATCH--</option>
-            {this.state.batches ? this.state.batches["BCA"] : null}
+            <option value="">--BATCH--</option>
+            {this.state.batches}
           </select>
         </div>
 
