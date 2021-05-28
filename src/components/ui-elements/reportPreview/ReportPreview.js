@@ -65,7 +65,7 @@ class ReportPreview extends Component {
       }
 
       let item = (
-        <>
+        <div key={count}>
           <h5>EXAM NO: {count}</h5>
           <table className="table table-striped">
             <thead>
@@ -97,23 +97,37 @@ class ReportPreview extends Component {
                 <th colSpan="2">Total Marks</th>
                 <td colSpan="3">{exam.examData["TOTAL MARKS"]}</td>
               </tr>
+              {this.props.data.student ? (
+                <tr className="table-info">
+                  <th colSpan="2">Marks Obtained</th>
+                  <td colSpan="3">
+                    {exam.examData["MARKS OBTAINED"]
+                      ? exam.examData["MARKS OBTAINED"]
+                      : "---"}
+                  </td>
+                </tr>
+              ) : null}
               <tr>
                 <td></td>
                 <td></td>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th>S.No</th>
-                <th>Name</th>
-                <th>Register No.</th>
-                <th>Email</th>
-                <th>Marks</th>
-              </tr>
-              {studentDetails}
+              {this.props.data.student ? null : (
+                <>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Register No.</th>
+                    <th>Email</th>
+                    <th>Marks</th>
+                  </tr>
+                  {studentDetails}
+                </>
+              )}
             </tbody>
           </table>
-        </>
+        </div>
       );
 
       count++;
@@ -167,6 +181,26 @@ class ReportPreview extends Component {
 
             <p>RESULT : </p>
             <table>
+              {this.props.data.student ? (
+                <>
+                  <tr>
+                    <th width="150px">Name</th>
+                    <td>: {this.props.data.student.NAME}</td>
+                  </tr>
+                  <tr>
+                    <th width="150px">Register.No</th>
+                    <td>: {this.props.data.student["REGISTER NUMBER"]}</td>
+                  </tr>
+                  <tr>
+                    <th width="150px">Email</th>
+                    <td>: {this.props.data.student.EMAIL}</td>
+                  </tr>
+                  <tr>
+                    <th width="150px">Parent Email</th>
+                    <td>: {this.props.data.student["PARENT EMAIL"]}</td>
+                  </tr>
+                </>
+              ) : null}
               <tr>
                 <th width="150px">Total Exams</th>
                 <td>: {this.props.data.exams.length}</td>

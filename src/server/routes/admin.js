@@ -849,6 +849,45 @@ router.post("/report/getdetails", async (req, res, next) => {
 
         exams.push({ examData, studentData });
       }
+    } else {
+      let student = await Users.findOne({
+        registerNumber: req.body.registerNo,
+      });
+
+      let studentData = {
+        NAME: student.name,
+        EMAIL: student.email,
+        "PARENT EMAIL": student.parentEmail,
+        "REGISTER NUMBER": student.registerNumber,
+      };
+
+      for (let exam of filteredExams) {
+        let answer = await Answers.findOne({
+          exam: exam._id,
+          student: student._id,
+        });
+
+        if (!answer) {
+          continue;
+        }
+
+        let teacher = await Users.findOne({ _id: exam.teacher });
+        let Class = await Classes.findOne({ _id: exam.Class });
+
+        let examData = {
+          "EXAM NAME": `${exam.examName}`,
+          SUBJECT: `${exam.subject}`,
+          TEACHER: `${teacher.name} (${teacher.registerNumber})`,
+          CLASS: `${Class.name} (${Class.batch})`,
+          DATE: `${exam.date}`,
+          TIME: `${exam.from} - ${exam.to}`,
+          "TOTAL MARKS": `${exam.totalMarks}`,
+          "MARKS OBTAINED": answer.totalMarks,
+        };
+
+        exams.push({ examData });
+        responseObject.student = studentData;
+      }
     }
 
     responseObject.exams = exams;
