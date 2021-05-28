@@ -790,15 +790,27 @@ router.post("/report/getdetails", async (req, res, next) => {
 
   //SETTING THE HEADER DETAILS FOR THE REPORT --------------------------------
 
-  responseObject.header = {
-    department: req.body.department,
-    Class: req.body.Class,
-    batch: req.body.batch,
-    accountType: req.body.accountType,
-    registerNumber: req.body.registerNo,
-    dateFrom: req.body.dateFrom,
-    dateTo: req.body.dateTo,
-  };
+  responseObject.header = {};
+
+  if (req.body.department && req.body.mode == "range") {
+    let department = await Department.findOne({ _id: req.body.department });
+
+    responseObject.header["Department"] = department.name;
+    responseObject.header["Class"] = req.body.Class;
+    responseObject.header["Batch"] = req.body.batch;
+  }
+
+  if (req.body.registerNo && req.body.mode == "single") {
+    responseObject.header["Register Number"] = req.body.registerNo;
+    responseObject.header["Account Type"] = req.body.accountType;
+  }
+
+  if (req.body.dateFrom && req.body.dateTo) {
+    responseObject.header["Date From"] = req.body.dateFrom;
+    responseObject.header["Date To"] = req.body.dateTo;
+  } else if (req.body.dateFrom || req.body.dateTo) {
+    responseObject.header["Date"] = req.body.dateFrom || req.body.dateTo;
+  }
 
   if (filteredExams.length <= 0) {
     res.statusCode = 203;

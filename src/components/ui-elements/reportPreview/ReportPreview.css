@@ -10,7 +10,31 @@
 }
 
 #reportPreviewBody {
-  background-color: white;
+  background-color: rgb(218, 218, 218);
   height: calc(100vh - 80px);
   width: 100vw;
+
+  display: flex;
+  justify-content: center;
+
+  overflow: auto;
+}
+
+.a4-paper {
+  background-color: white;
+
+  width: 21cm;
+  height: 29.7cm;
+
+  min-width: 21cm;
+  min-height: 29.7cm;
+
+  max-width: 21cm;
+  max-height: 29.7cm;
+
+  margin: 50px 0;
+
+  overflow: auto;
+
+  padding: 60px;
 }
