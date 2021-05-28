@@ -68,64 +68,60 @@ class ReportPreview extends Component {
         <div key={count}>
           <h5>EXAM NO: {count}</h5>
           <table className="table table-striped">
-            <thead>
+            <tr className="table-info">
+              <th colSpan="2">Exam Name</th>
+              <td colSpan="3">{exam.examData["EXAM NAME"]}</td>
+            </tr>
+            <tr className="table-info">
+              <th colSpan="2">Subject</th>
+              <td colSpan="3">{exam.examData.SUBJECT}</td>
+            </tr>
+            <tr className="table-info">
+              <th colSpan="2">Date</th>
+              <td colSpan="3">{exam.examData.DATE}</td>
+            </tr>
+            <tr className="table-info">
+              <th colSpan="2">Class</th>
+              <td colSpan="3">{exam.examData.CLASS}</td>
+            </tr>
+            <tr className="table-info">
+              <th colSpan="2">Teacher</th>
+              <td colSpan="3">{exam.examData.TEACHER}</td>
+            </tr>
+            <tr className="table-info">
+              <th colSpan="2">Time</th>
+              <td colSpan="3">{exam.examData.TIME}</td>
+            </tr>
+            <tr className="table-info">
+              <th colSpan="2">Total Marks</th>
+              <td colSpan="3">{exam.examData["TOTAL MARKS"]}</td>
+            </tr>
+            {this.props.data.student ? (
               <tr className="table-info">
-                <th colSpan="2">Exam Name</th>
-                <td colSpan="3">{exam.examData["EXAM NAME"]}</td>
+                <th colSpan="2">Marks Obtained</th>
+                <td colSpan="3">
+                  {exam.examData["MARKS OBTAINED"]
+                    ? exam.examData["MARKS OBTAINED"]
+                    : "---"}
+                </td>
               </tr>
-              <tr className="table-info">
-                <th colSpan="2">Subject</th>
-                <td colSpan="3">{exam.examData.SUBJECT}</td>
-              </tr>
-              <tr className="table-info">
-                <th colSpan="2">Date</th>
-                <td colSpan="3">{exam.examData.DATE}</td>
-              </tr>
-              <tr className="table-info">
-                <th colSpan="2">Class</th>
-                <td colSpan="3">{exam.examData.CLASS}</td>
-              </tr>
-              <tr className="table-info">
-                <th colSpan="2">Teacher</th>
-                <td colSpan="3">{exam.examData.TEACHER}</td>
-              </tr>
-              <tr className="table-info">
-                <th colSpan="2">Time</th>
-                <td colSpan="3">{exam.examData.TIME}</td>
-              </tr>
-              <tr className="table-info">
-                <th colSpan="2">Total Marks</th>
-                <td colSpan="3">{exam.examData["TOTAL MARKS"]}</td>
-              </tr>
-              {this.props.data.student ? (
-                <tr className="table-info">
-                  <th colSpan="2">Marks Obtained</th>
-                  <td colSpan="3">
-                    {exam.examData["MARKS OBTAINED"]
-                      ? exam.examData["MARKS OBTAINED"]
-                      : "---"}
-                  </td>
+            ) : null}
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            {this.props.data.student ? null : (
+              <>
+                <tr>
+                  <th>S.No</th>
+                  <th>Name</th>
+                  <th>Register No.</th>
+                  <th>Email</th>
+                  <th>Marks</th>
                 </tr>
-              ) : null}
-              <tr>
-                <td></td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.data.student ? null : (
-                <>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Name</th>
-                    <th>Register No.</th>
-                    <th>Email</th>
-                    <th>Marks</th>
-                  </tr>
-                  {studentDetails}
-                </>
-              )}
-            </tbody>
+                {studentDetails}
+              </>
+            )}
           </table>
         </div>
       );
@@ -135,6 +131,47 @@ class ReportPreview extends Component {
     }
 
     this.setState({ exams: parsedExams });
+  };
+
+  //Print button clicked
+  printData = () => {
+    let element = window.$(".a4-paper").html();
+
+    let printWindow = window.open("", "", "");
+
+    if (printWindow) {
+      printWindow.document.write(`
+      <html>
+      <head>
+      <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+      <title>Report Print</title>
+      <style>
+      body {
+        width: 21cm;
+        height: 29.7cm;
+      
+        overflow: auto;
+      
+        padding: 60px;
+      }
+
+      p {
+          line-height: 0.6;
+      }
+      </style>
+      `);
+      printWindow.document.write("</head><body >");
+      printWindow.document.write(element);
+      printWindow.document.write(`
+      </body>
+      <script>
+      window.print();
+      window.close();
+      </script>
+      </html>
+      `);
+    }
   };
 
   componentDidMount() {
