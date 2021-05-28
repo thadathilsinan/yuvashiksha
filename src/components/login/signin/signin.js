@@ -8,6 +8,7 @@ import "./signin.css";
 
 import http from "../../../shared/http";
 import configureDialogBox from "../../../shared/dailogBox";
+import $ from "jquery";
 
 class Signin extends Component {
   constructor(props) {
@@ -124,7 +125,15 @@ class Signin extends Component {
         },
         (res) => {
           if (res.status == 200) {
-            alert("Report sent successfully");
+            alert("Report sent Successfully. We will Contact you later");
+
+            window.$("#reportModal").modal("hide");
+            window.$("#content").val("");
+            this.setState({
+              reportEmail: "",
+              reportContent: "",
+              reportError: null,
+            });
           } else {
             alert(res.data);
           }
