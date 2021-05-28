@@ -786,7 +786,26 @@ router.post("/report/getdetails", async (req, res, next) => {
   //COMPLETED ALL FILTERS
   console.log(filteredExams.length);
 
-  res.end("OKK");
+  let responseObject = {};
+
+  //SETTING THE HEADER DETAILS FOR THE REPORT --------------------------------
+
+  responseObject.header = {
+    department: req.body.department,
+    Class: req.body.Class,
+    batch: req.body.batch,
+    accountType: req.body.accountType,
+    registerNumber: req.body.registerNo,
+    dateFrom: req.body.dateFrom,
+    dateTo: req.body.dateTo,
+  };
+
+  if (filteredExams.length <= 0) {
+    res.statusCode = 203;
+    res.end("No matching exams found");
+  } else {
+    res.json(responseObject);
+  }
 });
 
 module.exports = router;

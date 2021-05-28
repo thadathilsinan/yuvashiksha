@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import "./Report.css";
 
 import http from "../../../../shared/http";
+import ReportPreview from "../../../ui-elements/reportPreview/ReportPreview";
 import $ from "jquery";
 
 class Report extends React.Component {
@@ -16,6 +17,8 @@ class Report extends React.Component {
       Classes: null,
       selectionType: "range",
       dateFilter: false,
+      printData: {},
+      showPrintPreview: false,
     };
   }
 
@@ -210,9 +213,25 @@ class Report extends React.Component {
         accountType,
       },
       (res) => {
-        console.log(res.data);
+        if (res.status == 200) {
+          this.setState({ printData: res.data }, () => {
+            this.openPrintPreview();
+          });
+        } else {
+          alert(res.data);
+        }
       }
     );
+  };
+
+  //OPen the print preview screen
+  openPrintPreview = () => {
+    this.setState({ showPrintPreview: true });
+  };
+
+  //Close print Preview screen
+  closePrintPreview = () => {
+    this.setState({ showPrintPreview: false });
   };
 
   componentDidMount() {
@@ -227,124 +246,138 @@ class Report extends React.Component {
 
   render() {
     return (
-      <div className="container mt-5 mb-5">
-        <input
-          type="radio"
-          name="selectionType"
-          onChange={this.changeSelectionType}
-          id="rangeSelectionRadio"
-          defaultChecked
-        />
-        <span>
-          <b> RANGE SELECTION</b>
-        </span>
-        <div className="inputGroup" id="rangeSelectionDiv">
-          <div class="input-group input-group-lg">
-            <div class="input-group-prepend">
-              <span class="input-group-text">DEPARTMENT</span>
+      <>
+        {/* PREVIEW REPORT  */}
+        {this.state.showPrintPreview ? (
+          <ReportPreview
+            data={this.state.printData}
+            close={this.closePrintPreview}
+          />
+        ) : null}
+
+        <div className="container mt-5 mb-5">
+          <input
+            type="radio"
+            name="selectionType"
+            onChange={this.changeSelectionType}
+            id="rangeSelectionRadio"
+            defaultChecked
+          />
+          <span>
+            <b> RANGE SELECTION</b>
+          </span>
+          <div className="inputGroup" id="rangeSelectionDiv">
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text">DEPARTMENT</span>
+              </div>
+              <select
+                className="form-control"
+                ref={this.departmentRef}
+                onChange={this.parseClassOptions}
+              >
+                <option value="">--SELECT--</option>
+                {this.state.departments}
+              </select>
             </div>
-            <select
-              className="form-control"
-              ref={this.departmentRef}
-              onChange={this.parseClassOptions}
+
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text">CLASS</span>
+              </div>
+              <select
+                className="form-control"
+                ref={this.ClassRef}
+                onChange={this.parseBatchOptions}
+              >
+                <option value="">--SELECT--</option>
+                {this.state.Classes}
+              </select>
+            </div>
+
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text">BATCH</span>
+              </div>
+              <select className="form-control" ref={this.batchRef}>
+                <option value="">--SELECT--</option>
+                {this.state.batches}
+              </select>
+            </div>
+          </div>
+
+          <input
+            type="radio"
+            name="selectionType"
+            id="singleSelectionRadio"
+            onChange={this.changeSelectionType}
+          />
+          <span>
+            <b> SINGLE SELECTION</b>
+          </span>
+          <div className="inputGroup" id="singleSelectionDiv">
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text">ACCOUNT TYPE</span>
+              </div>
+              <select className="form-control" ref={this.accountTypeRef}>
+                <option value="teacher">TEACHER</option>
+                <option value="student">STUDENT</option>
+              </select>
+            </div>
+
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text">REGISTER NO.</span>
+              </div>
+              <input
+                className="form-control"
+                type="text"
+                ref={this.registerNoRef}
+              />
+            </div>
+          </div>
+
+          <input
+            type="checkbox"
+            id="dateFilterCheck"
+            onChange={this.toggleDateFilter}
+          />
+          <span>
+            <b> DATE FILTER</b>
+          </span>
+          <div className="inputGroup" id="dateFilterDiv">
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text">DATE FROM</span>
+              </div>
+              <input
+                className="form-control"
+                type="date"
+                ref={this.dateFromRef}
+              />
+
+              <div class="input-group-prepend">
+                <span class="input-group-text">DATE TO</span>
+              </div>
+              <input
+                className="form-control"
+                type="date"
+                ref={this.dateToRef}
+              />
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Button
+              className=" mr-3  p-2 btn btn-light mt-3"
+              onClick={this.getDetails}
             >
-              <option value="">--SELECT--</option>
-              {this.state.departments}
-            </select>
-          </div>
-
-          <div class="input-group input-group-lg">
-            <div class="input-group-prepend">
-              <span class="input-group-text">CLASS</span>
-            </div>
-            <select
-              className="form-control"
-              ref={this.ClassRef}
-              onChange={this.parseBatchOptions}
-            >
-              <option value="">--SELECT--</option>
-              {this.state.Classes}
-            </select>
-          </div>
-
-          <div class="input-group input-group-lg">
-            <div class="input-group-prepend">
-              <span class="input-group-text">BATCH</span>
-            </div>
-            <select className="form-control" ref={this.batchRef}>
-              <option value="">--SELECT--</option>
-              {this.state.batches}
-            </select>
+              GET DETAILS
+            </Button>
           </div>
         </div>
-
-        <input
-          type="radio"
-          name="selectionType"
-          id="singleSelectionRadio"
-          onChange={this.changeSelectionType}
-        />
-        <span>
-          <b> SINGLE SELECTION</b>
-        </span>
-        <div className="inputGroup" id="singleSelectionDiv">
-          <div class="input-group input-group-lg">
-            <div class="input-group-prepend">
-              <span class="input-group-text">ACCOUNT TYPE</span>
-            </div>
-            <select className="form-control" ref={this.accountTypeRef}>
-              <option value="teacher">TEACHER</option>
-              <option value="student">STUDENT</option>
-            </select>
-          </div>
-
-          <div class="input-group input-group-lg">
-            <div class="input-group-prepend">
-              <span class="input-group-text">REGISTER NO.</span>
-            </div>
-            <input
-              className="form-control"
-              type="text"
-              ref={this.registerNoRef}
-            />
-          </div>
-        </div>
-
-        <input
-          type="checkbox"
-          id="dateFilterCheck"
-          onChange={this.toggleDateFilter}
-        />
-        <span>
-          <b> DATE FILTER</b>
-        </span>
-        <div className="inputGroup" id="dateFilterDiv">
-          <div class="input-group input-group-lg">
-            <div class="input-group-prepend">
-              <span class="input-group-text">DATE FROM</span>
-            </div>
-            <input
-              className="form-control"
-              type="date"
-              ref={this.dateFromRef}
-            />
-
-            <div class="input-group-prepend">
-              <span class="input-group-text">DATE TO</span>
-            </div>
-            <input className="form-control" type="date" ref={this.dateToRef} />
-          </div>
-        </div>
-
-        <div className="text-center">
-          <Button
-            className=" mr-3  p-2 btn btn-light mt-3"
-            onClick={this.getDetails}
-          >
-            GET DETAILS
-          </Button>
-        </div>
-      </div>
+      </>
     );
   }
 }
