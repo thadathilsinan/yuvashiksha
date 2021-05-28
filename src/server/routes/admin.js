@@ -784,7 +784,6 @@ router.post("/report/getdetails", async (req, res, next) => {
   }
 
   //COMPLETED ALL FILTERS
-  console.log(filteredExams.length);
 
   let responseObject = {};
 
@@ -816,6 +815,43 @@ router.post("/report/getdetails", async (req, res, next) => {
     res.statusCode = 203;
     res.end("No matching exams found");
   } else {
+    //Parse the exams data
+    let exams = [];
+
+    if (!(req.body.mode == "single" && req.body.accountType == "student")) {
+      for (let exam of filteredExams) {
+        let answers = await Answers.find({ exam: exam._id });
+
+        let teacher = await Users.findOne({ _id: exam.teacher });
+        let Class = await Classes.findOne({ _id: exam.Class });
+
+        let examData = {
+          "EXAM NAME": `${exam.examName}`,
+          SUBJECT: `${exam.subject}`,
+          TEACHER: `${teacher.name} (${teacher.registerNumber})`,
+          CLASS: `${Class.name} (${Class.batch})`,
+          DATE: `${exam.date}`,
+          TIME: `${exam.from} - ${exam.to}`,
+          "TOTAL MARKS": `${exam.totalMarks}`,
+        };
+
+        let studentData = {};
+
+        for (let i in answers) {
+          let student = await Users.findOne({ _id: answers[i].student });
+
+          studentData[student.registerNumber] = {
+            name: student.name,
+            email: student.email,
+            marks: answers[i].totalMarks,
+          };
+        }
+
+        exams.push({ examData, studentData });
+      }
+    }
+
+    responseObject.exams = exams;
     res.json(responseObject);
   }
 });
