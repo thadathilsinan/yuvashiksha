@@ -668,45 +668,47 @@ router.get("/report/formdata", async (req, res, next) => {
 
 //Return the exam details for the report
 router.post("/report/getdetails", async (req, res, next) => {
+  let cDateFrom = req.body.dateFrom;
+  let cDateTo = req.body.dateTo;
+
+  //Fetch all exams
+  let allExams = await Exam.find({});
+  let filteredExams = [];
+
+  //DATE FILTERS -------------------------
+  if (cDateFrom && cDateTo) {
+    //Ranged date filter
+    let minDate = Date.parse(cDateFrom);
+    let maxDate = Date.parse(cDateTo);
+
+    for (let exam of allExams) {
+      let examDate = Date.parse(exam.date);
+
+      if (examDate >= minDate && examDate <= maxDate) {
+        filteredExams.push(exam);
+      }
+    }
+  } else if (cDateFrom || cDateTo) {
+    //Single date filter
+    let cDate = cDateFrom || cDateTo;
+    let date = Date.parse(cDate);
+
+    for (let exam of allExams) {
+      let examDate = Date.parse(exam.date);
+
+      if (date == examDate) {
+        filteredExams.push(exam);
+      }
+    }
+  } else {
+    filteredExams = allExams;
+  }
+
+  //RANGED FILTERS---------------------------------------
   if (req.body.mode == "range") {
     let cDepartment = req.body.department;
     let cClass = req.body.Class;
     let cBatch = req.body.batch;
-    let cDateFrom = req.body.dateFrom;
-    let cDateTo = req.body.dateTo;
-
-    //Fetch all exams
-    let allExams = await Exam.find({});
-    let filteredExams = [];
-
-    //Date Filtering
-    if (cDateFrom && cDateTo) {
-      //Ranged date filter
-      let minDate = Date.parse(cDateFrom);
-      let maxDate = Date.parse(cDateTo);
-
-      for (let exam of allExams) {
-        let examDate = Date.parse(exam.date);
-
-        if (examDate >= minDate && examDate <= maxDate) {
-          filteredExams.push(exam);
-        }
-      }
-    } else if (cDateFrom || cDateTo) {
-      //Single date filter
-      let cDate = cDateFrom || cDateTo;
-      let date = Date.parse(cDate);
-
-      for (let exam of allExams) {
-        let examDate = Date.parse(exam.date);
-
-        if (date == examDate) {
-          filteredExams.push(exam);
-        }
-      }
-    } else {
-      filteredExams = allExams;
-    }
 
     //Department wise filtering
     if (cDepartment && !cClass && !cBatch) {
@@ -753,10 +755,36 @@ router.post("/report/getdetails", async (req, res, next) => {
         }
       }
     }
+  } else if (req.body.mode == "single") {
+    let cRegisterNo = req.body.registerNo;
 
-    //COMPLETED ALL FILTERS
-    console.log(filteredExams.length);
+    let dateFilteredExams = filteredExams;
+    filteredExams = [];
+
+    //TEACHER ACCOUNT FILTER
+    if (req.body.accountType == "teacher") {
+      for (let exam of dateFilteredExams) {
+        let teacher = await Users.findOne({ _id: exam.teacher });
+
+        if (teacher && teacher.registerNumber == cRegisterNo) {
+          filteredExams.push(exam);
+        }
+      }
+    }
+    //STUDENT ACCOUNT FILTER
+    else if (req.body.accountType == "student") {
+      for (let exam of dateFilteredExams) {
+        let student = await Users.findOne({ registerNumber: cRegisterNo });
+
+        if (student && student.class.toString() == exam.Class.toString()) {
+          filteredExams.push(exam);
+        }
+      }
+    }
   }
+
+  //COMPLETED ALL FILTERS
+  console.log(filteredExams.length);
 
   res.end("OKK");
 });

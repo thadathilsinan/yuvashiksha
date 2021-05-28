@@ -24,6 +24,7 @@ class Report extends React.Component {
   ClassRef = React.createRef();
   batchRef = React.createRef();
   registerNoRef = React.createRef();
+  accountTypeRef = React.createRef();
   dateFromRef = React.createRef();
   dateToRef = React.createRef();
 
@@ -176,38 +177,42 @@ class Report extends React.Component {
     let dateFrom = this.dateFromRef.current.value;
     let dateTo = this.dateToRef.current.value;
 
-    if (this.state.selectionType == "range") {
-      let department = this.departmentRef.current.value;
-      let Class = this.ClassRef.current.value;
-      let batch = this.batchRef.current.value;
+    let registerNo = this.registerNoRef.current.value;
+    let accountType = this.accountTypeRef.current.value;
 
+    let department = this.departmentRef.current.value;
+    let Class = this.ClassRef.current.value;
+    let batch = this.batchRef.current.value;
+
+    if (this.state.selectionType == "range") {
       if (!department) {
         alert("Please select atleast the department option");
         return;
       }
-
-      http(
-        "POST",
-        "/admin/report/getdetails",
-        {
-          mode: this.state.selectionType,
-          department,
-          Class,
-          batch,
-          dateFrom,
-          dateTo,
-        },
-        (res) => {
-          console.log(res.data);
-        }
-      );
     } else {
-      let registerNo = this.registerNoRef.current.value;
-
       if (!registerNo) {
         alert("Please enter the register number");
+        return;
       }
     }
+
+    http(
+      "POST",
+      "/admin/report/getdetails",
+      {
+        mode: this.state.selectionType,
+        department,
+        Class,
+        batch,
+        dateFrom,
+        dateTo,
+        registerNo,
+        accountType,
+      },
+      (res) => {
+        console.log(res.data);
+      }
+    );
   };
 
   componentDidMount() {
@@ -283,6 +288,16 @@ class Report extends React.Component {
           <b> SINGLE SELECTION</b>
         </span>
         <div className="inputGroup" id="singleSelectionDiv">
+          <div class="input-group input-group-lg">
+            <div class="input-group-prepend">
+              <span class="input-group-text">ACCOUNT TYPE</span>
+            </div>
+            <select className="form-control" ref={this.accountTypeRef}>
+              <option value="teacher">TEACHER</option>
+              <option value="student">STUDENT</option>
+            </select>
+          </div>
+
           <div class="input-group input-group-lg">
             <div class="input-group-prepend">
               <span class="input-group-text">REGISTER NO.</span>
