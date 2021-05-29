@@ -4,3 +4,8 @@
   background-color: rgb(196, 196, 196);
   overflow: auto;
 }
+
+.backBtn {
+  margin-right: 3px;
+  background-color: rgb(207, 45, 45);
+}

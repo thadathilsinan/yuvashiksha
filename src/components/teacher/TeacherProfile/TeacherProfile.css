@@ -33,6 +33,9 @@ body {
 
 }
 #verifyStudentsBtn{
+  position: fixed;
+  right : 125px;
+  padding: 6px 12px;
   border: none;
   border-radius: 50px;
   font-size: 13px;
@@ -45,7 +48,7 @@ body {
   background-color: blue;
 }
 #logoutBtn{
-  font-size: 14px;
+  font-size: 13px;
   border: none;
   border-radius: 50px;
   background-color: red;
@@ -55,7 +58,7 @@ body {
 }
 #logoutBtn:hover{
   border: none;
-  background-color: red;
+  background-color: rgb(218, 85, 85);
 }
 #backBtn{
   background: #001ec7;
