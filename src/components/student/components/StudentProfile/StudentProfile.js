@@ -164,6 +164,7 @@ export class StudentProfile extends Component {
                 <Button
                   variant="primary"
                   className="btn btn-primary mr-3"
+                  id="backBtn"
                   size="sm"
                   onClick={() => {
                     window.history.back();
@@ -177,7 +178,10 @@ export class StudentProfile extends Component {
             right: (
               <h5>
                 <Button
-                  className="logoutBtn"
+                  variant="danger"
+                  className="btn bg-danger"
+                  id="logoutBtn"
+                  size="md"
                   onClick={this.logout}
                 >
                   LOGOUT
@@ -300,6 +304,7 @@ export class StudentProfile extends Component {
             </Form.Group>
             <p className="ml-2 text-right">
               <Button
+                id="changeBtn"
                 className="ml-7"
                 variant="primary"
                 onClick={this.saveUserAccount}
