@@ -190,7 +190,11 @@ class Evaluation extends Component {
                 <Button
                   variant="primary"
                   className="btn btn-primary mr-3"
+                  id="navBack"
                   size="sm"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Go back"
                   onClick={() => {
                     window.history.back();
                   }}
@@ -208,27 +212,39 @@ class Evaluation extends Component {
               <h5>
                 TOTAL MARKS: {this.state.total} / {this.props.exam.totalMarks}
                 <button
-                  className="btn btn-light ml-5"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Previous answer"
+                  className="btn"
                   onClick={this.props.prev}
                 >
                   <GrLinkPrevious color="white" />
                 </button>
                 <Button
-                  className="btn btn-light ml-3"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Images Captured at Exam time"
+                  id="btn-img"
                   onClick={this.openImages}
                 >
                   <BsImages />
                 </Button>
                 {this.state.restrictAccess ? null : (
                   <button
-                    className="btn btn-light ml-3"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Save Marks"
+                    className="btn "
                     onClick={this.saveMarks}
                   >
                     <IoIosSave />
                   </button>
                 )}
                 <button
-                  className="btn btn-light ml-3"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Next answer"
+                  className="btn"
                   onClick={this.props.next}
                 >
                   <GrLinkNext />

@@ -3,3 +3,33 @@
   overflow: auto;
   background-color: rgb(196, 196, 196);
 }
+#btn-print {
+  position: fixed;
+  right: 125px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 50px;
+  font-size: 13px;
+  background: #001ec7;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  color: white;
+}
+#btn-print:hover {
+  background-color: blue;
+}
+#btn-publish {
+  border-radius: 35px;
+  border-style: none;
+  background: #2d8b51;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  color: white;
+}
+#btn-publish:hover {
+  background-color: green;
+}
+
+#navBack {
+  background: #001ec7;
+  border-style: none;
+  color: white;
+}

@@ -136,8 +136,13 @@ class VerifyStudent extends Component {
             left: (
               <h5>
                 <Button
-                  className="backBtn"
+                  variant="primary"
+                  className="btn btn-primary mr-3"
+                  id="navBack"
                   size="sm"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Go back"
                   onClick={() => {
                     window.history.back();
                   }}

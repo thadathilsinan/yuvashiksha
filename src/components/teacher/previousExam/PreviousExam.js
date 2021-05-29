@@ -191,7 +191,11 @@ class PreviousExam extends Component {
                     <Button
                       variant="primary"
                       className="btn btn-primary mr-3"
+                      id="navBack"
                       size="sm"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Go back"
                       onClick={() => {
                         localStorage.setItem("back", "true");
                         localStorage.setItem("right", "true");
@@ -210,16 +214,16 @@ class PreviousExam extends Component {
                 right: (
                   <h4>
                     <Button
-                      className="btn btn-light"
+                      id="btn-print"
                       onClick={this.printResult}
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Print"
                     >
                       <BiPrinter />
                     </Button>
                     {this.state.restrictAccess ? null : (
-                      <Button
-                        className="btn btn-success ml-2"
-                        onClick={this.publishResult}
-                      >
+                      <Button id="btn-publish" onClick={this.publishResult}>
                         PUBLISH
                       </Button>
                     )}

@@ -21,3 +21,25 @@
 #evaluationFooter button {
   margin: 0 20px;
 }
+.btn {
+  margin-left: 20px;
+  border-radius: 35px;
+  border-style: none;
+  background: #001ec7;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  color: white;
+}
+#btn-img {
+  margin-left: 20px;
+  border-radius: 2px;
+  border-style: none;
+  background: #001ec7;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  color: white;
+}
+
+#navBack {
+  background: #001ec7;
+  border-style: none;
+  color: white;
+}

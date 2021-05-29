@@ -50,7 +50,7 @@ class Images extends Component {
           {{
             left: <h4>IMAGES</h4>,
             right: (
-              <button className="btn btn-danger" onClick={this.props.close}>
+              <button className="btn-close" onClick={this.props.close}>
                 CLOSE
               </button>
             ),
