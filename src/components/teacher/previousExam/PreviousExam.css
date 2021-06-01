@@ -23,6 +23,7 @@
   background: #2d8b51;
   box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
   color: white;
+  font-size: 12px;
 }
 #btn-publish:hover {
   background-color: green;

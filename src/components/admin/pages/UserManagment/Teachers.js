@@ -108,7 +108,7 @@ export default class Teachers extends Component {
                   </span>{" "}
                   <Button
                     type="submit"
-                    className=" mr-3 btn btn-danger"
+                    style={{ backgroundColor: "red" }}
                     onClick={() => this.deleteClickListener(item)}
                   >
                     Delete

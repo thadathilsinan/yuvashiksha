@@ -931,12 +931,12 @@ class NewExam extends Component {
         {configureDialogBox(
           "scheduleexam",
           "SCHEDULE EXAM",
-          <>
-            <Row>
-              <Col>
+          <div id="submit">
+            <Row className="mt-4">
+              <Col className="mt-2">
                 <Form.Label className="text-dark">EXAM NAME</Form.Label>
               </Col>
-              <Col>
+              <Col >
                 <Form.Control
                   ref={this.examNameRef}
                   className="text-box"
@@ -945,8 +945,8 @@ class NewExam extends Component {
                 />
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
+            <Row className="mt-4">
+              <Col className="mt-2">
                 <Form.Label className="text-dark">SUBJECT</Form.Label>
               </Col>
               <Col>
@@ -959,12 +959,12 @@ class NewExam extends Component {
               </Col>
             </Row>
             <Row className="mt-2">
-              <Col>
+              <Col className="mt-2">
                 <Form.Label className="text-dark">TIME</Form.Label>
               </Col>
             </Row>
             <Row>
-              <Col>
+              <Col className="mt-2">
                 <Form.Label className="text-dark">From</Form.Label>
               </Col>
               <Col>
@@ -976,8 +976,8 @@ class NewExam extends Component {
                 />
               </Col>
             </Row>
-            <Row>
-              <Col>
+            <Row className="mt-3">
+              <Col className="mt-2">
                 <Form.Label className="text-dark">To</Form.Label>
               </Col>
               <Col>
@@ -989,8 +989,8 @@ class NewExam extends Component {
                 />
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
+            <Row className="mt-4">
+              <Col className="mt-2">
                 <Form.Label className="text-dark">DATE</Form.Label>
               </Col>
               <Col>
@@ -1002,8 +1002,8 @@ class NewExam extends Component {
                 />
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
+            <Row className="mt-4">
+              <Col className="mt-2">
                 <Form.Label className="text-dark">TOTAL MARKS</Form.Label>
               </Col>
               <Col>
@@ -1016,14 +1016,13 @@ class NewExam extends Component {
                 />
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
+            <Row className="mt-4">
+              <Col className="mt-2">
                 <Form.Label className="text-dark">CLASS</Form.Label>
               </Col>
               <Col>
                 <Form.Control
                   ref={this.classRef}
-                  
                   as="select"
                   className="my-1 mr-sm-2 text-box"
                   id="inlineFormCustomSelectPref"
@@ -1039,7 +1038,7 @@ class NewExam extends Component {
                   {this.state.classOptions}
                 </Form.Control>
               </Col>
-              <Col>
+              <Col className="mt-2">
                 <Form.Label className="text-dark">BATCH</Form.Label>
               </Col>
               <Col>
@@ -1057,12 +1056,9 @@ class NewExam extends Component {
                 </Form.Control>
               </Col>
             </Row>
-          </>,
+          </div>,
           <>
-            <button
-              className="create-btn"
-              onClick={this.scheduleExam}
-            >
+            <button className="create-btn" onClick={this.scheduleExam}>
               {this.props.exam ? "EDIT EXAM" : "CREATE EXAM"}
             </button>
           </>
@@ -1320,8 +1316,8 @@ class NewExam extends Component {
                   className="btn btn-primary mr-3"
                   id="navBack"
                   size="sm"
-                  data-bs-toggle="tooltip" 
-                  data-bs-placement="bottom" 
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
                   title="Go back"
                   onClick={() => {
                     this.props.history.push("/teacher");
@@ -1344,8 +1340,8 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light "
                       id="navBarDown"
-                      data-bs-toggle="tooltip" 
-                      data-bs-placement="bottom" 
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
                       title="Move question to bottom"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.questionDown}
@@ -1357,8 +1353,8 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light ml-3 "
                       id="navBarUp"
-                      data-bs-toggle="tooltip" 
-                      data-bs-placement="bottom" 
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
                       title="Move Question to top"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.questionUp}
@@ -1370,8 +1366,8 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light ml-3 "
                       id="navBarEdit"
-                      data-bs-toggle="tooltip" 
-                      data-bs-placement="bottom" 
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
                       title="Edit Question"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.editSelectedQuestion}
@@ -1383,8 +1379,8 @@ class NewExam extends Component {
                     <button
                       className="btn btn-light ml-3 "
                       id="navBarDelete"
-                      data-bs-toggle="tooltip" 
-                      data-bs-placement="bottom" 
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
                       title="Delete Question"
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.removeQuestion}
@@ -1394,10 +1390,13 @@ class NewExam extends Component {
                   </Col>
                   <Col>
                     <Dropdown>
-                      <Dropdown.Toggle variant="light" id="dropdown-basic"
-                      data-bs-toggle="tooltip" 
-                      data-bs-placement="bottom" 
-                      title="Add Question">
+                      <Dropdown.Toggle
+                        variant="light"
+                        id="dropdown-basic"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Add Question"
+                      >
                         <BsPlus />
                       </Dropdown.Toggle>
 
@@ -1447,8 +1446,8 @@ class NewExam extends Component {
                   <Button
                     className="btn btn-success ml-3"
                     id="navSuccess"
-                    data-bs-toggle="tooltip" 
-                    data-bs-placement="bottom" 
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
                     title="Finish"
                     onClick={this.openScheduleExam}
                   >

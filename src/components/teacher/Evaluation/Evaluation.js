@@ -220,6 +220,16 @@ class Evaluation extends Component {
                 >
                   <GrLinkPrevious color="white" />
                 </button>
+                <button
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Next answer"
+                  className="btn"
+                  id="btn-next"
+                  onClick={this.props.next}
+                >
+                  <GrLinkNext />
+                </button>
                 <Button
                   data-bs-toggle="tooltip"
                   data-bs-placement="bottom"
@@ -240,15 +250,6 @@ class Evaluation extends Component {
                     <IoIosSave />
                   </button>
                 )}
-                <button
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Next answer"
-                  className="btn"
-                  onClick={this.props.next}
-                >
-                  <GrLinkNext />
-                </button>
               </h5>
             ),
           }}

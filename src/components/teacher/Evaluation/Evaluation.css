@@ -36,10 +36,14 @@
   background: #001ec7;
   box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
   color: white;
+  margin-right: 2em;
 }
 
 #navBack {
   background: #001ec7;
   border-style: none;
   color: white;
+}
+#btn-next {
+  margin-right: 2em;
 }

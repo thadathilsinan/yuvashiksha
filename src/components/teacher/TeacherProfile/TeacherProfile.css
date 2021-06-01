@@ -7,60 +7,57 @@
 body {
   overflow: hidden;
 }
-#changeBtn{
+#changeBtn {
+  margin-left: 8px;
   font-size: 14px;
-  border:none;
+  border: none;
   border-radius: 50px;
-  background: #001EC7;
-  box-shadow:  5px 5px 8px #b1b1b1,
-              -5px -5px 8px #ffffff;
+  background: #001ec7;
+  box-shadow: 5px 5px 8px #b1b1b1, -5px -5px 8px #ffffff;
   color: white;
 }
 
-#changeBtn:hover{
+#changeBtn:hover {
   background-color: blue;
 }
 
-#saveBtn{
+#saveBtn {
+  margin-right: 107px;
   font-size: 14px;
   border-radius: 50px;
   background-color: #001ec7;
-  box-shadow:  5px 5px 8px #b1b1b1,
-              -5px -5px 8px #ffffff;
+  box-shadow: 5px 5px 8px #b1b1b1, -5px -5px 8px #ffffff;
 }
-#saveBtn:hover{
+#saveBtn:hover {
   background-color: blue;
-
 }
-#verifyStudentsBtn{
+#verifyStudentsBtn {
   position: fixed;
-  right : 125px;
+  right: 125px;
   padding: 6px 12px;
   border: none;
   border-radius: 50px;
   font-size: 13px;
-  background: #001EC7;
-  box-shadow:  4px 4px 7px #00179b,
-              -4px -4px 7px #0025f3;
+  background: #001ec7;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
   color: white;
 }
-#verifyStudentsBtn:hover{
+#verifyStudentsBtn:hover {
   background-color: blue;
 }
-#logoutBtn{
+#logoutBtn {
   font-size: 13px;
   border: none;
   border-radius: 50px;
   background-color: red;
-  box-shadow:  4px 4px 7px #00179b,
-              -4px -4px 7px #0025f3;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
   color: white;
 }
-#logoutBtn:hover{
+#logoutBtn:hover {
   border: none;
   background-color: rgb(218, 85, 85);
 }
-#backBtn{
+#backBtn {
   background: #001ec7;
   border-style: none;
   color: white;

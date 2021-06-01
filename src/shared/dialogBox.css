@@ -1,14 +1,11 @@
-
-.modal-header{
-    background-color: #001EC7;
-    color: #ecf0f3;
+.modal-header {
+  background-color: #001ec7;
+  color: #ecf0f3;
 }
-.modal-body{
-    background-color: #e0e0e0;
+.modal-body {
+  background-color: #fff;
 }
-.modal-footer{
-    background-color: #001EC7;
-    color: #ecf0f3;
+.modal-footer {
+  background-color: #001ec7;
+  color: #ecf0f3;
 }
-
-
