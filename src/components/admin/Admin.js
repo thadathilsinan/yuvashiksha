@@ -79,7 +79,7 @@ class Admin extends Component {
     //The content of the right side of the navBar
     let navBarRight = {
       home: (
-        <Button variant="danger" className="mr-4" onClick={this.logout}>
+        <Button id="logoutBtn" className="mr-4" onClick={this.logout}>
           Logout
         </Button>
       ),

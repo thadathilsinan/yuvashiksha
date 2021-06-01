@@ -13,3 +13,13 @@
   height: calc(100vh - 80px - 50px - 50px);
   overflow: auto;
 }
+#backBtn {
+  background: #001ec7;
+  border-style: none;
+  color: white;
+}
+#navBack {
+  background: #001ec7;
+  border-style: none;
+  color: white;
+}

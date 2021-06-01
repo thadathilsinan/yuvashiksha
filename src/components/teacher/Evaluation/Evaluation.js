@@ -186,7 +186,7 @@ class Evaluation extends Component {
         <NavBar>
           {{
             left: (
-              <h5 style={{ display: "flex" }}>
+              <h5 style={{ display: "flex" }} className="evalution">
                 <Button
                   variant="primary"
                   className="btn btn-primary mr-3"

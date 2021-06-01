@@ -76,7 +76,11 @@ class ExamGuidlines extends Component {
                   <Button
                     variant="primary"
                     className="btn btn-primary mr-3"
+                    id="navBack"
                     size="sm"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Go back"
                     onClick={() => {
                       window.history.back();
                     }}

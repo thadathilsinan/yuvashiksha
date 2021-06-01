@@ -36,3 +36,15 @@
   background-color: #82b1ff;
   border-right: 8px solid white;
 }
+#logoutBtn {
+  font-size: 13px;
+  border: none;
+  border-radius: 50px;
+  background-color: red;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  color: white;
+}
+#logoutBtn:hover {
+  border: none;
+  background-color: rgb(218, 85, 85);
+}

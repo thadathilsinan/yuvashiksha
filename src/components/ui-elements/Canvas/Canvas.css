@@ -17,3 +17,27 @@
   height: 400;
   border: 2px solid black;
 }
+.btn-close {
+  font-size: 12px;
+  border: none;
+  border-radius: 50px;
+  background-color: red;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  color: white;
+}
+.btn-close:hover {
+  border: none;
+  background-color: rgb(218, 85, 85);
+}
+#btn-save {
+  font-size: 12px;
+  border-radius: 50px;
+  border: none;
+  background: #2d8b51;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  color: white;
+}
+.btn-save:hover {
+  border: none;
+  background-color: green;
+}

@@ -253,10 +253,7 @@ export default class Canvas extends Component {
               ),
               right: (
                 <>
-                  <button
-                    className="btn btn-danger mr-3"
-                    onClick={this.props.close}
-                  >
+                  <button className="btn-close" onClick={this.props.close}>
                     CLOSE
                   </button>
 
@@ -268,7 +265,7 @@ export default class Canvas extends Component {
                   >
                     CLEAR
                   </button>
-                  <button className="btn btn-success" onClick={this.save}>
+                  <button className="btn-save" onClick={this.save}>
                     SAVE
                   </button>
                 </>

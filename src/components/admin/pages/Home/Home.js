@@ -73,6 +73,7 @@ class Home extends React.Component {
 
             <p className="ml-2 text-right">
               <Button
+                id="save-btn"
                 className="ml-7"
                 variant="primary"
                 onClick={this.changePassword}
