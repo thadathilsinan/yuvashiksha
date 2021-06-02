@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import http from "../../../../shared/http";
-
+import "./Message.css";
 let mapStateToProps = (state) => {
   return {
     message: state.admin.message,
@@ -70,8 +70,9 @@ class Messagecontent extends Component {
             </textarea>
             <div className="text-right">
               <Button
+                id="btn-replay"
                 type="submit"
-                className="mt-4 mr-3 btn btn-success"
+                className=" btn btn-success"
                 onClick={this.replay}
               >
                 Reply

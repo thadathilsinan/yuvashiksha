@@ -1,0 +1,12 @@
+#btn-replay {
+  margin-right: 50px;
+  margin-top: 13px;
+  box-shadow: 5px 5px 8px #b1b1b1, -5px -5px 8px #ffffff;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 12px;
+}
+#btn-replay {
+  background-color: green;
+}
