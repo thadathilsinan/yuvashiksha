@@ -194,14 +194,17 @@ class ClassBatch extends Component {
 
   //Remove a class
   removeClass = (classId) => {
-    http(
-      "POST",
-      "/admin/institutionstructure/class/remove",
-      { classId },
-      (res) => {
-        alert(res.data);
-      }
-    );
+    let confirm = window.confirm("Are you sure to delete the Class");
+    if (confirm) {
+      http(
+        "POST",
+        "/admin/institutionstructure/class/remove",
+        { classId },
+        (res) => {
+          alert(res.data);
+        }
+      );
+    }
   };
 
   //Change Mentor of a department

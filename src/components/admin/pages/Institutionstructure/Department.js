@@ -179,14 +179,17 @@ class Departments extends React.Component {
 
   //Remove a department
   removeDepartment = (departmentId) => {
-    http(
-      "POST",
-      "/admin/institutionstructure/department/remove",
-      { departmentId },
-      (res) => {
-        alert(res.data);
-      }
-    );
+    let confirm = window.confirm("Are you sure to delete the Department");
+    if (confirm) {
+      http(
+        "POST",
+        "/admin/institutionstructure/department/remove",
+        { departmentId },
+        (res) => {
+          alert(res.data);
+        }
+      );
+    }
   };
 
   //Change HOD of a department
