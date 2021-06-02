@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Button, Row, Form, Col, Modal } from "react-bootstrap";
 
-import { FaMinus, FaPencilAlt, FaPlus } from "react-icons/fa";
+import "./ClassBatch.css";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
 import configureDialogBox from "../../../../shared/dailogBox";
 import { withRouter } from "react-router-dom";
-
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import http from "../../../../shared/http";
 
 class ClassBatch extends Component {
@@ -107,15 +107,6 @@ class ClassBatch extends Component {
                 ),
                 right: (
                   <div>
-                    <Button
-                      className="mr-4 btn btn-danger"
-                      onClick={() => {
-                        this.removeClass(Class.id);
-                      }}
-                    >
-                      <FaMinus />
-                    </Button>
-
                     <a
                       href="#"
                       data-toggle="modal"
@@ -123,13 +114,21 @@ class ClassBatch extends Component {
                       style={{ color: "white" }}
                     >
                       <Button
-                        className="btn btn-secondary"
+                        className="btn-edit"
                         onClick={() => {
                           this.setEditingClass(Class.id);
                         }}
                       >
-                        <FaPencilAlt />
+                        <AiOutlineEdit />
                       </Button>{" "}
+                      <Button
+                        className="btn-delete"
+                        onClick={() => {
+                          this.removeClass(Class.id);
+                        }}
+                      >
+                        <AiOutlineDelete />
+                      </Button>
                     </a>
                   </div>
                 ),

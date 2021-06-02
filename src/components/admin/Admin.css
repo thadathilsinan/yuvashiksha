@@ -1,5 +1,5 @@
 .root {
-  background-color: #82b1ff;
+  background-color: #e0e0e0;
 }
 
 #adminContent {
@@ -19,9 +19,9 @@
 #adminSidebar {
   width: 300px;
   height: calc(100vh - 80px);
-
   background-color: #060b26;
   overflow: auto;
+  border-right: 1px;
 }
 
 #adminSidebar .list-group-item {
@@ -33,7 +33,8 @@
 }
 
 #adminSidebar .active {
-  background-color: #82b1ff;
+  color: black;
+  background-color: #e0e0e0;
   border-right: 8px solid white;
 }
 #logoutBtn {

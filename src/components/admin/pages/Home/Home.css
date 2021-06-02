@@ -6,15 +6,9 @@
   color: white;
 }
 #save-btn {
-  font-size: 12px;
-  border: none;
-  padding: 8px 8px;
-  border-radius: 12px;
-  border: none;
-  color: #ecf0f3;
-  background: #001ec7;
-  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
-  color: white;
+  border-radius: 50px;
+
+  box-shadow: -20px 20px 60px #5c636a, 20px -20px 60px #7c8790;
 }
 #save-btn:hover {
   background-color: blue;

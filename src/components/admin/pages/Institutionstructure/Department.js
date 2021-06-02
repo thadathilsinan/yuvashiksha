@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form, Col, Row } from "react-bootstrap";
-import { FaMinus, FaPencilAlt } from "react-icons/fa";
+
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import ListItem from "../../../ui-elements/ListItem/ListItem";
 import configureDialogBox from "../../../../shared/dailogBox";
 import "./Department.css";
@@ -97,15 +98,6 @@ class Departments extends React.Component {
                 ),
                 right: (
                   <div>
-                    <Button
-                      className="btn btn-danger mr-3"
-                      data-id={department.id}
-                      onClick={() => {
-                        this.removeDepartment(department.id);
-                      }}
-                    >
-                      <FaMinus />
-                    </Button>
                     <a
                       href="#"
                       data-toggle="modal"
@@ -113,15 +105,24 @@ class Departments extends React.Component {
                       style={{ color: "white" }}
                     >
                       <Button
-                        className="btn btn-secondary"
+                        className="btn-edit"
                         data-id={department.id}
                         onClick={() => {
                           this.setEditingDepartment(department.id);
                         }}
                       >
-                        <FaPencilAlt />
+                        <AiOutlineEdit />
                       </Button>
                     </a>
+                    <Button
+                      className="btn-delete"
+                      data-id={department.id}
+                      onClick={() => {
+                        this.removeDepartment(department.id);
+                      }}
+                    >
+                      <AiOutlineDelete />
+                    </Button>
                   </div>
                 ),
               }}
