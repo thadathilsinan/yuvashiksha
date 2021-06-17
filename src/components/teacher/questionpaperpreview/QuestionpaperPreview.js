@@ -72,7 +72,16 @@ class QuestionPaperPreview extends Component {
     this.Class = this.props.Class;
     this.batch = this.props.batch;
 
-    this.props.history.push("/teacher/previewexam/editexam");
+    let examStartTime = new Date(
+      `${this.props.exam.date},${this.props.exam.from}`
+    );
+    let currentTime = new Date();
+
+    if (currentTime.getTime() >= examStartTime.getTime()) {
+      alert("Exam can't be edited after exam start");
+    } else {
+      this.props.history.push("/teacher/previewexam/editexam");
+    }
   };
 
   //Remove exam from server
