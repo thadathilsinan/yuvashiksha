@@ -160,6 +160,13 @@ class Evaluation extends Component {
     }
   };
 
+  //student previous exam mode
+  checkStudentMode = () => {
+    if (this.props.studentMode) {
+      this.setState({ restrictAccess: true });
+    }
+  };
+
   componentDidMount() {
     this.getAnswers();
     this.checkTeacherAccess();
@@ -211,34 +218,38 @@ class Evaluation extends Component {
             right: (
               <h5>
                 TOTAL MARKS: {this.state.total} / {this.props.exam.totalMarks}
-                <button
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Previous answer"
-                  className="btn"
-                  onClick={this.props.prev}
-                >
-                  <GrLinkPrevious color="white" />
-                </button>
-                <button
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Next answer"
-                  className="btn"
-                  id="btn-next"
-                  onClick={this.props.next}
-                >
-                  <GrLinkNext />
-                </button>
-                <Button
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="bottom"
-                  title="Images Captured at Exam time"
-                  id="btn-img"
-                  onClick={this.openImages}
-                >
-                  <BsImages />
-                </Button>
+                {this.props.studentMode ? null : (
+                  <>
+                    <button
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Previous answer"
+                      className="btn"
+                      onClick={this.props.prev}
+                    >
+                      <GrLinkPrevious color="white" />
+                    </button>
+                    <button
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Next answer"
+                      className="btn"
+                      id="btn-next"
+                      onClick={this.props.next}
+                    >
+                      <GrLinkNext />
+                    </button>
+                    <Button
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Images Captured at Exam time"
+                      id="btn-img"
+                      onClick={this.openImages}
+                    >
+                      <BsImages />
+                    </Button>{" "}
+                  </>
+                )}
                 {this.state.restrictAccess ? null : (
                   <button
                     data-bs-toggle="tooltip"

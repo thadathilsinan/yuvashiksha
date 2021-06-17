@@ -6,16 +6,20 @@ import ListItem from "../ui-elements/ListItem/ListItem";
 import StartExam from "./components/startexam/StartExam";
 import { Link, BrowserRouter, Route, withRouter } from "react-router-dom";
 import StudentProfile from "./components/StudentProfile/StudentProfile";
-import { FaUserCircle } from "react-icons/fa";
+import { FaChessKing, FaUserCircle } from "react-icons/fa";
 import "./Student.css";
 import http from "../../shared/http";
 import configuireDialogBox from "../../shared/dailogBox";
+
+import Evaluation from "../teacher/Evaluation/Evaluation";
+import { data } from "jquery";
 
 class Student extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      student: {},
       examData: [],
       examList: [],
       previousExamList: [],
@@ -50,7 +54,11 @@ class Student extends Component {
 
       if (currentTime.getTime() > examDate.getTime()) {
         previousExamList.push(
-          <ListItem height="100px" key={item._id}>
+          <ListItem
+            height="100px"
+            key={item._id}
+            onClick={() => this.openPreviousExam(item)}
+          >
             {{
               left: (
                 <div id="leftListItem">
@@ -135,6 +143,30 @@ class Student extends Component {
     });
   };
 
+  //open previous exam
+  openPreviousExam = (item) => {
+    this.setState({ selectedExam: item }, () => {
+      http(
+        "POST",
+        "/teacher/previousexam/getstudents",
+        { exam: item._id },
+        (res) => {
+          if (res.status == 200) {
+            for (const student of res.data) {
+              console.log(student, this.props.user);
+              if (student.id == this.props.user.user._id) {
+                this.setState({ student }, () => {
+                  this.props.history.push("/student/previousexam");
+                });
+                break;
+              }
+            }
+          }
+        }
+      );
+    });
+  };
+
   //Open the exam guidlines page
   openExamGuidlines = () => {
     this.props.history.push("/student/guidelines");
@@ -159,6 +191,13 @@ class Student extends Component {
   render() {
     return (
       <>
+        <Route path="/student/previousexam" exact>
+          <Evaluation
+            exam={this.state.selectedExam}
+            studentMode
+            student={this.state.student}
+          />
+        </Route>
         <Route path="/student/profile" exact>
           <StudentProfile
             user={this.props.user.user}
