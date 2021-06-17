@@ -133,6 +133,36 @@ router.post(
     let department = await Department.findOne({ _id: req.body.departmentId });
 
     if (department) {
+      ///Removing Exam
+
+      //Removing  teacher users in department
+      let teachers = await Users.find({ department: department._id });
+      for (let teacher of teachers) {
+        let exams = await Exam.find({
+          teacher: teacher._id,
+        });
+
+        for (let exam of exams) {
+          await Answers.deleteMany({
+            exam: exam._id,
+          });
+          await exam.remove();
+        }
+        await teacher.remove();
+      }
+
+      //Removing  student users in department
+      let allStudents = await Users.find({});
+
+      for (let student of allStudents) {
+        let Class = await Classes.findOne({
+          _id: student.class,
+        });
+        if (Class.department == department._id) {
+          await student.remove();
+        }
+      }
+
       //Removing classes in that department
       await Classes.deleteMany({
         department: department._id,
