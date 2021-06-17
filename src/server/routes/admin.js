@@ -158,7 +158,7 @@ router.post(
         let Class = await Classes.findOne({
           _id: student.class,
         });
-        if (Class.department == department._id) {
+        if (Class && Class.department == department._id) {
           await student.remove();
         }
       }
