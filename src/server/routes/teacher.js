@@ -367,15 +367,24 @@ router.post("/previousexam/publish", async (req, res, next) => {
   let exam = await Exams.findOne({ _id: req.body.exam });
   let subject = "Yuvashiksha Exam Result";
   let body = "";
+  let bodyParent = "";
 
   for (let answer of answers) {
     let student = await Users.findOne({ _id: answer.student });
 
     if (!isNaN(parseInt(answer.totalMarks))) {
+      bodyParent = `Dear parent of ${student.name}, 
+      Your ward  ${student.name}'s exam result for the ${exam.subject} subject of your ${exam.examName} is published.
+      Your total marks in the exam is: ${answer.totalMarks} / ${exam.totalMarks}. `;
+
       body = `Dear ${student.name},
     The result for the ${exam.subject} subject of your ${exam.examName} is published.
     Your total marks in the exam is: ${answer.totalMarks} / ${exam.totalMarks}.`;
     } else {
+      bodyParent = `Dear parent of ${student.name}, 
+      Your ward  ${student.name}'s exam result for the ${exam.subject} subject of  ${exam.examName} is published.
+      Unfortunately teacher did not evaluated your answer paper. 
+      Please contact teacher for more info `;
       body = `Dear ${student.name},
       The result for the ${exam.subject} subject of  ${exam.examName} is published.
       Unfortunately your teacher did not evaluated your answer paper. 
@@ -383,6 +392,7 @@ router.post("/previousexam/publish", async (req, res, next) => {
     }
 
     sendMail(student.email, subject, body);
+    sendMail(student.parentEmail, subject, bodyParent);
   }
 
   res.statusCode = 200;
