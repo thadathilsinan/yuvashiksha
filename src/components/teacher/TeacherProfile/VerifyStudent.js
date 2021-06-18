@@ -17,8 +17,14 @@ class VerifyStudent extends Component {
 
   //Get the list of students in the class
   getStudentData = () => {
+    //Loading Screen
+    window.showLoading();
+
     http("GET", "/teacher/profile/verifystudents", {}, (res) => {
       if (res.status == 200) {
+        //hiding loadingScreen
+        window.hideLoading();
+
         this.setState({ studentData: res.data }, () => {
           this.setUpStudentList();
         });
