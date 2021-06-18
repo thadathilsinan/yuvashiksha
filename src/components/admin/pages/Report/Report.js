@@ -199,6 +199,9 @@ class Report extends React.Component {
       }
     }
 
+    //Loading Screen
+    window.showLoading();
+
     http(
       "POST",
       "/admin/report/getdetails",
@@ -215,6 +218,9 @@ class Report extends React.Component {
       (res) => {
         if (res.status == 200) {
           this.setState({ printData: res.data }, () => {
+            //hiding loadingScreen
+            window.hideLoading();
+
             this.openPrintPreview();
           });
         } else {

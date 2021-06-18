@@ -16,6 +16,11 @@ import Images from "./components/teacher/Evaluation/Images/Images";
 import Loading from "./components/ui-elements/loading.js/Loading";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { showLoading: false };
+  }
+
   componentDidMount() {
     //Replacing system default alert with custom alert
     window.alert = (text) => {
@@ -32,6 +37,14 @@ class App extends React.Component {
         </div>`
       );
     };
+
+    //Loading Screen
+    window.showLoading = () => {
+      this.setState({ showLoading: true });
+    };
+    window.hideLoading = () => {
+      this.setState({ showLoading: false });
+    };
   }
 
   render() {
@@ -39,6 +52,8 @@ class App extends React.Component {
       <BrowserRouter>
         <Provider store={store}>
           <div>
+            {this.state.showLoading ? <Loading /> : null}
+
             {/* Routes of the app */}
             <Route path="/" component={LoginRoute} />
             <Route path="/student" component={StudentMain} />
@@ -46,9 +61,7 @@ class App extends React.Component {
             <Route path="/admin" component={AdminMain} />
 
             {/* //Test route for development purposes */}
-            <Route path="/test">
-              <Loading />
-            </Route>
+            <Route path="/test"></Route>
           </div>
         </Provider>
       </BrowserRouter>
