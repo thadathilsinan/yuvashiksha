@@ -223,8 +223,14 @@ class Teacher extends Component {
     }
 
     //SETTING LOCALSTORAGE VALUE
-    localStorage.setItem("class", this.classRef.current.value);
-    localStorage.setItem("batch", this.batchRef.current.value);
+    localStorage.setItem(
+      "class",
+      this.classRef.current ? this.classRef.current.value : null
+    );
+    localStorage.setItem(
+      "batch",
+      this.batchRef.current ? this.batchRef.current.value : null
+    );
   };
 
   //When an exam list item is clicked

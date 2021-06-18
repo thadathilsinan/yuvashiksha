@@ -19,3 +19,14 @@
   box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
   color: white;
 }
+#navBack {
+  background: #001ec7;
+  border-style: none;
+  color: white;
+}
+#left-nav-image {
+  display: flex;
+}
+#nav-image {
+  font-size: 1.5rem;
+}

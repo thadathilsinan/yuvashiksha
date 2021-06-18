@@ -107,6 +107,8 @@ class Evaluation extends Component {
   //Open images captured
   openImages = () => {
     this.setState({ showImages: true });
+    //Loading Screen
+    window.showLoading();
   };
 
   //Close images

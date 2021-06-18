@@ -18,8 +18,9 @@ import Loading from "./components/ui-elements/loading.js/Loading";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { showLoading: false };
   }
+
+  loadingRef = React.createRef();
 
   componentDidMount() {
     //Replacing system default alert with custom alert
@@ -40,31 +41,46 @@ class App extends React.Component {
 
     //Loading Screen
     window.showLoading = () => {
-      this.setState({ showLoading: true });
+      this.loadingRef.current.style.display = "block";
     };
     window.hideLoading = () => {
-      this.setState({ showLoading: false });
+      this.loadingRef.current.style.display = "none";
     };
   }
 
   render() {
     return (
-      <BrowserRouter>
-        <Provider store={store}>
-          <div>
-            {this.state.showLoading ? <Loading /> : null}
+      <div>
+        <div
+          ref={this.loadingRef}
+          style={{ display: "none", height: "100vh", position: "absolute" }}
+        >
+          <iframe
+            src="../preloader/preload.html"
+            style={{
+              height: "100vh",
+              width: "100vw",
+              position: "absolute",
+              "z-index": "100000",
+            }}
+          />
+        </div>
 
-            {/* Routes of the app */}
-            <Route path="/" component={LoginRoute} />
-            <Route path="/student" component={StudentMain} />
-            <Route path="/teacher" component={TeacherMain} />
-            <Route path="/admin" component={AdminMain} />
+        <BrowserRouter>
+          <Provider store={store}>
+            <div>
+              {/* Routes of the app */}
+              <Route path="/" component={LoginRoute} />
+              <Route path="/student" component={StudentMain} />
+              <Route path="/teacher" component={TeacherMain} />
+              <Route path="/admin" component={AdminMain} />
 
-            {/* //Test route for development purposes */}
-            <Route path="/test"></Route>
-          </div>
-        </Provider>
-      </BrowserRouter>
+              {/* //Test route for development purposes */}
+              <Route path="/test"></Route>
+            </div>
+          </Provider>
+        </BrowserRouter>
+      </div>
     );
   }
 }

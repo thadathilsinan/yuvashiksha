@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import http from "../../../../shared/http";
 import NavBar from "../../../ui-elements/navBar/NavBar";
 import "./Images.css";
-
+import { Button } from "react-bootstrap";
+import Loading from "../../../ui-elements/loading.js/Loading";
 class Images extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +23,9 @@ class Images extends Component {
       (res) => {
         if (res.status == 200) {
           this.setState({ images: res.data }, () => {
+            //hiding loadingScreen
+            window.hideLoading();
+
             this.renderImages();
           });
         }
@@ -48,7 +52,26 @@ class Images extends Component {
       <div>
         <NavBar>
           {{
-            left: <h4>IMAGES</h4>,
+            left: (
+              <div id="left-nav-image">
+                {" "}
+                <Button
+                  variant="primary"
+                  className="btn btn-primary mr-3"
+                  id="navBack"
+                  size="sm"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Go back"
+                  onClick={() => {
+                    window.history.back();
+                  }}
+                >
+                  {"<"}
+                </Button>
+                <span id="nav-image">IMAGES</span>
+              </div>
+            ),
             right: (
               <button className="btn-close" onClick={this.props.close}>
                 CLOSE
