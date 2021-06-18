@@ -14,8 +14,12 @@ class Messagelist extends React.Component {
 
   //Get messages form server
   getMessages = () => {
+    //Loading Screen
+    window.showLoading();
     http("GET", "/admin/messages", {}, (res) => {
       if (res.status == 200) {
+        //hiding loadingScreen
+        window.hideLoading();
         let replayedMessages = [];
         let messages = [];
 
