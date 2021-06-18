@@ -87,6 +87,9 @@ class Evaluation extends Component {
 
   //Get answers from DB
   getAnswers = () => {
+    //Loading Screen
+    window.showLoading();
+
     http(
       "POST",
       "/teacher/previousexam/evaluate/getanswers",
@@ -96,6 +99,9 @@ class Evaluation extends Component {
       },
       (res) => {
         if (res.status == 200) {
+          //hiding loadingScreen
+          window.hideLoading();
+
           this.setState({ answers: res.data }, () => {
             this.parseQuestions();
           });

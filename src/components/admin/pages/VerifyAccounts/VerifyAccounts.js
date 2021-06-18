@@ -14,8 +14,14 @@ export default class VerifyAccounts extends Component {
 
   //Get users data from the server
   getUserData = () => {
+    //Loading Screen
+    window.showLoading();
+
     http("GET", "/admin/verifyaccount", null, (res) => {
       if (res.status == 200) {
+        //hiding loadingScreen
+        window.hideLoading();
+
         this.setState({ userData: res.data });
       } else {
         alert("Users data return failed");

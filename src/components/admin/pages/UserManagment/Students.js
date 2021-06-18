@@ -146,10 +146,12 @@ export default class Students extends Component {
   getUserData = () => {
     //Loading Screen
     window.showLoading();
+
     http("GET", "/admin/usermanagement/student", null, (res) => {
       if (res.status == 200) {
         //hiding loadingScreen
         window.hideLoading();
+
         this.setState({ userData: res.data });
       } else {
         alert("Error during fetching student data from server");

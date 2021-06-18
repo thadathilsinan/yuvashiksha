@@ -30,12 +30,18 @@ class PreviousExam extends Component {
 
   //Get the list of student who attended the exam
   getStudentList = () => {
+    //Loading Screen
+    window.showLoading();
+
     http(
       "POST",
       "/teacher/previousexam/getstudents",
       { exam: this.props.exam._id },
       (res) => {
         if (res.status == 200) {
+          //hiding loadingScreen
+          window.hideLoading();
+
           this.setState({ studentData: res.data }, () => {
             this.setupStudentList();
           });
