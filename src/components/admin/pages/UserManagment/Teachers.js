@@ -165,11 +165,17 @@ export default class Teachers extends Component {
   //Search
   search = (searchText) => {
     if (searchText) {
+      //Loading Screen
+      window.showLoading();
+
       http(
         "POST",
         "/admin/usermanagement/teacher/search",
         { searchString: searchText },
         (res) => {
+          //hiding loadingScreen
+          window.hideLoading();
+
           this.setState({ userData: res.data });
         }
       );
