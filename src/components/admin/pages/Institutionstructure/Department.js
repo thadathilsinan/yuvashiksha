@@ -24,9 +24,16 @@ class Departments extends React.Component {
   departmentNewName = React.createRef(); //for editing department name
 
   getDepartments = () => {
+    //Loading Screen
+    window.showLoading();
+
     //getting department data from db
+
     http("GET", "/admin/institutionstructure/department", {}, async (res) => {
       let departments = { ...res.data };
+
+      //hiding loadingScreen
+      window.hideLoading();
 
       //This will return options for the <select> to select HOD for each department
       let getHodOptions = (department) => {

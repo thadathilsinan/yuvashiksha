@@ -25,12 +25,18 @@ class ClassBatch extends Component {
 
   getClasses = () => {
     //getting class data from db
+    //Loading Screen
+    window.showLoading();
+
     http(
       "POST",
       "/admin/institutionstructure/class",
       { department: this.props.match.params.departmentId },
       async (res) => {
         let classes = [...res.data];
+
+        //hiding loadingScreen
+        window.hideLoading();
 
         //This will return options for the <select> to select HOD for each department
         let getTeacherOptions = (cls) => {
