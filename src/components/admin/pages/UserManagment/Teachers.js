@@ -149,8 +149,12 @@ export default class Teachers extends Component {
 
   //Get teacher user info from server
   getUserData = () => {
+    //Loading Screen
+    window.showLoading();
     http("GET", "/admin/usermanagement/teacher", null, (res) => {
       if (res.status == 200) {
+        //hiding loadingScreen
+        window.hideLoading();
         this.setState({ userData: res.data });
       } else {
         alert("Error during fetching teacher data from server");
