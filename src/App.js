@@ -13,6 +13,7 @@ import React from "react";
 import $ from "jquery";
 import StudentMain from "./components/student/StudentMain";
 import Images from "./components/teacher/Evaluation/Images/Images";
+import Loading from "./components/ui-elements/loading.js/Loading";
 
 class App extends React.Component {
   componentDidMount() {
@@ -46,7 +47,7 @@ class App extends React.Component {
 
             {/* //Test route for development purposes */}
             <Route path="/test">
-              <Images />
+              <Loading />
             </Route>
           </div>
         </Provider>
