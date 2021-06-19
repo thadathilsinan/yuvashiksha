@@ -7,7 +7,7 @@ class VerifyOtp extends Component {
     super(props);
     this.state = {
       time: {},
-      seconds: 60 * 5,
+      seconds: 20,
       resendEnable: false,
       otp: "",
       otpError: null,
@@ -39,6 +39,11 @@ class VerifyOtp extends Component {
     this.setState({ time: timeLeftVar });
   }
 
+  resetTimer() {
+    let timeLeftVar = this.secondsToTime(20);
+    this.setState({ time: timeLeftVar, resendEnable: false });
+  }
+
   startTimer() {
     if (this.timer == 0 && this.state.seconds > 0) {
       this.timer = setInterval(this.countDown, 1000);
@@ -64,6 +69,7 @@ class VerifyOtp extends Component {
     http("POST", "/register/resendotp", {}, (res) => {
       if (res.status == 200) {
         console.log("OTP resend");
+        this.resetTimer();
       } else {
         alert(
           `Error ${res.status} during otp resend\nError message logged in console.`
