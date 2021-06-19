@@ -248,6 +248,7 @@ class PreviousExam extends Component {
             next={this.nextStudent}
             prev={this.prevStudent}
             user={this.props.user}
+            back={this.getStudentList}
           />
         </Route>
       </>

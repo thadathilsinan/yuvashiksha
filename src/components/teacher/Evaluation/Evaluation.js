@@ -212,6 +212,7 @@ class Evaluation extends Component {
                   title="Go back"
                   onClick={() => {
                     window.history.back();
+                    this.props.back();
                   }}
                 >
                   {"<"}
