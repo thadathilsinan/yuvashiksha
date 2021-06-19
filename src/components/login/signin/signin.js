@@ -49,11 +49,15 @@ class Signin extends Component {
   login = () => {
     if (this.state.username.length > 0 && this.state.password.length > 0) {
       this.setState({ erroMessage: null });
+      //Loading Screen
+      window.showLoading();
       http(
         "POST",
         "/login",
         { username: this.state.username, password: this.state.password },
         (res) => {
+          //hiding loadingScreen
+          window.hideLoading();
           if (res.status == 200) {
             alert("Login Successful");
 
