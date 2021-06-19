@@ -7,3 +7,6 @@
   border: 2px solid black;
   overflow: auto;
 }
+.text-question {
+  white-space: pre-line;
+}

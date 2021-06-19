@@ -48,7 +48,10 @@ class Evaluation extends Component {
           questionNumber++;
 
           //Getting the answer written by the student
-          if (this.state.answers.answers[question.id]) {
+          if (
+            this.state.answers.answers &&
+            this.state.answers.answers[question.id]
+          ) {
             answer = this.state.answers.answers[question.id].answer;
             if (this.state.answers.answers[question.id].canvas) {
               canvas = this.state.answers.answers[question.id].canvas;
@@ -212,7 +215,9 @@ class Evaluation extends Component {
                   title="Go back"
                   onClick={() => {
                     window.history.back();
-                    this.props.back();
+                    if (this.props.back) {
+                      this.props.back();
+                    }
                   }}
                 >
                   {"<"}

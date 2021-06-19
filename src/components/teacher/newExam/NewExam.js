@@ -120,7 +120,7 @@ class NewExam extends Component {
   //Add a new Text into questions
   addNewText = () => {
     let text = this.newTextRef.current.value;
-
+    console.log(text);
     if (text) {
       this.setState({
         questions: [
@@ -936,7 +936,7 @@ class NewExam extends Component {
               <Col className="mt-2">
                 <Form.Label className="text-dark">EXAM NAME</Form.Label>
               </Col>
-              <Col >
+              <Col>
                 <Form.Control
                   ref={this.examNameRef}
                   className="text-box"
@@ -1179,13 +1179,13 @@ class NewExam extends Component {
               <label className="black mr-3" for="mcq">
                 Enter Question:
               </label>
-              <input
+              <textarea
                 type="text"
                 name="short"
                 id="short"
                 ref={this.shortQuestionRef}
                 className="mr-3 form-control from-control-lg"
-              ></input>
+              ></textarea>
               <br />
               <label className="black" for="mcq">
                 Mark:
@@ -1231,13 +1231,13 @@ class NewExam extends Component {
               <label className="black mr-3" for="mcq">
                 Enter Question:
               </label>
-              <input
+              <textarea
                 type="text"
                 name="short"
                 id="short"
                 ref={this.essayQuestionRef}
                 className="mr-3 form-control from-control-lg"
-              ></input>
+              ></textarea>
               <br />
               <label className="black" for="mcq">
                 Mark:

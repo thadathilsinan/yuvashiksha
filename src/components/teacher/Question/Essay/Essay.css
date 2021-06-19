@@ -11,3 +11,6 @@
 #essayQuestion {
   z-index: 1;
 }
+.text-question {
+  white-space: pre-line;
+}

@@ -77,8 +77,11 @@ class Mcq extends Component {
           ) : null}
           {this.props.question.marks} Mark(s)
         </div>
-        {this.props.index ? this.props.index + ". " : null}
-        {this.props.question.question}
+
+        <div className="text-question">
+          {this.props.index ? this.props.index + ". " : null}
+          {this.props.question.question}
+        </div>
 
         {this.props.question.canvas ? (
           <div className="questionCanvas">
