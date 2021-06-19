@@ -3,6 +3,7 @@
   padding: 0%;
   box-sizing: border-box;
   z-index: 300;
+  background: #e0e0e0;
 }
 
 #loading {
@@ -170,6 +171,7 @@ h2 {
   position: absolute;
   border-radius: 110px;
   background-color: white;
+  background: transparent;
   width: 300px;
   height: 100px;
   z-index: -1;
