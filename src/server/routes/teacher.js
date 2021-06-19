@@ -274,10 +274,15 @@ router.get("/profile/verifystudents", async (req, res, next) => {
 router.post("/profile/verifystudents/accept", async (req, res, next) => {
   let student = await Users.findOne({ _id: req.body.userId });
 
+  let body = "";
+  let subject = "Yuvashiksha Account verified";
   //Change the account status
   student.accountStatus = "ok";
   await student.save();
-
+  //send the mailBody
+  body = `Dear ${student.name},
+  Your Account has been verified successfully by teacher`;
+  sendMail(student.email, subject, body);
   res.statusCode = 200;
   res.end("Account verified successfully");
 });
@@ -285,11 +290,15 @@ router.post("/profile/verifystudents/accept", async (req, res, next) => {
 //reject a student account
 router.post("/profile/verifystudents/reject", async (req, res, next) => {
   let student = await Users.findOne({ _id: req.body.userId });
-
+  let body = "";
+  let subject = "Yuvashiksha Account has been rejected";
   //Change the account status
   student.accountStatus = "rejected";
   await student.save();
-
+  //send the mailBody
+  body = `Dear ${student.name},
+  Your Account has been reject  by teacher `;
+  sendMail(student.email, subject, body);
   res.statusCode = 200;
   res.end("Account rejected successfully");
 });
