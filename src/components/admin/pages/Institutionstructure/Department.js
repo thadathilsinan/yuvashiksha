@@ -154,6 +154,8 @@ class Departments extends React.Component {
         { departmentName },
         (res) => {
           if (res.status == 200) {
+            this.getDepartments();
+            window.$("#adddept").modal("hide");
             alert("Department addedd successfully");
           } else {
             alert(res.data);
@@ -179,6 +181,8 @@ class Departments extends React.Component {
         "/admin/institutionstructure/department/edit",
         { departmentId: this.departmentToEdit, newName },
         (res) => {
+          this.getDepartments();
+          window.$("#editdept").modal("hide");
           alert(res.data);
         }
       );
@@ -194,6 +198,8 @@ class Departments extends React.Component {
         "/admin/institutionstructure/department/remove",
         { departmentId },
         (res) => {
+          this.getDepartments();
+
           alert(res.data);
         }
       );

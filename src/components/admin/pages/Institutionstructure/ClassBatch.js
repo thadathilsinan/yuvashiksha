@@ -127,15 +127,15 @@ class ClassBatch extends Component {
                       >
                         <AiOutlineEdit />
                       </Button>{" "}
-                      <Button
-                        className="btn-delete"
-                        onClick={() => {
-                          this.removeClass(Class.id);
-                        }}
-                      >
-                        <AiOutlineDelete />
-                      </Button>
-                    </a>
+                    </a>{" "}
+                    <Button
+                      className="btn-delete"
+                      onClick={() => {
+                        this.removeClass(Class.id);
+                      }}
+                    >
+                      <AiOutlineDelete />
+                    </Button>
                   </div>
                 ),
               }}
@@ -165,6 +165,8 @@ class ClassBatch extends Component {
         },
         (res) => {
           if (res.status == 200) {
+            this.getClasses();
+            window.$("#addclass").modal("hide");
             alert("Class addedd successfully");
           } else {
             alert(res.data);
@@ -191,6 +193,8 @@ class ClassBatch extends Component {
         "/admin/institutionstructure/class/edit",
         { classId: this.classToEdit, newName, newBatch },
         (res) => {
+          this.getClasses();
+          window.$("#editclass").modal("hide");
           alert(res.data);
         }
       );
@@ -206,6 +210,7 @@ class ClassBatch extends Component {
         "/admin/institutionstructure/class/remove",
         { classId },
         (res) => {
+          this.getClasses();
           alert(res.data);
         }
       );

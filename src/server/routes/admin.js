@@ -312,7 +312,7 @@ router.post("/institutionstructure/class/remove", async (req, res, next) => {
   let Class = await Classes.findOne({ _id: req.body.classId });
 
   if (Class) {
-    let exams = await Exams.find({ Class: Class._id });
+    let exams = await Exam.find({ Class: Class._id });
 
     //removing exams
     for (let exam of exams) {
