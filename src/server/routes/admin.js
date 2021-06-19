@@ -312,6 +312,18 @@ router.post("/institutionstructure/class/remove", async (req, res, next) => {
   let Class = await Classes.findOne({ _id: req.body.classId });
 
   if (Class) {
+    let exams = await Exams.find({ Class: Class._id });
+
+    //removing exams
+    for (let exam of exams) {
+      let answer = await Answers.findOne({ exam: exam._id });
+      answer.remove();
+      exam.remove();
+    }
+
+    //removing students
+    await Users.deleteMany({ class: Class._id });
+
     await Class.remove();
 
     res.statusCode = 200;
