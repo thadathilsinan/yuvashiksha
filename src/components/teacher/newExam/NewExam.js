@@ -911,9 +911,21 @@ class NewExam extends Component {
       );
     }
   };
+  //arrow key
+  arrowKeyEventListener = () => {
+    window.addEventListener("keyup", (e) => {
+      let keycode = e.keyCode;
+      if (keycode == 38) {
+        this.questionUp();
+      } else if (keycode == 40) {
+        this.questionDown();
+      }
+    });
+  };
 
   componentDidMount() {
     this.getClasses();
+    this.arrowKeyEventListener();
   }
 
   render() {
