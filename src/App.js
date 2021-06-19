@@ -9,7 +9,7 @@ import AdminMain from "./components/admin/AdminMain";
 
 import { store } from "./store/store";
 import React from "react";
-
+import http from "./shared/http";
 import $ from "jquery";
 import StudentMain from "./components/student/StudentMain";
 import Images from "./components/teacher/Evaluation/Images/Images";
@@ -18,9 +18,31 @@ import Loading from "./components/ui-elements/loading.js/Loading";
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
   }
 
   loadingRef = React.createRef();
+
+  //check if system time is correct or notifier
+  checkSystemTime = () => {
+    http("GET", "/app/time", {}, (res) => {
+      let currentTime = new Date();
+      let offsetTime = 300000;
+      let timeDiffrence = currentTime.getTime() - res.data.getTime();
+
+      if (timeDiffrence >= offsetTime) {
+        this.setState(
+          {
+            errorMessage:
+              "Cannot launch the application please ensure  your System Time is correct.",
+          },
+          () => {
+            window.location.href = "http://localhost:3000/error";
+          }
+        );
+      }
+    });
+  };
 
   componentDidMount() {
     //Replacing system default alert with custom alert
@@ -46,6 +68,9 @@ class App extends React.Component {
     window.hideLoading = () => {
       this.loadingRef.current.style.display = "none";
     };
+
+    //check timer
+    this.checkSystemTime();
   }
 
   render() {
@@ -74,6 +99,11 @@ class App extends React.Component {
               <Route path="/student" component={StudentMain} />
               <Route path="/teacher" component={TeacherMain} />
               <Route path="/admin" component={AdminMain} />
+              <Route path="/error">
+                <h1>
+                  <center>{this.state.errorMessage}</center>
+                </h1>
+              </Route>
 
               {/* //Test route for development purposes */}
               <Route path="/test"></Route>

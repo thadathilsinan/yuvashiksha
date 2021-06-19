@@ -14,6 +14,7 @@ let adminRouter = require("./routes/admin");
 let teacherRoute = require("./routes/teacher");
 let uploadRouter = require("./routes/upload");
 const studentRouter = require("./routes/student");
+const appRouter = require("./routes/app");
 const bodyParser = require("body-parser");
 
 mongoose.connect(
@@ -77,6 +78,7 @@ app.use("/admin", adminRouter);
 app.use("/teacher", teacherRoute);
 app.use("/upload", uploadRouter);
 app.use("/student", studentRouter);
+app.use("/app", appRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
