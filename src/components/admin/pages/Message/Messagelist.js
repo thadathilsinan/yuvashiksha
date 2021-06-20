@@ -45,11 +45,11 @@ class Messagelist extends React.Component {
 
   render() {
     let messages = this.state.messages.map((message) => {
-      return <Message message={message} />;
+      return <Message message={message} refresh={this.getMessages} />;
     });
 
     let replayed = this.state.replayedMessages.map((message) => {
-      return <Message message={message} replayed />;
+      return <Message message={message} refresh={this.getMessages} replayed />;
     });
 
     return (

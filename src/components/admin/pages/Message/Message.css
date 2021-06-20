@@ -10,3 +10,13 @@
 #btn-replay {
   background-color: green;
 }
+.btn-delete {
+  border-radius: 50px;
+
+  border: none;
+  background: #d93025;
+  box-shadow: 20px 20px 50px #e6e6e6, -20px -20px 50px #ffffff;
+}
+.btn-delete:hover {
+  background-color: red;
+}

@@ -41,7 +41,11 @@ class VerifyOtp extends Component {
 
   resetTimer() {
     let timeLeftVar = this.secondsToTime(20);
-    this.setState({ time: timeLeftVar, resendEnable: false });
+    this.setState({ seconds: 20 }, () => {
+      this.setState({ time: timeLeftVar, resendEnable: false }, () => {
+        this.startTimer();
+      });
+    });
   }
 
   startTimer() {

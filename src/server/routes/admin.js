@@ -394,6 +394,19 @@ router.post("/messages/replay", async (req, res, next) => {
   }
 });
 
+//delete message
+router.post("/messages/delete", async (req, res, next) => {
+  let message = await BugReports.findOne({ _id: req.body.message });
+  if (message) {
+    await message.remove();
+    res.statusCode = 200;
+    res.end("Message deleted successfully");
+  } else {
+    res.statusCode = 203;
+    res.end("Message not found");
+  }
+});
+
 //Return User account details which are not activated yet
 router.get("/verifyaccount", async function (req, res, next) {
   let responseObject = [];
