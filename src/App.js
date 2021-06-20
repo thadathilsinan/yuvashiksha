@@ -39,6 +39,7 @@ class App extends React.Component {
               "Cannot launch the application please ensure  your System Time is correct.",
           },
           () => {
+            if(window.location.href != "http://localhost:3000/error" )
             window.location.href = "http://localhost:3000/error";
           }
         );
