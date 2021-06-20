@@ -46,16 +46,18 @@ class Messagecontent extends Component {
             <th scope="col"></th>
             <tr>
               <td>FROM:</td>
-              <td>{this.props.message.userEmail}</td>
+              <td>
+                {this.props.message ? this.props.message.userEmail : null}
+              </td>
             </tr>
             <tr>
               <td>DATE:</td>
-              <td>{this.props.message.date}</td>
+              <td>{this.props.message ? this.props.message.date : null}</td>
             </tr>
           </table>
           <div className="mt-4">
             Message : <br />
-            {this.props.message.message}
+            {this.props.message ? this.props.message.message : null}
           </div>
           <form>
             <textarea
@@ -66,7 +68,7 @@ class Messagecontent extends Component {
               cols="90"
               ref={this.replayMessage}
             >
-              {this.props.message.reply}
+              {this.props.message ? this.props.message.reply : null}
             </textarea>
             <div className="text-right">
               <Button
