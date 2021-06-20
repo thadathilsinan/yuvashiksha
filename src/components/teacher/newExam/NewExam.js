@@ -104,6 +104,7 @@ class NewExam extends Component {
 
   //double click sensitivity
   clickInterval = 0;
+  previousSelectedQuestion = null;
 
   //This is used when editiong an existing exam that is already scheduled
   setUpProps = () => {
@@ -196,10 +197,16 @@ class NewExam extends Component {
 
     this.setState({ selectedQuestion: questionElement.id }, () => {
       //double click
-      if (timeDiffrence <= 1000 && timeDiffrence > 0) {
+      if (
+        timeDiffrence <= 1000 &&
+        timeDiffrence > 0 &&
+        this.previousSelectedQuestion == this.state.selectedQuestion
+      ) {
         this.editSelectedQuestion();
       }
     });
+
+    this.previousSelectedQuestion = this.state.selectedQuestion;
   };
 
   //Remove question from array
