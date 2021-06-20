@@ -25,7 +25,7 @@ export default class Students extends Component {
         (res) => {
           if (res.status == 200) {
             alert("Student account deleted successfully");
-
+            this.getUserData();
             document.getElementById(item.id).style.display = "none";
           } else {
             alert(res.data);
@@ -48,7 +48,9 @@ export default class Students extends Component {
           (res) => {
             if (res.status == 200) {
               alert("Student Account disabled Successfully");
+
               this.changeToEnable(item);
+              this.getUserData();
             } else {
               alert(res.data);
             }
@@ -66,7 +68,9 @@ export default class Students extends Component {
           (res) => {
             if (res.status == 200) {
               alert("Student Account enabled Successfully");
+
               this.changeToDisable(item);
+              this.getUserData();
             } else {
               alert(res.data);
             }

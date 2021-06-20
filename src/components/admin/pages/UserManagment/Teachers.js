@@ -25,7 +25,7 @@ export default class Teachers extends Component {
         (res) => {
           if (res.status == 200) {
             alert("Teacher account deleted successfully");
-
+            this.getUserData();
             document.getElementById(item.id).style.display = "none";
           } else {
             alert(res.data);
@@ -49,6 +49,7 @@ export default class Teachers extends Component {
             if (res.status == 200) {
               alert("Teacher Account disabled Successfully");
               this.changeToEnable(item);
+              this.getUserData();
             } else {
               alert(res.data);
             }
@@ -67,6 +68,7 @@ export default class Teachers extends Component {
             if (res.status == 200) {
               alert("Teacher Account enabled Successfully");
               this.changeToDisable(item);
+              this.getUserData();
             } else {
               alert(res.data);
             }
