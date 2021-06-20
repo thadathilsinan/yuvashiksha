@@ -102,6 +102,9 @@ class NewExam extends Component {
   classRef = React.createRef();
   batchRef = React.createRef();
 
+  //double click sensitivity
+  clickInterval = 0;
+
   //This is used when editiong an existing exam that is already scheduled
   setUpProps = () => {
     if (this.props.exam) {
@@ -178,6 +181,12 @@ class NewExam extends Component {
 
   //select a particular question (Called inside <Question/>)
   selectQuestion = (event) => {
+    //double click
+    let currentTime = new Date().getTime();
+    let timeDiffrence = currentTime - this.clickInterval;
+
+    this.clickInterval = new Date().getTime();
+
     let questionElement = null;
 
     //SELECTING PARENT QUESTION ELEMENT
@@ -185,7 +194,12 @@ class NewExam extends Component {
       if ($(element).hasClass("question")) questionElement = element;
     }
 
-    this.setState({ selectedQuestion: questionElement.id });
+    this.setState({ selectedQuestion: questionElement.id }, () => {
+      //double click
+      if (timeDiffrence <= 1000 && timeDiffrence > 0) {
+        this.editSelectedQuestion();
+      }
+    });
   };
 
   //Remove question from array
