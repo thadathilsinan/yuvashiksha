@@ -16,6 +16,7 @@ let uploadRouter = require("./routes/upload");
 const studentRouter = require("./routes/student");
 const appRouter = require("./routes/app");
 const bodyParser = require("body-parser");
+const startNotification = require("./functions/notification");
 
 mongoose.connect(
   "mongodb+srv://yuvashiksha:yuvashiksha@yuvashilsha.y1gzh.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
@@ -79,6 +80,9 @@ app.use("/teacher", teacherRoute);
 app.use("/upload", uploadRouter);
 app.use("/student", studentRouter);
 app.use("/app", appRouter);
+
+//System notifiaction
+startNotification();
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

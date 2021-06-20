@@ -8,6 +8,7 @@ var transporter = nodemailer.createTransport({
   },
 });
 
+console.log("Starting");
 let sendMail = (destination, subject, body) => {
   let mailOptions = {
     from: "bcaproject2021@gmail.com",

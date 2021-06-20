@@ -28,6 +28,8 @@ class App extends React.Component {
     http("GET", "/app/time", {}, (res) => {
       let currentTime = new Date();
       let offsetTime = 300000;
+      console.log(res.data);
+
       let timeDiffrence = currentTime.getTime() - res.data.getTime();
 
       if (timeDiffrence >= offsetTime) {
