@@ -68,6 +68,17 @@ router.post("/newexam", async (req, res, next) => {
     //Saving new Exam
     await exam.save();
 
+    //Email send
+    let students = await Users.find({class:exam.Class});
+    let subject = "Exam scheduled";
+
+    for(let student of students){
+      let body = `Dear ${student.name},
+            Your ${exam.subject}  ${exam.examName} has been scheduled on ${exam.date} from ${exam.from} to ${exam.to},
+            Be prepared for your exam ! All  the very best ${student.name}`;
+        sendMail(student.email, subject, body); 
+    }
+
     res.statusCode = 200;
     res.end("Exam successfully created");
   } else {
@@ -101,6 +112,17 @@ router.post("/editexam", async (req, res, next) => {
 
       //Saving new Exam
       await exam.save();
+
+      //Email send
+    let students = await Users.find({class:exam.Class});
+    let subject = "Exam rescheduled";
+
+    for(let student of students){
+      let body = `Dear ${student.name},
+            Your ${exam.subject}  ${exam.examName} has been rescheduled to ${exam.date} from ${exam.from} to ${exam.to},
+            Be prepared for your exam ! All  the very best ${student.name}`;
+        sendMail(student.email, subject, body); 
+    }
 
       res.statusCode = 200;
       res.end("Exam successfully edited");
