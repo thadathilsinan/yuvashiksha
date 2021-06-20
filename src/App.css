@@ -13,7 +13,7 @@
 
   animation: fadealert 2s 1;
   animation-fill-mode: forwards;
-  animation-delay: 3s;
+  animation-delay: 1s;
 }
 
 body {

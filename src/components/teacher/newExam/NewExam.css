@@ -73,6 +73,8 @@ h5 {
 }
 
 #navBarDown {
+  position: relative;
+  left: 35px;
   border-radius: 35px;
   border-style: none;
   background: #001ec7;
@@ -110,6 +112,7 @@ h5 {
 }
 
 #navSuccess {
+  margin-right: 25px;
   border-radius: 35px;
   border-style: none;
   background: #2d8b51;

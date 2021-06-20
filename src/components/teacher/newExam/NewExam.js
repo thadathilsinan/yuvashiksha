@@ -5,10 +5,10 @@ import {
   BsFillCaretDownFill,
   BsFillCaretUpFill,
   BsPencil,
-  BsDash,
   BsCheck,
   BsPlus,
 } from "react-icons/bs";
+import { AiOutlineDelete } from "react-icons/ai";
 import { Button, Modal, Form, Row, Col, Dropdown } from "react-bootstrap";
 import configureDialogBox from "../../../shared/dailogBox";
 import $ from "jquery";
@@ -218,6 +218,12 @@ class NewExam extends Component {
 
   //Change order -1
   questionDown = () => {
+    //checking question is selected or not
+    if (!this.state.selectedQuestion) {
+      alert("Please select a question");
+      return;
+    }
+
     let questions = [...this.state.questions];
     const max = questions.length - 1;
 
@@ -238,6 +244,12 @@ class NewExam extends Component {
 
   //Change order +1
   questionUp = () => {
+    //checking question is selected or not
+    if (!this.state.selectedQuestion) {
+      alert("Please select a question");
+      return;
+    }
+
     let questions = [...this.state.questions];
 
     for (let i in questions) {
@@ -1388,7 +1400,7 @@ class NewExam extends Component {
                       <BsFillCaretUpFill />
                     </button>
                   </Col>
-                  <Col>
+                  {/* <Col>
                     <button
                       className="btn btn-light ml-3 "
                       id="navBarEdit"
@@ -1400,10 +1412,10 @@ class NewExam extends Component {
                     >
                       <BsPencil />
                     </button>
-                  </Col>
+                  </Col> */}
                   <Col>
                     <button
-                      className="btn btn-light ml-3 "
+                      className="btn btn-light  "
                       id="navBarDelete"
                       data-bs-toggle="tooltip"
                       data-bs-placement="bottom"
@@ -1411,7 +1423,7 @@ class NewExam extends Component {
                       disabled={this.state.selectedQuestion ? undefined : true}
                       onClick={this.removeQuestion}
                     >
-                      <BsDash />
+                      <AiOutlineDelete />
                     </button>
                   </Col>
                   <Col>
