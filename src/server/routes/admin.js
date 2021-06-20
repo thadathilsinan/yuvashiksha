@@ -415,6 +415,7 @@ router.get("/verifyaccount", async function (req, res, next) {
           department: departmentName.name,
         });
       }
+
       res.statusCode = 200;
       res.json(responseObject);
     })
@@ -423,8 +424,13 @@ router.get("/verifyaccount", async function (req, res, next) {
 
 //Accept a teacher account
 router.post("/verifyaccount/accept", (req, res, next) => {
+  let body = "";
+  let subject = "Yuvashiksha account verified";
   Users.findOneAndUpdate({ _id: req.body.userId }, { accountStatus: "ok" })
     .then((user) => {
+      body = `Dear ${user.name},
+  Your account has been verified successfully by Yuvashiskha`;
+      sendMail(user.email, subject, body);
       res.statusCode = 200;
       res.end("Successfully Verified");
     })
@@ -433,11 +439,16 @@ router.post("/verifyaccount/accept", (req, res, next) => {
 
 //Reject a teacher account
 router.post("/verifyaccount/reject", (req, res, next) => {
+  let body = "";
+  let subject = "Yuvashiksha account has been rejected";
   Users.findOneAndUpdate(
     { _id: req.body.userId },
     { accountStatus: "rejected" }
   )
     .then((user) => {
+      body = `Dear ${user.name},
+      Your account has been rejected by Yuvashiskha`;
+      sendMail(user.email, subject, body);
       res.statusCode = 200;
       res.end("Successfully Rejected");
     })
@@ -468,6 +479,7 @@ router.get("/usermanagement/teacher", (req, res, next) => {
 
         responseObject.push(newTeacher);
       }
+
       res.statusCode = 200;
       res.json(responseObject);
     })
@@ -478,12 +490,18 @@ router.get("/usermanagement/teacher", (req, res, next) => {
 
 //Disable a user account
 router.post("/usermanagement/disable", (req, res, next) => {
+  let body = "";
+  let subject = "Yuvashiksha Account has been disabled";
   Users.findOne({ _id: req.body.userId })
     .then(async (user) => {
       if (user) {
         user.accountStatus = "disabled";
 
         await user.save();
+        //sending mail
+        body = `Dear ${user.name},
+        Your Account has been verified successfully by yuvashiskha`;
+        sendMail(user.email, subject, body);
 
         res.statusCode = 200;
         res.end("Account disabled successfully");
@@ -531,13 +549,17 @@ router.get("/usermanagement/student", (req, res, next) => {
 
 //Enable a user account
 router.post("/usermanagement/enable", (req, res, next) => {
+  let body = "";
+  let subject = "Yuvashiksha Account has been enabled";
   Users.findOne({ _id: req.body.userId })
     .then(async (user) => {
       if (user) {
         user.accountStatus = "ok";
 
         await user.save();
-
+        body = `Dear ${user.name},
+        Your Yuvashiksha account has been  enabled`;
+        sendMail(user.email, subject, body);
         res.statusCode = 200;
         res.end("Account enabled successfully");
       } else {
@@ -550,10 +572,16 @@ router.post("/usermanagement/enable", (req, res, next) => {
 
 //Delete a user account
 router.post("/usermanagement/delete", async (req, res, next) => {
+  let body = "";
+  let subject = "Yuvashiksha Account has been deleted";
   let user = await Users.findOne({ _id: req.body.userId });
 
   if (user) {
     await user.remove();
+    //sending mail notification
+    body = `Dear ${user.name},
+    Your Yuvashiksha account has been deleted`;
+    sendMail(user.email, subject, body);
 
     res.statusCode = 200;
     res.end("Account removed successfully");
