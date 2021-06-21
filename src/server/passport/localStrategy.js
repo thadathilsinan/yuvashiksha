@@ -1,7 +1,9 @@
 const Users = require("../schema/Users");
-const Admin = require("../schema/Admin");
+
 const bcrypt = require("bcryptjs");
 const localStrategy = require("passport-local").Strategy;
+
+const config = require("../config");
 
 module.exports = function (passport) {
   passport.use(
@@ -10,11 +12,16 @@ module.exports = function (passport) {
       async (req, username, password, done) => {
         if (req.body.adminLogin) {
           //Admin account login
-          let admin = await Admin.findOne({ username, password });
 
-          if (admin) {
+          if (
+            username == config.adminUsername &&
+            password == config.adminPassword
+          ) {
             //Admin Login success
-            return done(null, { user: admin, accountType: "admin" });
+            return done(null, {
+              user: { username, password, accountType: "admin", id: 1 },
+              accountType: "admin",
+            });
           } else {
             //Login failed
             return done(null, false);
@@ -64,8 +71,11 @@ module.exports = function (passport) {
   });
   passport.deserializeUser((id, cb) => {
     if (id.accountType == "admin") {
-      Admin.findOne({ _id: id.id }, (err, user) => {
-        cb(null, id);
+      cb(null, {
+        username: config.adminUsername,
+        password: config.adminPassword,
+        accountType: "admin",
+        id: 1,
       });
     } else {
       Users.findOne({ _id: id }, (err, user) => {

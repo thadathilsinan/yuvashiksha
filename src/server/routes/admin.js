@@ -2,7 +2,7 @@ var express = require("express");
 const bodyParser = require("body-parser");
 
 //Importing required schemas
-const Admin = require("../schema/Admin");
+
 const Department = require("../schema/department");
 const Users = require("../schema/Users");
 const Classes = require("../schema/classes");
