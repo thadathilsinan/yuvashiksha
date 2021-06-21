@@ -18,14 +18,13 @@ const appRouter = require("./routes/app");
 const bodyParser = require("body-parser");
 const startNotification = require("./functions/notification");
 
-mongoose.connect(
-  "mongodb+srv://yuvashiksha:yuvashiksha@yuvashilsha.y1gzh.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
-  {
-    //mongodb://localhost:27017/yuvashiksha
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+const config = require("./config");
+
+mongoose.connect(config.dbConnectionString, {
+  //mongodb://localhost:27017/yuvashiksha
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 //Connecting to the db
 const db = mongoose.connection;
@@ -43,7 +42,7 @@ app.set("view engine", "jade");
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // <-- location of the react app were connecting to
+    origin: config.clientUrl, // <-- location of the react app were connecting to
     credentials: true,
   })
 );

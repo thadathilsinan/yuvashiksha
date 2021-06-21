@@ -9,6 +9,8 @@ import "./PreviousExam.css";
 import http from "../../../shared/http";
 import PrintPreview from "../../ui-elements/printPreview/PrintPreview";
 
+import config from "../../../config";
+
 class PreviousExam extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +26,7 @@ class PreviousExam extends Component {
 
   checkProps = () => {
     if (!this.props.exam) {
-      document.location.href = "http://localhost:3000/teacher";
+      document.location.href = config.clientUrl + "/teacher";
     }
   };
 

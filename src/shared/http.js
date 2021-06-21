@@ -1,5 +1,5 @@
 import axios from "axios";
-import { serverDomain } from "../config";
+import config from "../config";
 import parseCookie from "./parseCookie";
 
 let http = (
@@ -18,12 +18,12 @@ let http = (
 
   axios({
     method: method,
-    url: serverDomain + url,
+    url: config.serverUrl + url,
     data: body,
     withCredentials: true,
   })
     .then((response) => {
-      console.log(`${method} request send to ${serverDomain + url}`);
+      console.log(`${method} request send to ${config.serverUrl + url}`);
       console.log("Response from server: ", response);
       responseFromServer = response;
 

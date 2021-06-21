@@ -1,6 +1,7 @@
 const Users = require("../schema/Users");
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const bcrypt = require("bcryptjs");
+const config = require("../config");
 
 module.exports = (passport) => {
   //Setting the passport google strategy for google authentication
@@ -10,7 +11,7 @@ module.exports = (passport) => {
         clientID:
           "512354110909-ge6o3e0uphbkhmpg7qndaid7b1j1tkid.apps.googleusercontent.com",
         clientSecret: "cnJ_KHiLUX1oCsCJ_At-31X4",
-        callbackURL: "http://localhost:4000/register/redirect",
+        callbackURL: config.serverUrl + "/register/redirect",
       },
       async (accessToken, refreshToken, profile, done) => {
         // done(null, profile);

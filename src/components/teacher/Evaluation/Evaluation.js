@@ -11,6 +11,7 @@ import $ from "jquery";
 import { BsImages } from "react-icons/bs";
 import { IoIosSave } from "react-icons/io";
 
+import config from "../../../config";
 class Evaluation extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +28,7 @@ class Evaluation extends Component {
   //Check if all props available
   checkProps = () => {
     if (!this.props.exam || !this.props.student) {
-      document.location.href = "http://localhost:3000/teacher";
+      document.location.href = config.clientUrl + "/teacher";
     }
   };
 

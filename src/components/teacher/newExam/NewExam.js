@@ -17,6 +17,7 @@ import Question from "../Question/Question";
 import Canvas from "../../ui-elements/Canvas/Canvas";
 import { withRouter } from "react-router-dom";
 
+import config from "../../../config";
 class NewExam extends Component {
   constructor(props) {
     super(props);
@@ -527,7 +528,7 @@ class NewExam extends Component {
     formData.append("image", imageFile);
 
     $.ajax({
-      url: "http://localhost:4000/upload",
+      url: config.serverUrl + "/upload",
       cache: false,
       contentType: false,
       processData: false,
@@ -1322,11 +1323,7 @@ class NewExam extends Component {
             "uploadImage",
             "Upload Image",
             <>
-              <form
-                // action="http://localhost:4000/upload"
-                enctype="multipart/form-data"
-                // method="post"
-              >
+              <form enctype="multipart/form-data">
                 <p>MAX FILE SIZE (5MB)</p>
                 <p>Only .jpg, .jpeg, .png files supported</p>
                 <input type="file" id="imageUpload" name="image" />

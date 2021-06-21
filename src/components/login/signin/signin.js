@@ -10,6 +10,7 @@ import http from "../../../shared/http";
 import configureDialogBox from "../../../shared/dailogBox";
 import $ from "jquery";
 
+import config from "../../../config";
 class Signin extends Component {
   constructor(props) {
     super(props);
@@ -62,9 +63,9 @@ class Signin extends Component {
             alert("Login Successful");
 
             if (res.data.accountType === "teacher") {
-              document.location.href = "http://localhost:3000/teacher";
+              document.location.href = config.clientUrl + "/teacher";
             } else if (res.data.accountType === "student") {
-              document.location.href = "http://localhost:3000/student";
+              document.location.href = config.clientUrl + "/student";
             }
           } else {
             this.setState({
@@ -80,7 +81,7 @@ class Signin extends Component {
 
   // When googleSignin button clicked
   googleSignin = () => {
-    document.location.href = "http://localhost:4000/register/google";
+    document.location.href = config.serverUrl + "/register/google";
   };
 
   //Validate Email ID

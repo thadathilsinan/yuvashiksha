@@ -6,6 +6,7 @@
 var express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const config = require("../config");
 
 let router = express.Router();
 
@@ -38,7 +39,7 @@ const upload = multer({
 router.post("/", upload.single("image"), (req, res) => {
   if (req.file) {
     res.statusCode = 200;
-    res.end("http://localhost:4000/images/" + req.session.uploadedFileName);
+    res.end(config.serverUrl + "/images/" + req.session.uploadedFileName);
   } else {
     res.statusCode = 203;
     res.end("Upload Error");

@@ -1,5 +1,6 @@
 import { Component } from "react";
-import "./SetPassword.css";
+
+import config from "../../../config";
 
 import http from "../../../shared/http";
 class SetPassword extends Component {
@@ -25,7 +26,7 @@ class SetPassword extends Component {
           (res) => {
             if (res.status === 200) {
               alert("Signup Completed");
-              window.location.href = "http://localhost:3000/signin";
+              window.location.href = config.clientUrl + "/signin";
             } else {
               alert("Error: " + res.data);
             }

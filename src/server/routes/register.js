@@ -9,6 +9,8 @@ let passport = require("passport");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 
+const config = require("../config");
+
 //Helper function for sending emails
 let sendMail = require("../functions/sendMail");
 
@@ -253,7 +255,7 @@ router.get("/redirect", function (req, res, next) {
       //User not authenticated
       //Redirecting to the signup page with retrieved google data
       return res.redirect(
-        `http://localhost:3000/signup/google?name=${info._json.name}&id=${info._json.sub}&email=${info._json.email}`
+        `${config.clientUrl}/signup/google?name=${info._json.name}&id=${info._json.sub}&email=${info._json.email}`
       );
     }
 
@@ -264,9 +266,9 @@ router.get("/redirect", function (req, res, next) {
       }
       //Based on accountType redirecting the users to corresponding page
       if (req.user.accountType === "student")
-        return res.redirect("http://localhost:3000/student");
+        return res.redirect(config.clientUrl + "/student");
       else if (req.user.accountType === "teacher")
-        return res.redirect("http://localhost:3000/teacher");
+        return res.redirect(config.clientUrl + "/teacher");
     });
   })(req, res, next);
 });

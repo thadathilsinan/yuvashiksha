@@ -3,7 +3,7 @@ import http from "../../../../shared/http";
 import NavBar from "../../../ui-elements/navBar/NavBar";
 import "./Images.css";
 import { Button } from "react-bootstrap";
-import Loading from "../../../ui-elements/loading.js/Loading";
+
 class Images extends Component {
   constructor(props) {
     super(props);

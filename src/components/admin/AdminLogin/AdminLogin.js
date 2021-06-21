@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./AdminLogin.css";
 import http from "../../../shared/http";
-
+import config from "../../../config";
 class AdminLogin extends Component {
   //Creating ref for the input fields
   username = React.createRef();
@@ -24,7 +24,7 @@ class AdminLogin extends Component {
           if (res.status == 200) {
             alert("Login Success");
             //Refresh the page
-            window.location.href = "http://localhost:3000/admin/home";
+            window.location.href = config.clientUrl + "/admin/home";
           } else {
             alert(res.data);
           }

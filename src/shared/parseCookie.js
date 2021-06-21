@@ -12,8 +12,6 @@ let parseCookie = () => {
     }
 
     return parsedCookies;
-  } else {
-    console.log("parseCookie: Cookie is empty");
   }
 };
 

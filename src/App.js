@@ -13,8 +13,8 @@ import http from "./shared/http";
 import $ from "jquery";
 import StudentMain from "./components/student/StudentMain";
 import Images from "./components/teacher/Evaluation/Images/Images";
-import Loading from "./components/ui-elements/loading.js/Loading";
 
+import config from "./config";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -39,8 +39,8 @@ class App extends React.Component {
               "Cannot launch the application please ensure  your System Time is correct.",
           },
           () => {
-            if(window.location.href != "http://localhost:3000/error" )
-            window.location.href = "http://localhost:3000/error";
+            if (window.location.href != config.clientUrl + "/error")
+              window.location.href = config.clientUrl + "/error";
           }
         );
       }

@@ -1,10 +1,11 @@
 import { Component } from "react";
 import { withRouter, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
-import "./GoogleSignup.css";
 
 import Student from "../student/student";
 import Teacher from "../teacher/teacher";
+
+import config from "../../../../config";
 
 import http from "../../../../shared/http";
 
@@ -41,7 +42,7 @@ class Signup extends Component {
       (res) => {
         if (res.status == 200) {
           alert("Signup Completed");
-          document.location.href = "http://localhost:3000/signin";
+          document.location.href = config.clientUrl + "/signin";
         } else {
           alert(res.data);
         }

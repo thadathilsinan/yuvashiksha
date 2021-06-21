@@ -13,6 +13,8 @@ import UserMangamenet from "./pages/UserManagment/UserMangamenet";
 import VerifyAccount from "./pages/VerifyAccounts/VerifyAccounts";
 import Messagecontent from "./pages/Message/Messagecontent";
 
+import config from "../../config";
+
 import http from "../../shared/http";
 
 import { Button } from "react-bootstrap";
@@ -50,7 +52,7 @@ class Admin extends Component {
     http("GET", "/login/logout", {}, (res) => {
       alert(res.data);
       if (res.status == 200) {
-        window.location.href = "http://localhost:3000/";
+        window.location.href = config.clientUrl;
       }
     });
   };

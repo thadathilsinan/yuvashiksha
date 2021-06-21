@@ -9,6 +9,7 @@ import "./TeacherProfile.css";
 import { Route, withRouter } from "react-router-dom";
 import VerifyStudent from "./VerifyStudent";
 
+import config from "../../../config";
 class TeacherProfile extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +36,7 @@ class TeacherProfile extends Component {
     http("GET", "/login/logout", {}, (res) => {
       alert(res.data);
       if (res.status == 200) {
-        window.location.href = "http://localhost:3000/";
+        window.location.href = config.clientUrl;
       }
     });
   };

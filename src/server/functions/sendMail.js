@@ -1,15 +1,12 @@
 var nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 465,
   secure: true,
   pool: true, // This is the field you need to add
-  auth: {
-      user: 'bcaproject2021@gmail.com',
-      pass: 'yuvashiksha1234' 
-}});
-
+  auth: {},
+});
 
 let sendMail = (destination, subject, body) => {
   let mailOptions = {

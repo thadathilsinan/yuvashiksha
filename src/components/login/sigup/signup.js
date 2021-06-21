@@ -8,6 +8,8 @@ import Teacher from "./teacher/teacher";
 
 import http from "../../../shared/http";
 
+import config from "../../../config";
+
 const mapStateToProps = (state) => {
   return {
     signupData: state.login.signupData,
@@ -41,7 +43,7 @@ class Signup extends Component {
   };
 
   googleSignup = () => {
-    document.location.href = "http://localhost:4000/register/google";
+    document.location.href = config.serverUrl + "/register/google";
   };
 
   render() {

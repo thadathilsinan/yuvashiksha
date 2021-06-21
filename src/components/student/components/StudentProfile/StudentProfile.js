@@ -5,6 +5,7 @@ import http from "../../../../shared/http";
 import "./StudentProfile.css";
 import configuireDialogBox from "../../../../shared/dailogBox";
 
+import config from "../../../../config";
 export class StudentProfile extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +24,7 @@ export class StudentProfile extends Component {
     http("GET", "/login/logout", {}, (res) => {
       alert(res.data);
       if (res.status == 200) {
-        window.location.href = "http://localhost:3000/";
+        window.location.href = config.clientUrl;
       }
     });
   };
