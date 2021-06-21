@@ -124,7 +124,7 @@ class StudentMain extends Component {
   };
 
   componentDidMount() {
-    //this.checkKiosk();
+    this.checkKiosk();
 
     //Disabling right click menu
     this.preventRightClick();

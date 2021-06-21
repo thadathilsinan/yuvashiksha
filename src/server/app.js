@@ -80,6 +80,14 @@ app.use("/upload", uploadRouter);
 app.use("/student", studentRouter);
 app.use("/app", appRouter);
 
+//license file
+console.log(`YUVASHIKSHA Copyright (C) 2021  Team YUVASHIKSHA
+This program comes with ABSOLUTELY NO WARRANTY; for details type \`show w'.
+This is free software, and you are welcome to redistribute it
+under certain conditions; type \`show c' for details.
+`);
+
+
 //System notifiaction
 startNotification();
 
@@ -100,3 +108,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+

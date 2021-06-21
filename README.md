@@ -2,8 +2,7 @@
 
 # YUVASHIKSHA
 
-                                               **Online examination system for universities**
-
+## Online examination system for universities
 ## Features
 
 - Hub for exams, valuation and result publication
