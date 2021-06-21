@@ -45,53 +45,42 @@ router.post("/profile/save", async (req, res, next) => {
 
 //Create a new exam
 router.post("/newexam", async (req, res, next) => {
-  let exam = new Exams();
-
-  exam.examName = req.body.examName;
-  exam.subject = req.body.subject;
-  exam.from = req.body.timeFrom;
-  exam.to = req.body.timeTo;
-  exam.date = req.body.date;
-  exam.totalMarks = req.body.marks;
-  exam.questionPaper = req.body.questions;
-  exam.teacher = req.user.id;
-
   //Setting class data
   let Class = await Classes.findOne({
     name: req.body.Class,
     batch: req.body.batch,
   });
 
-  if (Class) {
-    exam.Class = Class._id;
+  //check if exam exists for that time
+  let otherExams = await Exams.find({
+    Class,
+    date: req.body.date,
+  });
 
-    //Saving new Exam
-    await exam.save();
+  let newExamStartTime = new Date(
+    `${req.body.date},${req.body.timeFrom}`
+  ).getTime();
+  let newExamEndTime = new Date(
+    `${req.body.date},${req.body.timeTo}`
+  ).getTime();
 
-    //Email send
-    let students = await Users.find({class:exam.Class});
-    let subject = "Exam scheduled";
+  let errorFlag = false;
 
-    for(let student of students){
-      let body = `Dear ${student.name},
-            Your ${exam.subject}  ${exam.examName} has been scheduled on ${exam.date} from ${exam.from} to ${exam.to},
-            Be prepared for your exam ! All  the very best ${student.name}`;
-        sendMail(student.email, subject, body); 
+  for (let exam of otherExams) {
+    let examStartTime = new Date(`${exam.date},${exam.from}`).getTime();
+    let examEndTime = new Date(`${exam.date},${exam.to}`).getTime();
+
+    if (
+      (newExamStartTime >= examStartTime && newExamStartTime <= examEndTime) ||
+      (newExamEndTime >= examStartTime && newExamEndTime <= examEndTime)
+    ) {
+      errorFlag = true;
     }
-
-    res.statusCode = 200;
-    res.end("Exam successfully created");
-  } else {
-    res.statusCode = 203;
-    res.end("Class data is not found");
   }
-});
 
-//Edit an existing exam data
-router.post("/editexam", async (req, res, next) => {
-  let exam = await Exams.findOne({ _id: req.body.id });
+  if (!errorFlag) {
+    let exam = new Exams();
 
-  if (exam) {
     exam.examName = req.body.examName;
     exam.subject = req.body.subject;
     exam.from = req.body.timeFrom;
@@ -101,12 +90,6 @@ router.post("/editexam", async (req, res, next) => {
     exam.questionPaper = req.body.questions;
     exam.teacher = req.user.id;
 
-    //Setting class data
-    let Class = await Classes.findOne({
-      name: req.body.Class,
-      batch: req.body.batch,
-    });
-
     if (Class) {
       exam.Class = Class._id;
 
@@ -114,25 +97,106 @@ router.post("/editexam", async (req, res, next) => {
       await exam.save();
 
       //Email send
-    let students = await Users.find({class:exam.Class});
-    let subject = "Exam rescheduled";
+      let students = await Users.find({ class: exam.Class });
+      let subject = "Exam scheduled";
 
-    for(let student of students){
-      let body = `Dear ${student.name},
-            Your ${exam.subject}  ${exam.examName} has been rescheduled to ${exam.date} from ${exam.from} to ${exam.to},
-            Be prepared for your exam ! All  the very best ${student.name}`;
-        sendMail(student.email, subject, body); 
-    }
+      for (let student of students) {
+        let body = `Dear ${student.name},
+         Your ${exam.subject}  ${exam.examName} has been scheduled on ${exam.date} from ${exam.from} to ${exam.to},
+          Be prepared for your exam ! All  the very best ${student.name}`;
+        sendMail(student.email, subject, body);
+      }
 
       res.statusCode = 200;
-      res.end("Exam successfully edited");
+      res.end("Exam successfully created");
     } else {
       res.statusCode = 203;
       res.end("Class data is not found");
     }
   } else {
     res.statusCode = 203;
-    res.end("Old Exam data is not found");
+    res.end("Another teacher had scheduled an exam in this time period");
+  }
+});
+
+//Edit an existing exam data
+router.post("/editexam", async (req, res, next) => {
+  //Setting class data
+  let Class = await Classes.findOne({
+    name: req.body.Class,
+    batch: req.body.batch,
+  });
+
+  //check if exam exists for that time
+  let otherExams = await Exams.find({
+    Class,
+    date: req.body.date,
+  });
+
+  let newExamStartTime = new Date(
+    `${req.body.date},${req.body.timeFrom}`
+  ).getTime();
+  let newExamEndTime = new Date(
+    `${req.body.date},${req.body.timeTo}`
+  ).getTime();
+
+  let errorFlag = false;
+
+  for (let exam of otherExams) {
+    let examStartTime = new Date(`${exam.date},${exam.from}`).getTime();
+    let examEndTime = new Date(`${exam.date},${exam.to}`).getTime();
+
+    if (
+      (newExamStartTime >= examStartTime && newExamStartTime <= examEndTime) ||
+      (newExamEndTime >= examStartTime && newExamEndTime <= examEndTime)
+    ) {
+      errorFlag = true;
+    }
+  }
+
+  if (!errorFlag) {
+    let exam = await Exams.findOne({ _id: req.body.id });
+
+    if (exam) {
+      exam.examName = req.body.examName;
+      exam.subject = req.body.subject;
+      exam.from = req.body.timeFrom;
+      exam.to = req.body.timeTo;
+      exam.date = req.body.date;
+      exam.totalMarks = req.body.marks;
+      exam.questionPaper = req.body.questions;
+      exam.teacher = req.user.id;
+
+      if (Class) {
+        exam.Class = Class._id;
+
+        //Saving new Exam
+        await exam.save();
+
+        //Email send
+        let students = await Users.find({ class: exam.Class });
+        let subject = "Exam rescheduled";
+
+        for (let student of students) {
+          let body = `Dear ${student.name},
+              Your ${exam.subject}  ${exam.examName} has been rescheduled to ${exam.date} from ${exam.from} to ${exam.to},
+              Be prepared for your exam ! All  the very best ${student.name}`;
+          sendMail(student.email, subject, body);
+        }
+
+        res.statusCode = 200;
+        res.end("Exam successfully edited");
+      } else {
+        res.statusCode = 203;
+        res.end("Class data is not found");
+      }
+    } else {
+      res.statusCode = 203;
+      res.end("Old Exam data is not found");
+    }
+  } else {
+    res.statusCode = 203;
+    res.end("Another teacher had scheduled an exam in this time period");
   }
 });
 
