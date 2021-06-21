@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+![README%20md%2085bf836b4da649a0a7e57f147f2c5195/test.png](README%20md%2085bf836b4da649a0a7e57f147f2c5195/test.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# YUVASHIKSHA
 
-## Available Scripts
+                                               **Online examination system for universities**
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Hub for exams, valuation and result publication
+- Monitoring through webcam images
+- Flexible for any exam pattern such as MCQ's and other modes
+- Manages to build an institution structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Prerequisites
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- [Node JS](https://nodejs.org/)
+- [MongoDB](https://www.mongodb.com/)
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Download the latest release from [here](https://github.com/thadathilsinan/yuvashiksha/releases).
 
-### `npm run build`
+```bash
+git clone "https://github.com/thadathilsinan/yuvashiksha.git"
+cd yuvashiksha
+npm install
+npm build
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd src/server
+npm install
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Usage
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Configure server file
 
-### `npm run eject`
+/src/server/config.js
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```jsx
+{
+  clientUrl: "http://localhost:3000", //YOUR STATIC SERVER URL,
+  serverUrl: "http://localhost:4000", //YOUR NODE SERVER URL
+	email: "example@gmail.com", //EMAIL ID FOR NOTIFICATION
+	password: "password", //PASSWORD FOR EXAM ACCOUNT
+	dbConnectionString: "connection-string", //MONGODB CONNECTION STRING
+  adminUsername: "hello",//ADMIN USERNAME
+  adminPassword: "1234567", //ADMIN PASSWORD
+};
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Use "app specific password" if two factor authentication is enabled in your gmail account and enable "less secure app" in google settings
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2.  Configure client side
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Configure the file /config.js before building the front-end
 
-## Learn More
+```jsx
+{
+  clientUrl: "http://localhost:3000", //YOUR STATIC SERVER URL,
+  serverUrl: "http://localhost:4000", //YOUR NODE SERVER URL
+};
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## LICENSE
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Distributed under the GPLv3 License. See `LICENSE` for more information.
 
-### Code Splitting
+## CONTACT
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+[Sinan](https://github.com/thadathilsinan) - [thadathilsinan@gmail.com](mailto:thadathilsinan@gmail.com) - @[sinan_thadathil](https://www.instagram.com/sinan_thadathil/)
 
-### Analyzing the Bundle Size
+Gladson saji - [gladsonsaji4@gmail.com](mailto:gladsonsaji4@gmail.com) - [@gladson_ms](https://www.linkedin.com/in/gladson-m-s-96b9171a5/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Basil jiji - [basilgg24@gmail.com](mailto:basilgg24@gmail.com)
 
-### Making a Progressive Web App
+Project Link : [https://github.com/thadathilsinan/yuvashiksha.git](https://github.com/thadathilsinan/yuvashiksha.git)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## ACKNOWLEDGEMENTS
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [https://reactjs.org](https://reactjs.org/)
+- [https://nodejs.org](https://nodejs.org/en/docs/)
+- [https://www.npmjs.com](https://www.npmjs.com/)
+- [https://stackoverflow.com](https://stackoverflow.com/)
