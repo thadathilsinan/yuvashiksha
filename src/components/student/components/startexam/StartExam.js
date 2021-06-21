@@ -439,21 +439,48 @@ class StartExam extends Component {
     });
   };
 
+  //check all questions attend or not
+  checkUnanswerdQuestions = () => {
+    console.log(this.state.answers);
+    console.log(this.props);
+    let questionPaper = this.props.exam.questionPaper;
+    let answers = this.state.answers;
+    let count = 0;
+
+    for (let question of questionPaper) {
+      if (
+        !(answers[question.id] && answers[question.id].answer) &&
+        question.type != "text"
+      ) {
+        count++;
+      }
+    }
+
+    if (count > 0) {
+      let confirmation =
+        window.confirm(`You have ${count} number of questions to answer.
+      Do you wish to proceed ? `);
+      return confirmation;
+    } else {
+      return true;
+    }
+  };
+
   //Called when click the finish button in the exam page
   finishExam = () => {
     if (
-      window.confirm("You have some more time, Are you sure to finish exam ? ")
+      window.confirm(
+        "You have some more time, Are you sure to finish exam ? "
+      ) &&
+      this.checkUnanswerdQuestions()
     ) {
       //Turn off camera
       const tracks = stream.getTracks();
-
       tracks.forEach(function (track) {
         track.stop();
       });
-
       this.setState({ completed: true }, () => {
         this.uploadAnswers();
-
         alert("Exam Completed successfully");
         this.props.history.push("/student");
       });
