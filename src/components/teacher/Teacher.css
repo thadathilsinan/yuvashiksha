@@ -1,11 +1,6 @@
-
 #NavBarRight {
   width: 700px;
   color: rgb(255, 255, 255);
-}
-
-#NavBarInfoText {
-  height: 10px;
 }
 
 #leftTabBody {
@@ -46,14 +41,12 @@ p {
 
   text-align: center;
   border-radius: 50px;
-  box-shadow:  20px 20px 60px #9b9b9b,
-              -20px -20px 60px #ffffff;
+  box-shadow: 20px 20px 60px #9b9b9b, -20px -20px 60px #ffffff;
 }
 
 #new-exam:hover {
   background-color: #e2e2e2;
-  box-shadow: inset 4px 4px 7px #c7c7c7,
-              inset -4px -4px 7px #ffffff;
+  box-shadow: inset 4px 4px 7px #c7c7c7, inset -4px -4px 7px #ffffff;
 }
 
 #floatButtonText {
@@ -79,8 +72,13 @@ p {
   cursor: pointer;
 }
 
-#teacher{
-    border-radius: 50px;
-    box-shadow: inset 20px 20px 60px #bebebe,
-                inset -20px -20px 60px #ffffff;
+#teacher {
+  border-radius: 50px;
+  box-shadow: inset 20px 20px 60px #bebebe, inset -20px -20px 60px #ffffff;
+}
+.selectedOption {
+  margin: 0;
+  position: relative;
+  top: 13px;
+  right: 8px;
 }

@@ -341,17 +341,24 @@ class Teacher extends Component {
 
     if (this.props.hod) {
       hodOrMentor = (
-        <div className="col-sm-2" id="teacher-select">
-          <select
-            className="form-select mt-2"
-            name="teacher"
-            id="teacher"
-            onChange={this.checkClassSelected}
-            ref={this.teacherRef}
-          >
-            <option value="">--TEACHER--</option>
-            {this.getTeacherOptions()}
-          </select>
+        <div
+          className="col-sm-3
+        "
+          id="teacher-select"
+        >
+          <div className="d-flex mt-1">
+            <p className="selectedOption">Role </p>
+            <select
+              className="form-select "
+              name="teacher"
+              id="teacher"
+              onChange={this.checkClassSelected}
+              ref={this.teacherRef}
+            >
+              <option value="">--TEACHER--</option>
+              {this.getTeacherOptions()}
+            </select>
+          </div>
         </div>
       );
     } else if (this.props.mentor) {
@@ -433,35 +440,38 @@ class Teacher extends Component {
               right: (
                 <div className="container" id="NavBarRight">
                   <div className="row">
-                    <div
-                      className="col-sm-4 align-self-center"
-                      id="NavBarInfoText"
-                    >
-                      <p>Select Class and Batch : </p>
+                    <div className="col-sm-3">
+                      <div className="d-flex mt-1">
+                        <p className="selectedOption"> Class </p>
+
+                        <select
+                          className="form-select"
+                          name="class"
+                          ref={this.classRef}
+                          id="class"
+                          onChange={this.classChanged}
+                        >
+                          <option value="">--CLASS--</option>
+                          {this.state.classOptions}
+                        </select>
+                      </div>
                     </div>
                     <div className="col-sm-3">
-                      <select
-                        className="form-select mt-1"
-                        name="class"
-                        ref={this.classRef}
-                        id="class"
-                        onChange={this.classChanged}
-                      >
-                        <option value="">--CLASS--</option>
-                        {this.state.classOptions}
-                      </select>
-                    </div>
-                    <div className="col-sm-3">
-                      <select
-                        className="form-select mt-1"
-                        name="batch"
-                        ref={this.batchRef}
-                        id="batch"
-                        onChange={this.batchChanged}
-                      >
-                        <option value="">--BATCH--</option>
-                        {this.state.batchOptions}
-                      </select>
+                      <div className="d-flex mt-1">
+                        <p className="selectedOption"> Batch </p>
+
+                        <select
+                          className="form-select"
+                          name="batch"
+                          ref={this.batchRef}
+                          id="batch"
+                          onChange={this.batchChanged}
+                        >
+                          <option value="">--BATCH--</option>
+
+                          {this.state.batchOptions}
+                        </select>
+                      </div>
                     </div>
 
                     {this.state.teacherSelect}
