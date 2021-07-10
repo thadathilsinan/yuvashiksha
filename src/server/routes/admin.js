@@ -1,6 +1,7 @@
 var express = require("express");
 const bodyParser = require("body-parser");
 
+const fs = require("fs");
 //Importing required schemas
 
 const Department = require("../schema/department");
@@ -13,6 +14,7 @@ const mongoose = require("mongoose");
 
 const sendMail = require("../functions/sendMail");
 const Exam = require("../schema/Exams");
+const { adminPassword, password } = require("../config");
 
 var router = express.Router();
 
@@ -20,15 +22,30 @@ router.use(bodyParser.json());
 
 //Change password of admin account
 router.post("/changepassword", async (req, res, next) => {
-  let adminAccount = await Admin.findOne({ _id: req.user.id });
+  if (!/[^a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]/.test(req.body.password)) {
+    let configData = fs.readFileSync("./config.js", "utf-8");
 
-  adminAccount.password = req.body.password;
+    let newConfig = configData.replace(
+      /adminPassword:\s\"[a-zA-Z0-9.@!#$%&'*+/=?^_`{|}~-]+\"\,/i,
+      `adminPassword: "${req.body.password}",`
+    );
 
-  //saving new password to db
-  await adminAccount.save();
+    fs.writeFileSync("./config.js", newConfig);
 
-  res.statusCode = 200;
-  res.end("Password changed successfully");
+    let checkNewConfig = fs.readFileSync("./config.js", "utf-8");
+    if (checkNewConfig == configData) {
+      res.statusCode = 203;
+      res.end("Password not changed same password ");
+    } else {
+      res.statusCode = 200;
+      res.end(newConfig);
+    }
+  } else {
+    res.statusCode = 203;
+    res.end("Only these charcters are allowoed a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-");
+  }
+
+  // res.end("Password Changed succesfully");
 });
 
 //Return department details from DB

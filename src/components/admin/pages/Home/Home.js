@@ -29,6 +29,7 @@ class Home extends React.Component {
           "/admin/changepassword",
           { password: passwordValue },
           (res) => {
+            console.log(res.data);
             if (res.status === 200) {
               alert("Password changed successfully");
             } else {
