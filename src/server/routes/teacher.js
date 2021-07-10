@@ -271,13 +271,15 @@ router.get("/hod", async (req, res, next) => {
 
   for (exam of allExams) {
     let Class = await Classes.findOne({ _id: exam.Class });
-    let department = await Departments.findOne({ _id: Class.department });
+    if (Class) {
+      let department = await Departments.findOne({ _id: Class.department });
 
-    //Checking if the exam is conducted in the HOD's department
-    if (String(department._id) == String(req.user.department)) {
-      let teacher = await Users.findOne({ _id: exam.teacher });
+      //Checking if the exam is conducted in the HOD's department
+      if (String(department._id) == String(req.user.department)) {
+        let teacher = await Users.findOne({ _id: exam.teacher });
 
-      responseObject[teacher._id] = { name: teacher.name };
+        responseObject[teacher._id] = { name: teacher.name };
+      }
     }
   }
 

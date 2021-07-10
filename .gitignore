@@ -25,3 +25,4 @@ yarn-error.log*
 
 #server dependencies
 /src/server/node_modules
+/src/server/public/images
