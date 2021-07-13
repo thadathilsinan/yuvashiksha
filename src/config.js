@@ -1,5 +1,5 @@
 let config = {
-  clientUrl: "https://serene-beaver-b984b0.netlify.app",
+  clientUrl: "https://yuvashiksha.netlify.app",
   serverUrl: "https://yuvashiksha.herokuapp.com",
 };
 
