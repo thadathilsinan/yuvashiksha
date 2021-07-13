@@ -5,8 +5,8 @@ let config = {
     "mongodb+srv://yuvashiksha:yuvashiksha1234@cluster0.hcsuv.mongodb.net/yuvashiksha?retryWrites=true&w=majority",
   email: "bcaproject2021@gmail.com",
   password: "yuvashiksha1234",
-  adminUsername: "hello",
-  adminPassword: "nonea",
+  adminUsername: "admin",
+  adminPassword: "yuvashiksha",
 };
 
 module.exports = config;
