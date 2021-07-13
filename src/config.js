@@ -1,6 +1,6 @@
 let config = {
-  clientUrl: "http://localhost:3000",
-  serverUrl: "http://localhost:4000",
+  clientUrl: "https://serene-beaver-b984b0.netlify.app",
+  serverUrl: "https://yuvashiksha.herokuapp.com",
 };
 
 export default config;
