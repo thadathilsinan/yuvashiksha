@@ -17,27 +17,28 @@
   height: 400;
   border: 2px solid black;
 }
-.btn-close {
-  font-size: 12px;
-  border: none;
-  border-radius: 50px;
+#btn-close {
+  font-size: 20px;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  margin-right: 15px;
   background-color: red;
-  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  border-radius: 5px;
   color: white;
 }
-.btn-close:hover {
-  border: none;
-  background-color: rgb(218, 85, 85);
+#btn-clear {
+  font-size: 20px;
+  box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  margin-right: 15px;
+  background-color: gray;
+  border-radius: 5px;
+  color: white;
 }
+
 #btn-save {
-  font-size: 12px;
-  border-radius: 50px;
-  border: none;
-  background: #2d8b51;
+  font-size: 20px;
+
   box-shadow: 4px 4px 7px #00179b, -4px -4px 7px #0025f3;
+  background: #2d8b51;
+  border-radius: 5px;
   color: white;
-}
-.btn-save:hover {
-  border: none;
-  background-color: green;
 }
