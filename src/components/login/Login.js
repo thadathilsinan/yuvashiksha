@@ -126,8 +126,9 @@ class Login extends Component {
               className="btn btn-danger"
               title="Exit Yuvashiksha"
               onClick={() => {
-                if (window.confirm("Are you sure to exit Yuvashiksha?"))
+                if (window.confirm("Are you sure to exit Yuvashiksha?")) {
                   navigator.clipboard.writeText("close-yuvashiksha");
+                }
               }}
             >
               <FaPowerOff />
