@@ -11,7 +11,7 @@ class StudentMain extends Component {
 
     this.state = {
       component: null,
-      show: true, //TEMPERORLY MADE TRUE FOR DEVELOPMENT PURPOSE, MUST CHANGE TO FALSE.
+      show: false, //TEMPERORLY MADE TRUE FOR DEVELOPMENT PURPOSE, MUST CHANGE TO FALSE.
       text: "PLEASE WAIT ...",
       textHint: "",
       showCloseButton: false,
